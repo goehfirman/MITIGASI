@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Toothpick Tower — Lab Gempa",
+  title: "Mengenal Kondisi Geografis Indonesia (Manfaat dan Ancaman)",
   description: "Laboratorium STEM 3D untuk membangun menara dan menguji guncangan di Papan Interaktif Digital.",
   other: {
     "codex-preview": "development",
