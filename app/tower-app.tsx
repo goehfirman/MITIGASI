@@ -10,7 +10,7 @@ import {Box,Rotate3D,Plus,Link2,Move,Trash2,Undo2,Redo2,Ruler,Play,Maximize,User
 import {preset,height,validDesign,type Design,type Result} from '@/lib/tower';
 type Session={token:string,role:string,code?:string,name:string,challenge?:string,strength?:string};
 const tools=[['orbit','Putar',Rotate3D],['add','Titik',Plus],['connect','Sambung',Link2],['move','Geser',Move],['delete','Hapus',Trash2]] as const;
-const help:Record<string,string>={orbit:'Geser satu jari untuk memutar. Cubit dua jari untuk memperbesar.',add:'Pilih tingkat, lalu ketuk petak untuk menambah marshmallow.',connect:'Ketuk dua marshmallow untuk menyambungkan tusuk gigi.',move:'Seret marshmallow pada bidang tingkat yang sama.',delete:'Ketuk marshmallow untuk menghapusnya beserta sambungannya.'};
+const help:Record<string,string>={orbit:'Geser satu jari untuk memutar. Cubit dua jari untuk memperbesar.',add:'Ketuk petak untuk menambah titik. Lingkaran merah samar menandai posisi titik di bawah.',connect:'Ketuk dua marshmallow untuk menyambungkan tusuk gigi.',move:'Seret marshmallow pada bidang tingkat yang sama.',delete:'Ketuk marshmallow untuk menghapusnya beserta sambungannya.'};
 export async function api(action:string,data:any={}){const r=await fetch('/api/lab',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action,...data})});const v:any=await r.json();if(!r.ok)throw new Error(v.error||'Belum dapat terhubung. Coba lagi.');return v;}
 function Choice({value,onChange,values,label}:any){return <Select value={value} onValueChange={onChange}><SelectTrigger aria-label={label}><SelectValue/></SelectTrigger><SelectContent>{values.map((v:string)=><SelectItem key={v} value={v}>{v}</SelectItem>)}</SelectContent></Select>}
 export default function TowerApp(){
