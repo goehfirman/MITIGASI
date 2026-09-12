@@ -34,10 +34,11 @@ export default function TowerScene(props:SceneProps){
  props.design.nodes.forEach((n,i)=>{const m=new T.Mesh(new T.SphereGeometry(.15,12,8),new T.MeshStandardMaterial({color:n.id===props.selected?0x5279ee:0xe53935,roughness:.85,wireframe:props.wire}));m.castShadow=true;m.userData={kind:'node',id:n.id,index:i};s.group.add(m);});
  props.design.beams.forEach((b,i)=>{const m=new T.Mesh(new T.CylinderGeometry(.035,.035,1,7),new T.MeshStandardMaterial({color:0xc49858,roughness:.8,wireframe:props.wire}));m.castShadow=true;m.userData={kind:'beam',index:i};s.group.add(m);});s.updateMeshes(props.design.nodes.map(n=>new T.Vector3(n.x,n.y,n.z)));
  },[props.design,props.selected,props.wire]);
- useEffect(()=>{const s=sceneRef.current;if(s){s.controls.enabled=props.tool==='orbit'||!!props.run;s.editGrid.visible=props.tool==='add'&&!props.run;s.editGrid.position.y=props.level*1.5;s.renderer.setPixelRatio(props.low?1:Math.min(devicePixelRatio,1.5));s.renderer.shadowMap.enabled=!props.low;}},[props.tool,props.level,props.run,props.low]);
+ useEffect(()=>{const s=sceneRef.current;if(s){s.controls.enabled=props.tool==='orbit'||!!props.run;s.editGrid.visible=props.tool==='add'&&!props.run;s.grid.visible=!s.editGrid.visible;s.editGrid.position.y=props.level*1.5;s.renderer.setPixelRatio(props.low?1:Math.min(devicePixelRatio,1.5));s.renderer.shadowMap.enabled=!props.low;}},[props.tool,props.level,props.run,props.low]);
  useEffect(()=>{const s=sceneRef.current;if(!s)return;const h=Math.max(3,...props.design.nodes.map(n=>n.y));s.controls.target.set(0,h*.4,0);const v=props.view==='Depan'?[0,h*.4,14]:props.view==='Atas'?[0,16,.01]:[9,8,11];s.camera.position.set(v[0],v[1],v[2]);s.controls.update();},[props.view]);
  useEffect(()=>{const s=sceneRef.current;if(s){s.camera.zoom=props.zoom;s.camera.updateProjectionMatrix();}},[props.zoom]);
  useEffect(()=>{const s=sceneRef.current;if(!s)return;if(props.run){s.sim=simulation(props.design,props.strength,props.direction);s.done=false;s.acc=0;s.follow=true;}else{s.sim=null;s.platform.position.set(0,-.24,0);s.updateMeshes(props.design.nodes.map(n=>new T.Vector3(n.x,n.y,n.z)));}},[props.run]);
  return <div ref={host} className="scene" aria-label="Kanvas menara 3D">{error&&<div role="alert" className="webgl-error">{error}</div>}</div>;
 }
+
 
