@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import ViewportFit from './viewport-fit';
 
 export const metadata: Metadata = {
   title: "Mengenal Kondisi Geografis Indonesia (Manfaat dan Ancaman)",
@@ -20,7 +21,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="id">
-      <body className="antialiased">{children}</body>
+      <body className="antialiased"><ViewportFit>{children}</ViewportFit></body>
     </html>
   );
 }
