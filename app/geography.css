@@ -3,8 +3,17 @@
 .is-home{display:flex;flex-direction:column}
 .is-home .geo-nav{order:0;width:100%}
 .is-home .geo-intro{order:1;width:100%;aspect-ratio:1614/974;padding:0;background:#167ca8 url('/homepage-indonesia.png') center top/100% 100% no-repeat}
-.is-home .geo-intro>*{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+.is-home .geo-intro>*:not(.hero-glass-menu){position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
 .is-home .geo-menu{order:2;width:calc(100% - 64px);align-self:center;margin:24px auto}
 .is-home .geo-map-section{order:3;width:calc(100% - 64px);align-self:center;margin:0 auto 28px}
 .is-home .geo-footer{order:4;width:calc(100% - 64px);align-self:center;margin:0 auto}
 @media(max-width:760px){.is-home .geo-menu,.is-home .geo-map-section,.is-home .geo-footer{width:calc(100% - 32px)}}
+.is-home .geo-intro{position:relative;margin-bottom:28px}
+.hero-glass-menu{position:absolute;bottom:4%;left:50%;transform:translateX(-50%);display:flex;justify-content:center;gap:20px;width:max-content;max-width:94%;z-index:1}
+.hero-glass-menu a{display:flex;align-items:center;justify-content:center;gap:12px;min-height:68px;padding:16px 32px;border:1px solid rgba(255,255,255,.65);border-radius:18px;background:rgba(8,39,59,.4);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);color:white;font-size:22px;font-weight:700;text-shadow:0 1px 4px #082737;box-shadow:inset 0 1px 0 #ffffff55,0 6px 24px #001f3f30;transition:background .2s,transform .2s}
+.hero-glass-menu a:hover{background:rgba(8,39,59,.65);transform:translateY(-2px)}
+.hero-glass-menu a:focus-visible{outline:3px solid #ffe386;outline-offset:4px}
+.hero-glass-menu svg{width:26px;height:26px;flex-shrink:0}
+@media(max-width:760px){.hero-glass-menu{gap:8px;bottom:3%;width:94%}.hero-glass-menu a{font-size:13px;min-height:48px;padding:10px 12px;gap:6px;border-radius:12px;flex:1}.hero-glass-menu svg{width:18px;height:18px}}
+@media(max-width:420px){.hero-glass-menu a{padding:8px 5px;font-size:12px;gap:4px}.hero-glass-menu svg{width:16px;height:16px}}
+@media(prefers-reduced-motion:reduce){.hero-glass-menu a{transition:none}}
