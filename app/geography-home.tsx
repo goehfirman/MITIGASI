@@ -21,7 +21,7 @@ export default function GeographyHome({section='home'}:{section?:'home'|'belajar
  useEffect(()=>{const mq=matchMedia('(prefers-reduced-motion: reduce)');setPaused(mq.matches);},[]);
  const map=useMemo(()=>{const indonesia=region.features.find(f=>f.properties.id==='IDN')!;const projection=geoMercator().fitExtent([[45,48],[1155,445]],indonesia as any);const path=geoPath(projection);return {projection,path,graticule:path(geoGraticule().extent([[90,-18],[149,12]]).step([5,5])()),equator:path({type:'LineString',coordinates:[[91,0],[145,0]]}),arcs:[path({type:'LineString',coordinates:volcanoes.slice(0,4).map(v=>v.point)}),path({type:'LineString',coordinates:volcanoes.slice(4).map(v=>v.point)})]};},[]);
  const fire=layer!=='khatulistiwa',equator=layer!=='cincin-api';
- return <div className="geo-home">
+ return <div className={'geo-home '+(section==='home'?'is-home':'')}>
  <header className="geo-nav"><a className="geo-brand" href="/"><span><Globe2/></span><div>Nusantara<span>JELAJAH • PAHAMI • SIAGA</span></div></a><nav aria-label="Menu utama"><a href="/belajar" aria-current={section==='belajar'?'page':undefined}>Belajar</a><a href="/mitigasi" aria-current={section==='mitigasi'?'page':undefined}>Mitigasi Gempa</a></nav><Button asChild variant="outline"><a href="/lab"><Triangle/>Laboratorium <ArrowRight/></a></Button></header>
  {section==='home'?<>
  <section className="geo-intro"><div className="geo-kicker"><span/> IPAS · KELAS 6</div><h1>Mengenal Kondisi Geografis Indonesia <span>(Manfaat dan Ancaman)</span></h1><p>Kenali negeri kita. Temukan kekayaan alamnya, pahami risikonya,<br className="desktop-break"/> dan belajar menjadi generasi yang siap siaga.</p></section>
