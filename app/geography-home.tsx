@@ -27,7 +27,7 @@ export default function GeographyHome({section='home'}:{section?:'home'|'belajar
 }
 
 function LearningMap({topic}:{topic:"equator"|"fire"}){
- const [paused,setPaused]=useState(false),[selected,setSelected]=useState<number|null>(null);
+ const [paused,setPaused]=useState(false),[selected,setSelected]=useState<number|null>(topic==="fire"?0:null);
  const [zoom,setZoom]=useState(1);
  const mapBox=useRef<HTMLElement>(null),detailBox=useRef<HTMLDivElement>(null);
  const [connector,setConnector]=useState({d:'',width:1,height:1});
@@ -42,7 +42,7 @@ function LearningMap({topic}:{topic:"equator"|"fire"}){
    frame=requestAnimationFrame(update);
   };update();return ()=>cancelAnimationFrame(frame);
  },[selected]);
- function changeZoom(delta:number){setSelected(null);setZoom(z=>Math.max(1,Math.min(3,Math.round((z+delta)*100)/100)));}
+ function changeZoom(delta:number){setZoom(z=>Math.max(1,Math.min(3,Math.round((z+delta)*100)/100)));}
 
  useEffect(()=>{const mq=matchMedia('(prefers-reduced-motion: reduce)');setPaused(mq.matches);},[]);
  const map=useMemo(()=>{const indonesia=region.features.find(f=>f.properties.id==='IDN')!;const projection=geoMercator().fitExtent([[45,48],[1155,445]],indonesia as any);const path=geoPath(projection);return {projection,path,graticule:path(geoGraticule().extent([[90,-18],[149,12]]).step([5,5])()),equator:path({type:'LineString',coordinates:[[91,0],[145,0]]}),arcs:[path({type:'LineString',coordinates:volcanoes.slice(0,11).map(v=>v.point)}),path({type:'LineString',coordinates:[volcanoes[12],volcanoes[11]].map(v=>v.point)}),path({type:'LineString',coordinates:[volcanoes[15],volcanoes[14],volcanoes[13]].map(v=>v.point)})]};},[]);

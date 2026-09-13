@@ -8,7 +8,7 @@ export default function ViewportFit({children}:{children:ReactNode}){
   const measure=()=>{cancelAnimationFrame(frame);frame=requestAnimationFrame(()=>{
    if(!host.current||!page.current)return;
    const available=host.current.getBoundingClientRect();
-   const width=Math.max(1280,available.width);
+   const width=page.current.querySelector(".learning-deck")?1440:Math.max(1280,available.width);
    if(page.current.offsetWidth!==Math.round(width)){setSize(s=>({...s,width}));return;}
    const height=page.current.scrollHeight;
    const scale=Math.min(1,available.width/width,(available.height-4)/Math.max(1,height));
