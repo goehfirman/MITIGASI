@@ -1,7 +1,7 @@
 "use client";
 import {useState,useMemo,useEffect,useRef,useLayoutEffect} from 'react';
 import {geoMercator,geoPath,geoGraticule} from 'd3-geo';
-import {Globe2,BookOpen,ShieldCheck,ArrowRight,Triangle,Pause,Play,Sun,Mountain,Leaf,Waves,House,Backpack,MoveRight,Expand,Maximize,ZoomIn,ZoomOut,CheckCircle2,AlertTriangle,ChevronRight,ChevronLeft,ShieldAlert,Users,Radio,Building,Activity,PhoneCall,AlertOctagon} from 'lucide-react';
+import {Globe2,BookOpen,ShieldCheck,ArrowRight,Triangle,Pause,Play,Sun,Mountain,Leaf,Waves,House,Backpack,MoveRight,Expand,Maximize,ZoomIn,ZoomOut,CheckCircle2,AlertTriangle,ChevronRight,ChevronLeft,ShieldAlert,Users,Radio,Building,Activity,PhoneCall,AlertOctagon,User} from 'lucide-react';
 import {Button} from '@/components/ui/button';
 
 import region from '@/lib/indonesia-region.json';
@@ -134,6 +134,7 @@ export default function GeographyHome({section='home'}:{section?:'home'|'belajar
  const [showPrompt, setShowPrompt] = useState(false);
  const [playMusic, setPlayMusic] = useState(false);
  const [showMitigationIntro, setShowMitigationIntro] = useState(false);
+ const [showDeveloperModal, setShowDeveloperModal] = useState(false);
 
  useEffect(()=>{
   const sync=()=>setFullscreen(!!document.fullscreenElement);sync();document.addEventListener('fullscreenchange',sync);
@@ -150,6 +151,15 @@ export default function GeographyHome({section='home'}:{section?:'home'|'belajar
     setShowMitigationIntro(true);
   }
  }, [section]);
+
+ useEffect(() => {
+  if (!showDeveloperModal) return;
+  const handleKey = (e: KeyboardEvent) => {
+   if (e.key === 'Escape') setShowDeveloperModal(false);
+  };
+  window.addEventListener('keydown', handleKey);
+  return () => window.removeEventListener('keydown', handleKey);
+ }, [showDeveloperModal]);
 
  async function toggleFullscreen(){try{setFullscreenError('');if(document.fullscreenElement)await document.exitFullscreen();else await document.documentElement.requestFullscreen();}catch{setFullscreenError('Layar penuh belum tersedia. Gunakan tombol layar penuh pada browser papan.');}}
  
@@ -174,6 +184,35 @@ export default function GeographyHome({section='home'}:{section?:'home'|'belajar
    onClose={() => setShowMitigationIntro(false)}
    onProceed={handleProceedToMitigation}
  />
+ {section === 'home' && (
+   <button
+     type="button"
+     className="home-developer-btn"
+     onClick={() => setShowDeveloperModal(true)}
+     aria-label="Tentang Pengembang"
+   >
+     <User className="w-4 h-4" />
+     <span>Tentang Pengembang</span>
+   </button>
+ )}
+ {showDeveloperModal && (
+   <div
+     className="dev-modal-overlay"
+     onClick={() => setShowDeveloperModal(false)}
+     role="dialog"
+     aria-modal="true"
+     aria-label="Tentang Pengembang"
+   >
+     <div className="dev-modal-card">
+       <img
+         src="/tentang-pengembang.png"
+         alt="Tentang Pengembang - Teguh Firmansyah Apriliana, M.Pd"
+         className="dev-modal-img"
+       />
+       <div className="dev-modal-hint">Klik di mana saja untuk keluar</div>
+     </div>
+   </div>
+ )}
  {showPrompt && section === 'home' && (
    <div className="prompt-overlay">
      <div className="prompt-dialog">
