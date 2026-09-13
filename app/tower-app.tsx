@@ -194,12 +194,7 @@ export default function TowerApp(){
           </button>
         </div>
 
-        <div className="hud-pill hud-pill-toggle">
-          <label>
-            <Switch checked={wire} disabled={!!run} onCheckedChange={setWire}/>
-            <span>Rangka</span>
-          </label>
-        </div>
+
       </div>
     </div>
 
