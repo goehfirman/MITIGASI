@@ -420,6 +420,7 @@ const mitigationPhases: MitigationPhaseData[] = [
     title: 'Di Dalam Ruangan: Merunduk, Lindungi Kepala & Bertahan',
     desc: 'Di dalam ruangan — Merunduk, lindungi kepala dan leher, berlindung di bawah meja kokoh, dan berpegangan kuat.',
     badge: 'Aturan Emas Bertahan Hidup',
+    image: '/mitigasi-saat-1.jpg',
     caption: 'Tiga langkah baku internasional: Merunduk ke lantai (Drop), Lindungi kepala bawah meja (Cover), Pegang kaki meja kuat (Hold On).',
     tips: [
      'DROP: Segera merunduk ke lantai sebelum guncangan kuat menjatuhkan Anda',
