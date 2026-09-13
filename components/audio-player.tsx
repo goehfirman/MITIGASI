@@ -58,8 +58,9 @@ export default function AudioPlayer({ autoPlayRequested }: { autoPlayRequested?:
     <div className="audio-player-container">
       <audio 
         ref={audioRef} 
-        src="/background-music.mp3" 
+        src="/background-music.mp3?v=2" 
         loop 
+        preload="auto"
         onPlay={() => setIsPlaying(true)}
         onPause={() => setIsPlaying(false)}
       />
