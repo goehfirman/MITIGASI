@@ -1,7 +1,7 @@
 "use client";
 import {useState,useMemo,useEffect,useRef,useLayoutEffect} from 'react';
 import {geoMercator,geoPath,geoGraticule} from 'd3-geo';
-import {Globe2,BookOpen,ShieldCheck,ArrowRight,Triangle,Pause,Play,Sun,Mountain,Leaf,Waves,House,Backpack,MoveRight,Expand,Maximize,ZoomIn,ZoomOut} from 'lucide-react';
+import {Globe2,BookOpen,ShieldCheck,ArrowRight,Triangle,Pause,Play,Sun,Mountain,Leaf,Waves,House,Backpack,MoveRight,Expand,Maximize,ZoomIn,ZoomOut,CheckCircle2,AlertTriangle,ChevronRight,ChevronLeft,ShieldAlert,Users,Radio,Building,Activity,PhoneCall,AlertOctagon} from 'lucide-react';
 import {Button} from '@/components/ui/button';
 
 import region from '@/lib/indonesia-region.json';
@@ -307,17 +307,798 @@ function Learning(){
  </section>
 }
 function LightPrompt(){return <Leaf aria-hidden="true"/>}
-function Mitigation(){
- const [slide,setSlide]=useState(0);
- const titles=['Sebelum Gempa','Saat Gempa','Setelah Gempa'];
- return <section className={'learning-deck mitigation-deck miti-theme-'+slide} aria-label="Slide Mitigasi Gempa Bumi" onKeyDown={e=>{if(e.key==='ArrowRight'){e.preventDefault();setSlide(s=>Math.min(2,s+1));}if(e.key==='ArrowLeft'){e.preventDefault();setSlide(s=>Math.max(0,s-1));}}}>
- <div className="slide-top"><Link href="/" aria-label="Kembali ke Beranda"><House /></Link></div>
- <h1>Mitigasi Gempa Bumi</h1>
- <div className="slide-body">
- {slide===0&&<article className="slide-glass"><Backpack/><h2>Sebelum Gempa</h2><p>Siapkan diri, kenali lingkungan, dan berlatih rutin agar siap saat bencana datang.</p><h3>Langkah Kesiapsiagaan</h3><ul className="slide-aspects"><li><strong>1.</strong> Kenali tempat berlindung, jalur evakuasi, dan titik kumpul di sekolah maupun di rumah.</li><li><strong>2.</strong> Bersama orang dewasa, amankan lemari, rak buku, dan letakkan benda berat di bagian bawah agar tidak mudah jatuh.</li><li><strong>3.</strong> Siapkan tas darurat berisi air minum, makanan ringan, senter, peluit, dan kotak P3K.</li><li><strong>4.</strong> Ikuti simulasi gempa secara berkala di sekolah dan di lingkungan rumah.</li></ul></article>}
- {slide===1&&<article className="slide-glass"><ShieldCheck/><h2>Saat Gempa</h2><p>Lindungi diri dari benda yang jatuh. Tetap tenang dan ikuti prosedur keselamatan.</p><h3>Tindakan Perlindungan</h3><ul className="slide-aspects"><li><strong>1.</strong> <em>Di dalam ruangan</em> — Merunduk, lindungi kepala dan leher, berlindung di bawah meja kokoh, dan berpegangan kuat.</li><li><strong>2.</strong> Jauhi kaca, jendela, dan benda yang bisa jatuh. Jangan menggunakan lift.</li><li><strong>3.</strong> <em>Di luar ruangan</em> — Jauhi bangunan, tiang listrik, dan pohon besar. Cari area terbuka.</li><li><strong>4.</strong> <em>Di pesisir</em> — Setelah guncangan kuat berhenti, segera evakuasi ke tempat tinggi melalui jalur aman (waspada tsunami).</li></ul></article>}
- {slide===2&&<article className="slide-glass"><House/><h2>Setelah Gempa</h2><p>Keluar dengan tertib, tetap waspada terhadap gempa susulan, dan ikuti arahan petugas.</p><h3>Langkah Pasca Gempa</h3><ul className="slide-aspects"><li><strong>1.</strong> Setelah guncangan berhenti, ikuti jalur aman menuju titik kumpul bersama guru atau keluarga.</li><li><strong>2.</strong> Laporkan orang yang terluka kepada orang dewasa atau petugas. Jangan masuk ke bangunan yang rusak.</li><li><strong>3.</strong> Waspadai gempa susulan — tetap di luar bangunan dan di area terbuka.</li><li><strong>4.</strong> Ikuti informasi resmi dari BMKG dan instruksi petugas. Jangan percaya informasi yang belum terverifikasi.</li></ul><p className="miti-source">Panduan diringkas dari <a href="https://www.bmkg.go.id/gempabumi/mitigasi/antisipasi-gempabumi" target="_blank" rel="noreferrer">BMKG: Antisipasi Gempa Bumi</a>.</p></article>}
- </div>
- <nav className="slide-navigation" aria-label="Navigasi slide" style={{justifyContent: 'center'}}><div className="slide-selectors">{titles.map((title,i)=><button key={title} onClick={()=>setSlide(i)} aria-label={`Slide ${i+1}: ${title}`} aria-current={slide===i?'step':undefined}>{i+1}</button>)}</div></nav>
- </section>
+interface MitigationPointData {
+ id: string;
+ shortTitle: string;
+ title: string;
+ desc: string;
+ badge: string;
+ image?: string;
+ caption: string;
+ tips: string[];
+ keyRules: { label: string; text: string }[];
+}
+
+interface MitigationPhaseData {
+ title: string;
+ subtitle: string;
+ summary: string;
+ icon: typeof Backpack;
+ points: MitigationPointData[];
+}
+
+const mitigationPhases: MitigationPhaseData[] = [
+ {
+  title: 'Sebelum Gempa',
+  subtitle: 'FASE 1 · KESIAPSIAGAAN AWAL',
+  summary: 'Siapkan diri, kenali lingkungan, dan berlatih rutin agar siap saat bencana datang.',
+  icon: Backpack,
+  points: [
+   {
+    id: 'sebelum-1',
+    shortTitle: 'Kenali Jalur & Titik Kumpul',
+    title: 'Kenali Tempat Berlindung, Jalur Evakuasi, dan Titik Kumpul',
+    desc: 'Kenali tempat berlindung, jalur evakuasi, dan titik kumpul di sekolah maupun di rumah.',
+    badge: 'Rute & Titik Kumpul Aman',
+    image: '/mitigasi-sebelum-1.jpg',
+    caption: 'Memahami rambu hijau darurat, arah panah lantai menuju titik kumpul lapangan terbuka, serta posisi Drop-Cover-Hold On di bawah meja kokoh.',
+    tips: [
+     'Hafalkan arah panah hijau jalur keluar darurat di koridor sekolah dan rumah',
+     'Tentukan titik kumpul (muster point) lapang yang bebas dari bahaya runtuhan gedung',
+     'Latih posisi perlindungan merunduk di bawah meja kokoh secara berkala'
+    ],
+    keyRules: [
+     { label: 'Lokasi', text: 'Di sekolah & di rumah' },
+     { label: 'Tujuan', text: 'Tahu arah evakuasi tanpa panik saat darurat' }
+    ]
+   },
+   {
+    id: 'sebelum-2',
+    shortTitle: 'Amankan Perabotan Berat',
+    title: 'Amankan Lemari & Taruh Benda Berat di Bagian Bawah',
+    desc: 'Bersama orang dewasa, amankan lemari, rak buku, dan letakkan benda berat di bagian bawah agar tidak mudah jatuh.',
+    badge: 'Pencegahan Bahaya Ruangan',
+    image: '/mitigasi-sebelum-2.jpg',
+    caption: 'Memasang siku pengunci dinding (L-bracket) pada lemari tinggi dan menata barang berat pada rak bagian paling bawah.',
+    tips: [
+     'Pasang siku pengunci (L-bracket) antara lemari tinggi dan dinding kokoh',
+     'Pindahkan buku tebal, vas, dan benda berat ke rak dasar lemari',
+     'Pastikan pintu keluar dan koridor tidak terhalang perabotan besar'
+    ],
+    keyRules: [
+     { label: 'Prioritas', text: 'Cegah cedera tertimpa perabot roboh' },
+     { label: 'Metode', text: 'Kunci bracket besi kuat ke dinding tembok' }
+    ]
+   },
+   {
+    id: 'sebelum-3',
+    shortTitle: 'Siapkan Tas Siaga Bencana',
+    title: 'Siapkan Tas Darurat Bencana (Emergency Bag)',
+    desc: 'Siapkan tas darurat berisi air minum, makanan ringan, senter, peluit, dan kotak P3K.',
+    badge: 'Kebutuhan Darurat 72 Jam',
+    image: '/mitigasi-sebelum-3.jpg',
+    caption: 'Tas siaga bencana tahan air berisi logistik bertahan hidup 72 jam pertama yang siap disambar kapan saja.',
+    tips: [
+     'Air minum botol mineral & makanan padat energi tahan lama',
+     'Senter terang, baterai cadangan, dan peluit darurat untuk meminta tolong',
+     'Kotak P3K, obat pribadi, masker penahan debu, serta radio darurat'
+    ],
+    keyRules: [
+     { label: 'Posisi Tas', text: 'Dekat pintu keluar / mudah dijangkau' },
+     { label: 'Kapasitas', text: 'Mencukupi kebutuhan bertahan 3 hari' }
+    ]
+   },
+   {
+    id: 'sebelum-4',
+    shortTitle: 'Ikuti Simulasi Gempa Rutin',
+    title: 'Ikuti Simulasi Evakuasi Gempa Berkala',
+    desc: 'Ikuti simulasi gempa secara berkala di sekolah dan di lingkungan rumah.',
+    badge: 'Latihan Refleks & Tanggap Darurat',
+    image: '/mitigasi-sebelum-4.jpg',
+    caption: 'Siswa berjalan tertib dengan melindungi kepala menggunakan buku menuju titik kumpul lapangan terbuka dipandu guru.',
+    tips: [
+     'Latih refleks spontan merunduk begitu alarm tanda bahaya berbunyi',
+     'Jalan cepat teratur tanpa saling mendahului atau mendorong teman',
+     'Dengarkan dan ikuti seluruh arahan guru atau koordinator keselamatan'
+    ],
+    keyRules: [
+     { label: 'Frekuensi', text: 'Minimal 1-2 kali per semester di sekolah' },
+     { label: 'Manfaat', text: 'Membiasakan tubuh tetap tenang dan teratur' }
+    ]
+   }
+  ]
+ },
+ {
+  title: 'Saat Gempa',
+  subtitle: 'FASE 2 · TINDAKAN PENYELAMATAN DIRI',
+  summary: 'Lindungi diri dari benda yang jatuh. Tetap tenang dan ikuti prosedur keselamatan.',
+  icon: ShieldCheck,
+  points: [
+   {
+    id: 'saat-1',
+    shortTitle: 'Drop, Cover, Hold On',
+    title: 'Di Dalam Ruangan: Merunduk, Lindungi Kepala & Bertahan',
+    desc: 'Di dalam ruangan — Merunduk, lindungi kepala dan leher, berlindung di bawah meja kokoh, dan berpegangan kuat.',
+    badge: 'Aturan Emas Bertahan Hidup',
+    caption: 'Tiga langkah baku internasional: Merunduk ke lantai (Drop), Lindungi kepala bawah meja (Cover), Pegang kaki meja kuat (Hold On).',
+    tips: [
+     'DROP: Segera merunduk ke lantai sebelum guncangan kuat menjatuhkan Anda',
+     'COVER: Lindungi kepala dan leher dengan masuk ke kolong meja kokoh',
+     'HOLD ON: Pegang erat kaki meja dengan kedua tangan agar meja tidak bergeser'
+    ],
+    keyRules: [
+     { label: 'Peringatan', text: 'Jangan lari keluar saat gempa sedang bergetar keras' },
+     { label: 'Fokus', text: 'Lindungi kepala dari serpihan genteng dan lampu plafon' }
+    ]
+   },
+   {
+    id: 'saat-2',
+    shortTitle: 'Jauhi Kaca & Jangan Pakai Lift',
+    title: 'Jauhi Kaca Jendela & Dilarang Menggunakan Lift',
+    desc: 'Jauhi kaca, jendela, dan benda yang bisa jatuh. Jangan menggunakan lift.',
+    badge: 'Area Bahaya Bangunan',
+    caption: 'Kaca jendela mudah pecah menjadi serpihan tajam, sedangkan lift berisiko mati total akibat putusnya aliran listrik.',
+    tips: [
+     'Menjauh minimal 2–3 meter dari jendela, pintu kaca, dan cermin dinding',
+     'Gunakan tas ransel atau buku tebal sebagai pelindung kepala jika tidak ada meja',
+     'Jika sedang berada di dalam lift, tekan semua tombol lantai dan segera keluar saat pintu terbuka'
+    ],
+    keyRules: [
+     { label: 'Larangan Mutlak', text: 'DILARANG menggunakan lift saat gempa' },
+     { label: 'Jalur Keluar', text: 'Selalu gunakan tangga darurat' }
+    ]
+   },
+   {
+    id: 'saat-3',
+    shortTitle: 'Di Luar Ruangan: Area Terbuka',
+    title: 'Di Luar Ruangan: Jauhi Gedung & Cari Lapangan Lapang',
+    desc: 'Di luar ruangan — Jauhi bangunan, tiang listrik, dan pohon besar. Cari area terbuka.',
+    badge: 'Zona Bebas Runtuhan',
+    caption: 'Menjauh dari fasad dinding gedung, genteng atap, tiang kabel listrik, serta papan reklame.',
+    tips: [
+     'Bergerak menuju tengah lapangan sepak bola, taman, atau halaman terbuka lebar',
+     'Waspadai jatuhnya genteng, serpihan kaca, dan ornamen dinding dari lantai atas',
+     'Jauhi trafo dan kabel tiang listrik yang berpotensi putus bertegangan'
+    ],
+    keyRules: [
+     { label: 'Jarak Aman', text: 'Minimal sama dengan tinggi gedung terdekat' },
+     { label: 'Posisi', text: 'Merunduk di tanah lapang jika getaran sangat keras' }
+    ]
+   },
+   {
+    id: 'saat-4',
+    shortTitle: 'Di Pesisir: Waspada Tsunami',
+    title: 'Di Kawasan Pesisir: Segera Mengungsi ke Tempat Tinggi',
+    desc: 'Di pesisir — Setelah guncangan kuat berhenti, segera evakuasi ke tempat tinggi melalui jalur aman (waspada tsunami).',
+    badge: 'Prosedur Tsunami 20-20-20',
+    caption: 'Jika gempa dirasakan kuat lebih dari 20 detik di dekat pantai, segera evakuasi ke bukit atau gedung tinggi aman.',
+    tips: [
+     'Prinsip 20-20-20: Gempa terasa >20 detik, evakuasi dalam 20 menit, tuju elevasi >20 meter',
+     'Jangan menunggu air laut surut atau menunggu bunyi sirine peringatan',
+     'Gunakan rute jalur evakuasi bukit terdekat dengan berjalan kaki cepat'
+    ],
+    keyRules: [
+     { label: 'Tanda Bahaya', text: 'Air laut surut tiba-tiba & suara gemuruh laut' },
+     { label: 'Arah Lari', text: 'Tegak lurus menjauhi garis pantai menuju perbukitan' }
+    ]
+   }
+  ]
+ },
+ {
+  title: 'Setelah Gempa',
+  subtitle: 'FASE 3 · PEMULIHAN & KEWASPADAAN SUSULAN',
+  summary: 'Keluar dengan tertib, tetap waspada terhadap gempa susulan, dan ikuti arahan petugas.',
+  icon: House,
+  points: [
+   {
+    id: 'setelah-1',
+    shortTitle: 'Evakuasi Tertib ke Titik Kumpul',
+    title: 'Setelah Guncangan Berhenti: Evakuasi Tenang & Tertib',
+    desc: 'Setelah guncangan berhenti, ikuti jalur aman menuju titik kumpul bersama guru atau keluarga.',
+    badge: 'Evakuasi Teratur Pasca Gempa',
+    caption: 'Melangkah tenang melalui tangga darurat tanpa panik menuju titik kumpul lapangan terbuka bersama rombongan.',
+    tips: [
+     'Periksa diri sendiri dan teman sekitar apakah mengalami luka fisik',
+     'Keluar perlahan lewat tangga darurat; jangan saling mendorong di pintu',
+     'Berkumpul di titik kumpul dan lakukan absensi untuk memastikan semua orang selamat'
+    ],
+    keyRules: [
+     { label: 'Etika Evakuasi', text: 'Dilarang panik, dilarang berlari kencang, dilarang mendorong' },
+     { label: 'Pemeriksaan', text: 'Laporkan bila ada rekan yang tertinggal di ruangan' }
+    ]
+   },
+   {
+    id: 'setelah-2',
+    shortTitle: 'Pertolongan & Gedung Rusak',
+    title: 'Laporkan Orang Terluka & Jangan Masuki Bangunan Rusak',
+    desc: 'Laporkan orang yang terluka kepada orang dewasa atau petugas. Jangan masuk ke bangunan yang rusak.',
+    badge: 'Penanganan Korban & Struktur Bangunan',
+    caption: 'Memberikan pertolongan pertama pada luka ringan dan melarang siapa pun masuk gedung yang mengalami retakan parah.',
+    tips: [
+     'Beri pertolongan pertama menggunakan isi kotak P3K darurat',
+     'Jika ada korban tertimpa berat, segera laporkan ke tim SAR / guru / petugas medis',
+     'Jangan sekali-kali masuk kembali ke gedung yang retak miring untuk mengambil barang'
+    ],
+    keyRules: [
+     { label: 'Bahaya Runtuh', text: 'Gedung retak dapat roboh sewaktu-waktu' },
+     { label: 'Nomor Darurat', text: '112 (Layanan Darurat) / 115 (Basarnas)' }
+    ]
+   },
+   {
+    id: 'setelah-3',
+    shortTitle: 'Waspada Gempa Susulan',
+    title: 'Waspadai Gempa Susulan (Aftershocks)',
+    desc: 'Waspadai gempa susulan — tetap di luar bangunan dan di area terbuka.',
+    badge: 'Siaga Gempa Lanjutan',
+    caption: 'Gempa susulan sering terjadi beberapa saat setelah gempa utama, dengan potensi merobohkan gedung yang strukturnya sudah melemah.',
+    tips: [
+     'Tetap bertahan di lapangan terbuka hingga situasi dinyatakan aman sepenuhnya oleh petugas',
+     'Jika gempa susulan datang, segera kembali lakukan posisi Drop-Cover-Hold On',
+     'Tenangkan diri, tarik napas dalam-dalam, dan saling memberi semangat kepada teman'
+    ],
+    keyRules: [
+     { label: 'Sifat Gempa', text: 'Dapat terjadi dalam hitungan menit, jam, atau beberapa hari' },
+     { label: 'Langkah Aman', text: 'Gunakan tenda darurat luar ruangan jika rumah mengalami retak' }
+    ]
+   },
+   {
+    id: 'setelah-4',
+    shortTitle: 'Pantau Info Resmi BMKG',
+    title: 'Pantau Informasi Resmi BMKG & Hindari Berita Hoaks',
+    desc: 'Ikuti informasi resmi dari BMKG dan instruksi petugas. Jangan percaya informasi yang belum terverifikasi.',
+    badge: 'Pemberitaan Resmi Terverifikasi',
+    caption: 'Mengakses data akurat parameter gempa dari aplikasi InfoBMKG dan mengikuti arahan komando BPBD setempat.',
+    tips: [
+     'Buka aplikasi resmi InfoBMKG atau kanal media sosial resmi bercentang biru',
+     'Nyalakan radio bertenaga baterai jika jaringan seluler dan listrik padam',
+     'Jangan menyebarkan kabar burung, pesan berantai tanpa sumber, atau isu gempa hoaks'
+    ],
+    keyRules: [
+     { label: 'Sumber Valid', text: 'BMKG, BPBD, BNPB, dan Pemda setempat' },
+     { label: 'Sikap Bijak', text: 'Saring sebelum sharing informasi bencana' }
+    ]
+   }
+  ]
+ }
+];
+
+function MitigationDiagram({ point }: { point: MitigationPointData }) {
+ if (point.id === 'saat-1') {
+  return (
+   <div className="miti-diagram-wrap">
+    <div className="miti-diagram-banner">
+     <ShieldAlert className="miti-pulse-icon" />
+     <div>
+      <h4>Tiga Langkah Emas Perlindungan Diri</h4>
+      <p>Lakukan segera saat merasakan bumi berguncang keras</p>
+     </div>
+    </div>
+    <div className="miti-diagram-grid-3">
+     <div className="miti-diagram-step">
+      <div className="miti-step-badge">1. DROP</div>
+      <div className="miti-step-illustration drop-ill">
+       <div className="drop-figure">🏃 ➔ 🧎</div>
+      </div>
+      <h5>Merunduk ke Lantai</h5>
+      <p>Rendahkan tubuh sebelum gempa merobohkan keseimbangan Anda.</p>
+     </div>
+     <div className="miti-diagram-step">
+      <div className="miti-step-badge highlight">2. COVER</div>
+      <div className="miti-step-illustration cover-ill">
+       <div className="cover-figure">🛡️ 🪑</div>
+      </div>
+      <h5>Lindungi Kepala Bawah Meja</h5>
+      <p>Masuk ke kolong meja kokoh untuk menahan runtuhan genteng & lampu.</p>
+     </div>
+     <div className="miti-diagram-step">
+      <div className="miti-step-badge">3. HOLD ON</div>
+      <div className="miti-step-illustration hold-ill">
+       <div className="hold-figure">✊ 🪵</div>
+      </div>
+      <h5>Pegang Kaki Meja Erat</h5>
+      <p>Pegang erat kaki meja agar meja tetap menaungi tubuh saat bergetar.</p>
+     </div>
+    </div>
+   </div>
+  );
+ }
+
+ if (point.id === 'saat-2') {
+  return (
+   <div className="miti-diagram-wrap">
+    <div className="miti-diagram-banner warning-banner">
+     <AlertOctagon className="miti-pulse-icon text-red" />
+     <div>
+      <h4>Dua Area Bahaya Tinggi di Dalam Gedung</h4>
+      <p>Kaca pecah dan elevator macet adalah penyebab utama korban luka</p>
+     </div>
+    </div>
+    <div className="miti-danger-split">
+     <div className="miti-danger-card red-border">
+      <div className="miti-danger-header">
+       <span className="miti-danger-badge">BAHAYA PECAHAN KACA</span>
+      </div>
+      <div className="miti-danger-graphic glass-hazard">
+       <div className="hazard-symbol">🪟 💥 ⚠️</div>
+       <div className="hazard-distance">Zona Bahaya: Radius 2–3 Meter</div>
+      </div>
+      <ul>
+       <li>Kaca jendela dapat meledak pecah ke dalam ruangan saat dinding berguncang.</li>
+       <li>Serpihan kaca tajam dapat melukai wajah, leher, dan mata.</li>
+       <li>Menjauhlah ke sudut ruangan atau di bawah meja yang jauh dari jendela.</li>
+      </ul>
+     </div>
+     <div className="miti-danger-card yellow-border">
+      <div className="miti-danger-header">
+       <span className="miti-danger-badge warning">DILARANG PAKAI LIFT</span>
+      </div>
+      <div className="miti-danger-graphic lift-hazard">
+       <div className="hazard-symbol">🛗 ❌ ➔ 🪜 ✔️</div>
+       <div className="hazard-distance">Gunakan Selalu Tangga Darurat</div>
+      </div>
+      <ul>
+       <li>Sensor otomatis atau korsleting listrik akan mematikan daya elevator seketika.</li>
+       <li>Risiko terjebak berjam-jam di dalam kotak lift antara dua lantai.</li>
+       <li>Kabel penahan lift berisiko keluar dari rel lintasan akibat getaran.</li>
+      </ul>
+     </div>
+    </div>
+   </div>
+  );
+ }
+
+ if (point.id === 'saat-3') {
+  return (
+   <div className="miti-diagram-wrap">
+    <div className="miti-diagram-banner">
+     <Building className="miti-pulse-icon" />
+     <div>
+      <h4>Panduan Zonasi Aman Luar Ruangan</h4>
+      <p>Menjauh dari jangkauan jatuhan material gedung dan jaringan listrik</p>
+     </div>
+    </div>
+    <div className="miti-outdoor-zones">
+     <div className="zone-diagram">
+      <div className="zone-building">
+       <span>GEDUNG TINGGI</span>
+       <div className="fall-radius-marker">⚠️ Zona Bahaya Fasad & Genteng Jatuh</div>
+      </div>
+      <div className="zone-safe">
+       <span className="safe-badge">ZONA AMAN TERBUKA</span>
+       <p>Lapangan Hijau / Halaman Parkir Lapang</p>
+       <small>Jarak aman: minimal sama dengan tinggi bangunan tertinggi terdekat</small>
+      </div>
+      <div className="zone-pole">
+       <span>TIANG LISTRIK</span>
+       <div className="fall-radius-marker">⚡ Bahaya Kabel Putus</div>
+      </div>
+     </div>
+    </div>
+   </div>
+  );
+ }
+
+ if (point.id === 'saat-4') {
+  return (
+   <div className="miti-diagram-wrap">
+    <div className="miti-diagram-banner">
+     <Waves className="miti-pulse-icon text-cyan" />
+     <div>
+      <h4>Formula Penyelamatan Tsunami: 20 · 20 · 20</h4>
+      <p>Pedoman resmi keselamatan di kawasan pesisir pantai</p>
+     </div>
+    </div>
+    <div className="miti-tsunami-scale">
+     <div className="tsunami-step-box">
+      <div className="tsunami-num">20</div>
+      <div className="tsunami-unit">DETIK</div>
+      <p>Jika guncangan gempa terasa kuat lebih dari 20 detik atau sulit berdiri.</p>
+     </div>
+     <div className="tsunami-arrow">➔</div>
+     <div className="tsunami-step-box">
+      <div className="tsunami-num">20</div>
+      <div className="tsunami-unit">MENIT</div>
+      <p>Waktu evakuasi sebelum gelombang pertama tiba; jangan tunggu air laut surut.</p>
+     </div>
+     <div className="tsunami-arrow">➔</div>
+     <div className="tsunami-step-box highlight-box">
+      <div className="tsunami-num">20</div>
+      <div className="tsunami-unit">METER</div>
+      <p>Lari menuju perbukitan atau gedung tinggi vertikal dengan ketinggian minimal 20 meter.</p>
+     </div>
+    </div>
+   </div>
+  );
+ }
+
+ if (point.id === 'setelah-1') {
+  return (
+   <div className="miti-diagram-wrap">
+    <div className="miti-diagram-banner">
+     <Users className="miti-pulse-icon" />
+     <div>
+      <h4>Alur Evakuasi Teratur Pasca Gempa</h4>
+      <p>Bergerak tenang mengikuti tanda panah hijau menuju titik kumpul sekolah</p>
+     </div>
+    </div>
+    <div className="miti-evac-flow">
+     <div className="evac-node">
+      <div className="evac-icon">🏫</div>
+      <h6>1. Ruang Kelas</h6>
+      <small>Tunggu getaran reda total</small>
+     </div>
+     <div className="evac-conn">➔</div>
+     <div className="evac-node">
+      <div className="evac-icon">🪜</div>
+      <h6>2. Tangga Darurat</h6>
+      <small>Jalan cepat, jangan dorong</small>
+     </div>
+     <div className="evac-conn">➔</div>
+     <div className="evac-node">
+      <div className="evac-icon">🟢</div>
+      <h6>3. Koridor Rute</h6>
+      <small>Ikuti panah lantai hijau</small>
+     </div>
+     <div className="evac-conn">➔</div>
+     <div className="evac-node highlight-node">
+      <div className="evac-icon">⛳</div>
+      <h6>4. Titik Kumpul</h6>
+      <small>Absensi & pengecekan tim</small>
+     </div>
+    </div>
+   </div>
+  );
+ }
+
+ if (point.id === 'setelah-2') {
+  return (
+   <div className="miti-diagram-wrap">
+    <div className="miti-diagram-banner">
+     <AlertTriangle className="miti-pulse-icon text-amber" />
+     <div>
+      <h4>Pemeriksaan Korban & Bahaya Gedung Retak</h4>
+      <p>Dua prioritas utama sesaat setelah mencapai area aman</p>
+     </div>
+    </div>
+    <div className="miti-post-split">
+     <div className="miti-post-card green-tint">
+      <h5>🏥 Pertolongan Pertama (P3K)</h5>
+      <ul>
+       <li>Beri obat luka luar pada lecet atau memar ringan dari isi tas siaga.</li>
+       <li>Tenangkan teman yang shock atau panik berlebihan.</li>
+       <li>Jika ada korban pingsan atau cedera tulang, jangan dipindahkan sembarangan; segera panggil petugas medis / SAR.</li>
+      </ul>
+     </div>
+     <div className="miti-post-card red-tint">
+      <h5>🚫 Dilarang Masuk Gedung Rusak</h5>
+      <ul>
+       <li>Gedung yang terlihat retak miring berpotensi runtuh sewaktu-waktu.</li>
+       <li>Jangan pernah kembali masuk ke dalam gedung untuk mengambil tas atau barang berharga.</li>
+       <li>Tunggu pemeriksaan kelayakan struktur oleh insinyur sipil / tim BPBD.</li>
+      </ul>
+     </div>
+    </div>
+   </div>
+  );
+ }
+
+ if (point.id === 'setelah-3') {
+  return (
+   <div className="miti-diagram-wrap">
+    <div className="miti-diagram-banner">
+     <Activity className="miti-pulse-icon" />
+     <div>
+      <h4>Siklus Gempa Susulan (Aftershocks)</h4>
+      <p>Memahami mengapa harus tetap bertahan di area luar ruangan</p>
+     </div>
+    </div>
+    <div className="miti-aftershock-graph">
+     <div className="seismo-chart">
+      <div className="seismo-wave main-wave">
+       <span className="wave-tag">Gempa Utama (Besar)</span>
+       <div className="wave-bars">
+        <span style={{height:'35px'}}/><span style={{height:'75px'}}/><span style={{height:'120px'}}/><span style={{height:'95px'}}/><span style={{height:'40px'}}/>
+       </div>
+      </div>
+      <div className="seismo-divider"/>
+      <div className="seismo-wave after-wave">
+       <span className="wave-tag">Gempa Susulan 1</span>
+       <div className="wave-bars">
+        <span style={{height:'25px'}}/><span style={{height:'45px'}}/><span style={{height:'65px'}}/><span style={{height:'35px'}}/>
+       </div>
+      </div>
+      <div className="seismo-wave after-wave">
+       <span className="wave-tag">Gempa Susulan 2...</span>
+       <div className="wave-bars">
+        <span style={{height:'18px'}}/><span style={{height:'32px'}}/><span style={{height:'25px'}}/>
+       </div>
+      </div>
+     </div>
+     <div className="seismo-note">
+      ⚠️ <strong>Penting:</strong> Bangunan yang sudah mengalami retak struktur akibat gempa utama dapat langsung roboh meskipun gempa susulan berkekuatan lebih kecil. Tetaplah berada di luar ruangan!
+     </div>
+    </div>
+   </div>
+  );
+ }
+
+ return (
+  <div className="miti-diagram-wrap">
+   <div className="miti-diagram-banner">
+    <Radio className="miti-pulse-icon" />
+    <div>
+     <h4>Pusat Informasi Valid & Saluran Darurat</h4>
+     <p>Hanya percayai sumber data resmi dan abaikan kabar burung hoaks</p>
+    </div>
+   </div>
+   <div className="miti-info-hub">
+    <div className="info-hub-col">
+     <h6>Kanal Resmi Terverifikasi</h6>
+     <div className="hub-badge-item">
+      <span>📱 Aplikasi Resmi InfoBMKG</span>
+      <small>Data magnitudo, pusat gempa, dan peringatan dini tsunami</small>
+     </div>
+     <div className="hub-badge-item">
+      <span>📻 Radio Darurat Siaga (RRI)</span>
+      <small>Tetap dapat mengudara meski internet dan listrik daerah padam</small>
+     </div>
+     <div className="hub-badge-item">
+      <span>🏢 Komando BPBD & BNPB</span>
+      <small>Panduan resmi posko evakuasi dan pembagian bantuan logistik</small>
+     </div>
+    </div>
+    <div className="info-hub-col">
+     <h6>Panggilan Darurat Bebas Pulsa</h6>
+     <div className="hub-call-badge">
+      <div className="call-num">112</div>
+      <div className="call-desc">Panggilan Darurat Terpadu Seluruh Indonesia</div>
+     </div>
+     <div className="hub-call-badge">
+      <div className="call-num">115</div>
+      <div className="call-desc">BASARNAS (Pencarian & Pertolongan Korban)</div>
+     </div>
+     <div className="hub-anti-hoax">
+      🛡️ Jangan menyebarkan ramalan gempa hoaks di WhatsApp atau media sosial!
+     </div>
+    </div>
+   </div>
+  </div>
+ );
+}
+
+function MitigationVisualizer({
+ phase,
+ point,
+ pointIndex,
+ totalPoints,
+ onSelectPoint
+}: {
+ phase: MitigationPhaseData;
+ point: MitigationPointData;
+ pointIndex: number;
+ totalPoints: number;
+ onSelectPoint: (idx: number) => void;
+}) {
+ const [isZoomed, setIsZoomed] = useState(false);
+
+ useEffect(() => {
+  const handleKey = (e: KeyboardEvent) => {
+   if (e.key === 'Escape') setIsZoomed(false);
+  };
+  window.addEventListener('keydown', handleKey);
+  return () => window.removeEventListener('keydown', handleKey);
+ }, []);
+
+ return (
+  <>
+   {isZoomed && point.image && (
+    <div className="miti-zoom-backdrop" onClick={() => setIsZoomed(false)}>
+     <div className="miti-zoom-content" onClick={e => e.stopPropagation()}>
+      <img src={point.image} alt={point.title} className="miti-zoom-img" />
+      <div className="miti-zoom-info">
+       <h3>{point.title}</h3>
+       <p>{point.caption}</p>
+       <button onClick={() => setIsZoomed(false)} className="miti-zoom-close" aria-label="Tutup pratinjau">×</button>
+      </div>
+     </div>
+    </div>
+   )}
+
+   <section className="geo-map-section miti-visual-section" aria-label="Visualisasi Langkah Mitigasi">
+    <div className="geo-map-head miti-visual-head">
+     <div>
+      <span className="geo-kicker">VISUALISASI MITIGASI · LANGKAH {pointIndex + 1} DARI {totalPoints}</span>
+      <h2>{point.shortTitle}</h2>
+     </div>
+     <div className="miti-head-actions">
+      <div className="miti-step-controls">
+       <Button
+        variant="ghost"
+        disabled={pointIndex === 0}
+        onClick={() => onSelectPoint(pointIndex - 1)}
+        aria-label="Langkah sebelumnya"
+        className="miti-nav-btn"
+       >
+        <ChevronLeft />
+       </Button>
+       <span className="miti-step-pill">{pointIndex + 1} / {totalPoints}</span>
+       <Button
+        variant="ghost"
+        disabled={pointIndex === totalPoints - 1}
+        onClick={() => onSelectPoint(pointIndex + 1)}
+        aria-label="Langkah berikutnya"
+        className="miti-nav-btn"
+       >
+        <ChevronRight />
+       </Button>
+      </div>
+      {point.image && (
+       <Button
+        variant="ghost"
+        onClick={() => setIsZoomed(true)}
+        aria-label="Perbesar gambar"
+        className="miti-expand-btn"
+        title="Perbesar gambar visualisasi"
+       >
+        <Expand />
+       </Button>
+      )}
+     </div>
+    </div>
+
+    <div className="miti-visual-display">
+     {point.image ? (
+      <div className="miti-img-frame" onClick={() => setIsZoomed(true)} title="Klik untuk memperbesar gambar">
+       <img src={point.image} alt={point.title} className="miti-img-display" />
+       <div className="miti-img-tag">{point.badge}</div>
+       <div className="miti-img-caption-overlay">
+        <span>{point.caption}</span>
+        <span className="miti-zoom-hint">🔍 Klik gambar untuk memperbesar</span>
+       </div>
+      </div>
+     ) : (
+      <MitigationDiagram point={point} />
+     )}
+    </div>
+
+    <div className="miti-visual-footer">
+     <div className="miti-tips-wrapper">
+      <div className="miti-tips-title">
+       <CheckCircle2 className="miti-check-icon" />
+       <span>Tindakan Kunci & Panduan Praktis:</span>
+      </div>
+      <div className="miti-tips-chips">
+       {point.tips.map((tip, i) => (
+        <div key={i} className="miti-tip-chip">
+         <span className="miti-chip-dot">•</span>
+         <span>{tip}</span>
+        </div>
+       ))}
+      </div>
+      <div className="miti-rules-row">
+       {point.keyRules.map((kr, i) => (
+        <div key={i} className="miti-rule-pill">
+         <strong>{kr.label}:</strong> {kr.text}
+        </div>
+       ))}
+      </div>
+     </div>
+    </div>
+   </section>
+  </>
+ );
+}
+
+function Mitigation() {
+ const [slide, setSlide] = useState(0);
+ const [activePoint, setActivePoint] = useState(0);
+ const titles = ['Sebelum Gempa', 'Saat Gempa', 'Setelah Gempa'];
+
+ const currentPhase = mitigationPhases[slide];
+ const currentPoint = currentPhase.points[activePoint] || currentPhase.points[0];
+
+ const handleSelectSlide = (i: number) => {
+  setSlide(i);
+  setActivePoint(0);
+ };
+
+ return (
+  <section
+   className={'learning-deck mitigation-deck miti-theme-' + slide}
+   aria-label="Slide Mitigasi Gempa Bumi"
+   onKeyDown={e => {
+    if (e.key === 'ArrowRight') {
+     e.preventDefault();
+     if (activePoint < currentPhase.points.length - 1) {
+      setActivePoint(p => p + 1);
+     } else if (slide < 2) {
+      handleSelectSlide(slide + 1);
+     }
+    }
+    if (e.key === 'ArrowLeft') {
+     e.preventDefault();
+     if (activePoint > 0) {
+      setActivePoint(p => p - 1);
+     } else if (slide > 0) {
+      handleSelectSlide(slide - 1);
+      setActivePoint(mitigationPhases[slide - 1].points.length - 1);
+     }
+    }
+   }}
+  >
+   <div className="slide-top">
+    <Link href="/" aria-label="Kembali ke Beranda"><House /></Link>
+   </div>
+   <h1>Mitigasi Gempa Bumi</h1>
+
+   <div className="slide-body has-map miti-body">
+    <article className="slide-glass miti-glass">
+     <div className="miti-phase-header">
+      <div className="miti-phase-badge">{currentPhase.subtitle}</div>
+      <h2>{currentPhase.title}</h2>
+      <p className="miti-phase-summary">{currentPhase.summary}</p>
+     </div>
+
+     <div className="miti-list-label">
+      <span>PILIH LANGKAH UNTUK MELIHAT VISUALISASI:</span>
+     </div>
+
+     <div className="miti-points-list">
+      {currentPhase.points.map((pt, idx) => {
+       const isActive = activePoint === idx;
+       return (
+        <button
+         key={pt.id}
+         type="button"
+         className={'miti-point-card ' + (isActive ? 'is-active' : '')}
+         onClick={() => setActivePoint(idx)}
+         aria-pressed={isActive}
+        >
+         <div className="miti-card-num">{idx + 1}</div>
+         <div className="miti-card-body">
+          <div className="miti-card-title-row">
+           <h4>{pt.shortTitle}</h4>
+           {isActive && <span className="miti-active-pill">Aktif</span>}
+          </div>
+          <p className="miti-card-desc">{pt.desc}</p>
+         </div>
+        </button>
+       );
+      })}
+     </div>
+
+     <p className="miti-source">
+      Panduan diringkas dari{' '}
+      <a href="https://www.bmkg.go.id/gempabumi/mitigasi/antisipasi-gempabumi" target="_blank" rel="noreferrer">
+       BMKG: Antisipasi Gempa Bumi
+      </a>.
+     </p>
+    </article>
+
+    <MitigationVisualizer
+     key={slide + '-' + activePoint}
+     phase={currentPhase}
+     point={currentPoint}
+     pointIndex={activePoint}
+     totalPoints={currentPhase.points.length}
+     onSelectPoint={setActivePoint}
+    />
+   </div>
+
+   <nav className="slide-navigation" aria-label="Navigasi fase mitigasi" style={{ justifyContent: 'center' }}>
+    <div className="slide-selectors">
+     {titles.map((title, i) => (
+      <button
+       key={title}
+       onClick={() => handleSelectSlide(i)}
+       aria-label={`Fase ${i + 1}: ${title}`}
+       aria-current={slide === i ? 'step' : undefined}
+      >
+       {i + 1}
+      </button>
+     ))}
+    </div>
+   </nav>
+  </section>
+ );
 }
