@@ -43,17 +43,6 @@ export default function TowerApp(){
       <h2>Lab Maya Struktur Anti Gempa</h2>
     </div>
     <div className="lab-top-right">
-      <div className="lab-session-box">
-        <Users size={16}/>
-        <input 
-          aria-label="Nama kelompok" 
-          value={name} 
-          maxLength={40} 
-          disabled={!!session||!!run} 
-          onChange={e=>setName(e.target.value)}
-        />
-        {session?.code && <span className="session-code-badge">{session.code}</span>}
-      </div>
       <Button 
         variant="ghost" 
         className="lab-icon-btn" 
@@ -270,51 +259,7 @@ export default function TowerApp(){
 
   {/* Simplified Bottom Toolbar */}
   <footer className="lab-toolbar">
-    {/* Section 1: Mode & Preset */}
-    <div className="tb-section tb-mode">
-      <div className="tb-pill-switch">
-        <button 
-          type="button" 
-          disabled={!!run} 
-          className={`tb-switch-btn ${mode==='Bebas'?'active':''}`} 
-          onClick={()=>setMode('Bebas')}
-        >
-          Bebas
-        </button>
-        <button 
-          type="button" 
-          disabled={!!run} 
-          className={`tb-switch-btn ${mode==='Tantangan'?'active':''}`} 
-          onClick={()=>setMode('Tantangan')}
-        >
-          Tantangan
-        </button>
-      </div>
-      <div className="tb-presets">
-        <button 
-          type="button" 
-          disabled={!!run} 
-          className="tb-preset-btn" 
-          onClick={()=>edit(preset(true))}
-          title="Contoh Struktur Segitiga"
-        >
-          <Triangle size={13}/> Segitiga
-        </button>
-        <button 
-          type="button" 
-          disabled={!!run} 
-          className="tb-preset-btn" 
-          onClick={()=>edit(preset(false,3,false))}
-          title="Contoh Struktur Segi Empat"
-        >
-          <Square size={13}/> Segiempat
-        </button>
-      </div>
-    </div>
-
-    <div className="tb-divider"/>
-
-    {/* Section 2: Alat Bangun (5 tools) */}
+    {/* Section: Alat Bangun (5 tools) */}
     <div className="tb-section tb-tools">
       {tools.map(([id, label, Icon]) => (
         <button
