@@ -474,6 +474,7 @@ const mitigationPhases: MitigationPhaseData[] = [
     title: 'Di Kawasan Pesisir: Segera Mengungsi ke Tempat Tinggi',
     desc: 'Di pesisir — Setelah guncangan kuat berhenti, segera evakuasi ke tempat tinggi melalui jalur aman (waspada tsunami).',
     badge: 'Prosedur Tsunami 20-20-20',
+    image: '/mitigasi-saat-4.jpg',
     caption: 'Jika gempa dirasakan kuat lebih dari 20 detik di dekat pantai, segera evakuasi ke bukit atau gedung tinggi aman.',
     tips: [
      'Prinsip 20-20-20: Gempa terasa >20 detik, evakuasi dalam 20 menit, tuju elevasi >20 meter',
