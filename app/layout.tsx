@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import ViewportFit from './viewport-fit';
+import AudioPlayer from '@/components/audio-player';
 
 export const metadata: Metadata = {
   title: "Mengenal Kondisi Geografis Indonesia (Manfaat dan Ancaman)",
@@ -21,7 +22,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="id">
-      <body className="antialiased"><ViewportFit>{children}</ViewportFit></body>
+      <body className="antialiased">
+        <ViewportFit>{children}</ViewportFit>
+        <AudioPlayer />
+      </body>
     </html>
   );
 }

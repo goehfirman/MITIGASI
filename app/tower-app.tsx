@@ -1,5 +1,6 @@
 "use client";
 import {useEffect,useState} from 'react';
+import Link from 'next/link';
 import Scene, { type Target } from './tower-scene';
 import {Button} from '@/components/ui/button';
 import {Dialog,DialogContent,DialogTitle,DialogDescription} from '@/components/ui/dialog';
@@ -36,7 +37,7 @@ export default function TowerApp(){
   {/* Top Navigation Bar */}
   <header className="lab-top-nav">
     <Button asChild variant="ghost" className="lab-icon-btn">
-      <a href="/"><House size={20} aria-label="Kembali ke Beranda"/></a>
+      <Link href="/"><House size={20} aria-label="Kembali ke Beranda"/></Link>
     </Button>
     <div className="lab-title-area">
       <img src="/stem-logo.png" alt="STEM" className="lab-stem-logo" />
