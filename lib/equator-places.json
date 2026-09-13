@@ -1,0 +1,122 @@
+[
+  {
+    "name": "Kepulauan Batu",
+    "region": "Sumatera Utara",
+    "point": [
+      98.45,
+      0.0
+    ],
+    "description": "Garis khatulistiwa melintasi kawasan Kepulauan Batu di sebelah barat Pulau Sumatra. Wilayah ini terdiri atas sejumlah pulau kecil yang berada sangat dekat dengan garis lintang 0°.",
+    "image": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Indonesia_-_panoramio_%282%29.jpg"
+  },
+  {
+    "name": "Bonjol",
+    "region": "Sumatera Barat",
+    "point": [
+      100.2199,
+      0.0012
+    ],
+    "description": "Bonjol merupakan salah satu daerah terkenal di Indonesia yang dilalui garis khatulistiwa. Di kawasan ini terdapat monumen yang menandai keberadaan garis lintang 0°.",
+    "image": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Tugu_khatulistiwa_Bonjol.jpg"
+  },
+  {
+    "name": "Pangkalan Lesung",
+    "region": "Riau",
+    "point": [
+      102.1102,
+      -0.0002
+    ],
+    "description": "Pangkalan Lesung berada sangat dekat dengan garis khatulistiwa. Tugu Equator di wilayah ini menjadi penanda bahwa garis lintang 0° melintasi Kabupaten Pelalawan.",
+    "image": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Tugu_Equator.jpg"
+  },
+  {
+    "name": "Tanjung Teludas",
+    "region": "Kepulauan Riau",
+    "point": [
+      104.5,
+      0.0
+    ],
+    "description": "Garis khatulistiwa melintasi wilayah Kabupaten Lingga. Di Tanjung Teludas terdapat penanda khatulistiwa yang menunjukkan posisi garis lintang 0°.",
+    "image": "https://assets.pikiran-rakyat.com/crop/0x0%3A0x0/720x0/webp/photo/2024/04/29/2197270126.jpg"
+  },
+  {
+    "name": "Pontianak",
+    "region": "Kalimantan Barat",
+    "point": [
+      109.3224,
+      0.0009
+    ],
+    "description": "Pontianak dikenal sebagai Kota Khatulistiwa. Kota ini menjadi salah satu lokasi paling terkenal di Indonesia yang dilalui garis lintang 0° dan memiliki Tugu Khatulistiwa sebagai ikon kota.",
+    "image": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Tugu_Khatulistiwa_Pontianak_%282026%29_01.jpg"
+  },
+  {
+    "name": "Tumbang Olong",
+    "region": "Kalimantan Tengah",
+    "point": [
+      114.3342,
+      -0.0008
+    ],
+    "description": "Garis khatulistiwa melintasi kawasan Tumbang Olong. Di wilayah ini terdapat Tugu Khatulistiwa yang menjadi penanda geografis lintang 0°.",
+    "image": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Tugu_Khatulistiwa.jpg"
+  },
+  {
+    "name": "Santan Ulu",
+    "region": "Kalimantan Timur",
+    "point": [
+      117.2384,
+      -0.0088
+    ],
+    "description": "Wilayah Santan Ulu terletak sangat dekat dengan garis khatulistiwa. Daerah ini menjadi salah satu titik lintasan ekuator di bagian timur Pulau Kalimantan.",
+    "image": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Tugu_Khatulistiwa_Santan_Ulu_%281%29.jpg"
+  },
+  {
+    "name": "Tinombo Selatan",
+    "region": "Sulawesi Tengah",
+    "point": [
+      120.0947,
+      0.0006
+    ],
+    "description": "Garis khatulistiwa melintasi wilayah Tinombo Selatan di Kabupaten Parigi Moutong. Di kawasan ini terdapat Tugu Khatulistiwa sebagai penanda lintang 0° di Pulau Sulawesi.",
+    "image": "https://www.khatulistiwa.desa.id/desa/upload/artikel/sedang_1588415875_Tugu%20Katulistiwa.jpg"
+  },
+  {
+    "name": "Pulau Kayoa",
+    "region": "Maluku Utara",
+    "point": [
+      127.44,
+      0.0
+    ],
+    "description": "Pulau Kayoa berada sangat dekat dengan garis khatulistiwa. Di wilayah ini terdapat penanda yang menunjukkan lintasan garis lintang 0° di kawasan kepulauan Maluku Utara.",
+    "image": "https://awsimages.detik.net.id/community/media/visual/2019/03/26/1200cf57-eaa6-46ef-bef6-bf1ebc35cb5a.jpeg"
+  },
+  {
+    "name": "Pulau Halmahera",
+    "region": "Maluku Utara",
+    "point": [
+      127.7,
+      0.0
+    ],
+    "description": "Garis khatulistiwa melintasi Pulau Halmahera. Karena wilayah pulau ini membentang di sekitar lintang 0°, sebagian wilayahnya berada di belahan utara dan sebagian lainnya di belahan selatan.",
+    "image": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Jailolo_Bay_Sunrise.jpg"
+  },
+  {
+    "name": "Pulau Gebe",
+    "region": "Maluku Utara",
+    "point": [
+      129.45,
+      0.0
+    ],
+    "description": "Pulau Gebe dan beberapa pulau kecil di sekitarnya berada sangat dekat dengan garis khatulistiwa. Wilayah ini menjadi bagian dari jalur lintang 0° di Indonesia bagian timur.",
+    "image": "https://hubud.kemenhub.go.id/upbu/storage/libpar/gebe_1723_tempat-wisata_20260524002223_wisata-1-jpg.jpg"
+  },
+  {
+    "name": "Pulau Waigeo",
+    "region": "Papua Barat Daya",
+    "point": [
+      130.95,
+      0.0
+    ],
+    "description": "Pulau Waigeo dilintasi garis khatulistiwa sehingga sebagian wilayahnya berada di belahan Bumi utara dan sebagian lainnya berada di belahan Bumi selatan.",
+    "image": "https://commons.wikimedia.org/wiki/Special:Redirect/file/Waigeo_view-1.jpg"
+  }
+]
