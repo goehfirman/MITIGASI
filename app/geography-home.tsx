@@ -536,6 +536,7 @@ const mitigationPhases: MitigationPhaseData[] = [
     title: 'Waspadai Gempa Susulan (Aftershocks)',
     desc: 'Waspadai gempa susulan — tetap di luar bangunan dan di area terbuka.',
     badge: 'Siaga Gempa Lanjutan',
+    image: '/mitigasi-setelah-3.jpg',
     caption: 'Gempa susulan sering terjadi beberapa saat setelah gempa utama, dengan potensi merobohkan gedung yang strukturnya sudah melemah.',
     tips: [
      'Tetap bertahan di lapangan terbuka hingga situasi dinyatakan aman sepenuhnya oleh petugas',
