@@ -518,6 +518,7 @@ const mitigationPhases: MitigationPhaseData[] = [
     title: 'Laporkan Orang Terluka & Jangan Masuki Bangunan Rusak',
     desc: 'Laporkan orang yang terluka kepada orang dewasa atau petugas. Jangan masuk ke bangunan yang rusak.',
     badge: 'Penanganan Korban & Struktur Bangunan',
+    image: '/mitigasi-setelah-2.jpg',
     caption: 'Memberikan pertolongan pertama pada luka ringan dan melarang siapa pun masuk gedung yang mengalami retakan parah.',
     tips: [
      'Beri pertolongan pertama menggunakan isi kotak P3K darurat',
