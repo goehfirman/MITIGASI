@@ -1,0 +1,185 @@
+[
+  {
+    "name": "Sumatra",
+    "coast": "Pantai barat cenderung lebih terjal dan berombak besar, sedangkan pantai timur lebih landai.",
+    "waters": "Samudra Hindia, Selat Malaka, dan Selat Sunda.",
+    "potential": [
+      "Perikanan tangkap",
+      "Udang dan hasil tambak",
+      "Hutan mangrove",
+      "Budidaya perikanan",
+      "Wisata bahari"
+    ],
+    "description": "Pantai barat Sumatra berhadapan langsung dengan Samudra Hindia sehingga memiliki ombak yang cukup besar. Pantai timur lebih landai serta memiliki banyak muara sungai, rawa, dan hutan mangrove.",
+    "beach": "Pantai Padang, Sumatera Barat",
+    "image": "https://upload.wikimedia.org/wikipedia/commons/f/f3/Padang_Beach.jpg"
+  },
+  {
+    "name": "Jawa",
+    "coast": "Pantai utara relatif landai, sedangkan pantai selatan lebih terjal dan memiliki ombak besar.",
+    "waters": "Laut Jawa, Samudra Hindia, Selat Sunda, dan Selat Bali.",
+    "potential": [
+      "Perikanan",
+      "Tambak ikan dan udang",
+      "Produksi garam",
+      "Pelabuhan dan transportasi laut",
+      "Wisata pantai"
+    ],
+    "description": "Pantai utara Jawa banyak berupa dataran rendah sehingga berkembang menjadi kawasan pelabuhan, tambak, industri, dan permukiman. Pantai selatan menghadap Samudra Hindia sehingga memiliki ombak yang lebih kuat.",
+    "beach": "Pantai Parangtritis, DI Yogyakarta",
+    "image": "https://upload.wikimedia.org/wikipedia/commons/6/68/Pantai_Parangtritis_jogjakarta.jpg"
+  },
+  {
+    "name": "Kalimantan",
+    "coast": "Relatif landai, berlumpur, serta memiliki banyak delta, rawa, dan mangrove.",
+    "waters": "Laut Natuna, Laut Jawa, Selat Makassar, dan Laut Sulawesi.",
+    "potential": [
+      "Udang",
+      "Kepiting",
+      "Perikanan",
+      "Mangrove",
+      "Budidaya pesisir"
+    ],
+    "description": "Banyak sungai besar bermuara di pesisir Kalimantan sehingga membentuk delta, rawa, dan kawasan mangrove. Lingkungan ini sangat penting sebagai tempat hidup dan berkembang biak berbagai biota laut.",
+    "beach": "Pantai Lamaru, Kalimantan Timur",
+    "image": "https://upload.wikimedia.org/wikipedia/commons/a/aa/Pantai_Lamaru_Balikpapan_%283%29.jpg"
+  },
+  {
+    "name": "Sulawesi",
+    "coast": "Sangat berlekuk dengan banyak teluk, tanjung, semenanjung, dan pulau kecil.",
+    "waters": "Laut Sulawesi, Selat Makassar, Teluk Tomini, dan Laut Banda.",
+    "potential": [
+      "Tuna",
+      "Cakalang",
+      "Rumput laut",
+      "Terumbu karang",
+      "Wisata selam dan snorkeling"
+    ],
+    "description": "Bentuk Pulau Sulawesi yang memiliki beberapa semenanjung menyebabkan garis pantainya sangat berlekuk. Kondisi tersebut membentuk banyak teluk dan perairan yang kaya sumber daya ikan serta terumbu karang.",
+    "beach": "Pantai Tanjung Bira, Sulawesi Selatan",
+    "image": "https://upload.wikimedia.org/wikipedia/commons/c/cc/Tanjung_Bira_Beach.jpg"
+  },
+  {
+    "name": "Papua",
+    "coast": "Pantai utara sebagian berbukit dan lebih terjal, sedangkan pantai selatan sangat landai dan berawa.",
+    "waters": "Samudra Pasifik dan Laut Arafura.",
+    "potential": [
+      "Perikanan",
+      "Mutiara",
+      "Mangrove",
+      "Terumbu karang",
+      "Wisata bahari"
+    ],
+    "description": "Pantai utara Papua berhadapan dengan Samudra Pasifik. Sementara itu, pesisir selatan didominasi dataran rendah, rawa, muara sungai, dan kawasan mangrove yang sangat luas.",
+    "beach": "Pantai Base G, Jayapura",
+    "image": "https://upload.wikimedia.org/wikipedia/commons/0/0c/Pantai_Base_G.jpg"
+  },
+  {
+    "name": "Bali",
+    "coast": "Beragam, mulai dari pantai berpasir putih, pasir hitam vulkanik, hingga tebing kapur.",
+    "waters": "Laut Bali, Selat Bali, Selat Lombok, dan Samudra Hindia.",
+    "potential": [
+      "Pariwisata bahari",
+      "Perikanan",
+      "Budidaya rumput laut",
+      "Terumbu karang",
+      "Wisata selam dan snorkeling"
+    ],
+    "description": "Bali memiliki garis pantai yang sangat beragam. Kawasan selatan terkenal dengan pantai wisata dan tebing kapur, sedangkan beberapa pantai di utara dan timur memiliki pasir berwarna gelap akibat material vulkanik.",
+    "beach": "Pantai Kuta, Bali",
+    "image": "https://upload.wikimedia.org/wikipedia/commons/f/fa/Bali_-_Kuta_Beach.jpg"
+  },
+  {
+    "name": "Nusa Tenggara",
+    "coast": "Berbukit, bertebing, memiliki banyak teluk kecil, pantai berpasir, dan kawasan terumbu karang.",
+    "waters": "Laut Flores, Laut Sawu, dan Samudra Hindia.",
+    "potential": [
+      "Rumput laut",
+      "Mutiara",
+      "Perikanan",
+      "Garam",
+      "Terumbu karang",
+      "Wisata bahari"
+    ],
+    "description": "Pulau-pulau seperti Lombok, Sumbawa, Flores, Sumba, dan Timor memiliki banyak teluk serta perairan yang cocok untuk budidaya rumput laut, mutiara, dan perikanan.",
+    "beach": "Pantai Tanjung Aan, Lombok",
+    "image": "https://upload.wikimedia.org/wikipedia/commons/7/7f/Pantai_Tanjung_Aan.jpg"
+  },
+  {
+    "name": "Maluku",
+    "coast": "Sangat berlekuk karena terdiri atas banyak pulau, teluk, tanjung, dan selat.",
+    "waters": "Laut Banda, Laut Seram, dan Laut Maluku.",
+    "potential": [
+      "Tuna",
+      "Cakalang",
+      "Ikan karang",
+      "Mutiara",
+      "Terumbu karang",
+      "Wisata bahari"
+    ],
+    "description": "Maluku merupakan wilayah kepulauan dengan wilayah laut yang sangat luas. Perairannya memiliki potensi perikanan yang besar, khususnya tuna dan cakalang.",
+    "beach": "Pantai Ora, Pulau Seram",
+    "image": "https://upload.wikimedia.org/wikipedia/commons/b/b9/Pantai_Ora.jpg"
+  },
+  {
+    "name": "Bangka Belitung",
+    "coast": "Didominasi pantai berpasir terang dengan batu-batu granit berukuran besar.",
+    "waters": "Selat Karimata dan Laut Jawa.",
+    "potential": [
+      "Perikanan",
+      "Budidaya laut",
+      "Ekosistem pesisir",
+      "Wisata pantai"
+    ],
+    "description": "Pantai Bangka Belitung memiliki ciri khas batu granit besar dan pasir berwarna terang. Keindahan alam tersebut menjadi salah satu potensi wisata bahari utama wilayah ini.",
+    "beach": "Pantai Tanjung Tinggi, Belitung",
+    "image": "https://upload.wikimedia.org/wikipedia/commons/2/25/Pantai_Tanjung_Tinggi%2C_Belitung.jpg"
+  },
+  {
+    "name": "Kepulauan Riau",
+    "coast": "Terdiri atas banyak pulau kecil, selat sempit, teluk, dan kawasan mangrove.",
+    "waters": "Selat Malaka dan Laut Natuna.",
+    "potential": [
+      "Perikanan",
+      "Budidaya laut",
+      "Pelabuhan",
+      "Transportasi dan perdagangan laut",
+      "Mangrove",
+      "Wisata kepulauan"
+    ],
+    "description": "Kepulauan Riau berada di jalur pelayaran internasional yang strategis. Selain kaya sumber daya perikanan, wilayah ini memiliki potensi besar dalam bidang transportasi, perdagangan, dan wisata bahari.",
+    "beach": "Pantai Trikora, Bintan",
+    "image": "https://upload.wikimedia.org/wikipedia/commons/d/db/Trikora_Beach.jpg"
+  },
+  {
+    "name": "Natuna dan Anambas",
+    "coast": "Memiliki banyak pantai berpasir, teluk kecil, pulau-pulau kecil, dan batuan granit.",
+    "waters": "Laut Natuna Utara.",
+    "potential": [
+      "Perikanan tangkap",
+      "Terumbu karang",
+      "Minyak dan gas lepas pantai",
+      "Wisata bahari",
+      "Budidaya laut"
+    ],
+    "description": "Natuna dan Anambas memiliki wilayah laut yang luas dan kaya ikan. Selain perikanan, kawasan ini memiliki sumber daya energi lepas pantai serta potensi pariwisata bahari.",
+    "beach": "Pantai Batu Kasah, Natuna",
+    "image": "https://dinaspariwisata.natunakab.go.id/wp-content/uploads/2025/11/wisata-pantai-batu-kasah.jpg"
+  },
+  {
+    "name": "Halmahera",
+    "coast": "Sangat berlekuk dengan banyak teluk, semenanjung, pulau kecil, dan kawasan pesisir vulkanik.",
+    "waters": "Laut Maluku, Laut Halmahera, dan Samudra Pasifik.",
+    "potential": [
+      "Tuna",
+      "Cakalang",
+      "Rumput laut",
+      "Terumbu karang",
+      "Perikanan",
+      "Wisata bahari"
+    ],
+    "description": "Bentuk Pulau Halmahera yang bercabang menghasilkan banyak teluk dan perairan pesisir. Laut di sekitarnya kaya ikan pelagis seperti tuna dan cakalang serta memiliki kawasan terumbu karang.",
+    "beach": "Pantai Luari, Halmahera Utara",
+    "image": "https://awsimages.detik.net.id/community/media/visual/2023/12/15/terbius-eksotisnya-pantai-di-indonesia-timur_169.jpeg"
+  }
+]
