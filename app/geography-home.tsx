@@ -456,6 +456,7 @@ const mitigationPhases: MitigationPhaseData[] = [
     title: 'Di Luar Ruangan: Jauhi Gedung & Cari Lapangan Lapang',
     desc: 'Di luar ruangan — Jauhi bangunan, tiang listrik, dan pohon besar. Cari area terbuka.',
     badge: 'Zona Bebas Runtuhan',
+    image: '/mitigasi-saat-3.jpg',
     caption: 'Menjauh dari fasad dinding gedung, genteng atap, tiang kabel listrik, serta papan reklame.',
     tips: [
      'Bergerak menuju tengah lapangan sepak bola, taman, atau halaman terbuka lebar',
