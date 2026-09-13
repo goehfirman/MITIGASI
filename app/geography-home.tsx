@@ -500,6 +500,7 @@ const mitigationPhases: MitigationPhaseData[] = [
     title: 'Setelah Guncangan Berhenti: Evakuasi Tenang & Tertib',
     desc: 'Setelah guncangan berhenti, ikuti jalur aman menuju titik kumpul bersama guru atau keluarga.',
     badge: 'Evakuasi Teratur Pasca Gempa',
+    image: '/mitigasi-setelah-1.jpg',
     caption: 'Melangkah tenang melalui tangga darurat tanpa panik menuju titik kumpul lapangan terbuka bersama rombongan.',
     tips: [
      'Periksa diri sendiri dan teman sekitar apakah mengalami luka fisik',
