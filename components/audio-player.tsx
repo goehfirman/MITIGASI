@@ -129,54 +129,59 @@ export default function AudioPlayer({ autoPlayRequested }: { autoPlayRequested?:
   };
 
   return (
-    <div className="audio-player-container" role="region" aria-label="Pemutar Musik Latar">
-      <audio 
-        ref={audioRef} 
-        src="/background-music.mp3?v=3" 
-        loop 
-        preload="auto"
-        onPlay={() => setIsPlaying(true)}
-        onPause={() => setIsPlaying(false)}
-      />
-      <button 
-        onClick={togglePlay} 
-        aria-label={isPlaying ? "Jeda Musik" : "Putar Musik"} 
-        title={isPlaying ? "Jeda Musik Latar" : "Putar Musik Latar"}
-        className="audio-control-btn"
-      >
-        {isPlaying ? (
-          <div className="equalizer playing" title="Musik sedang berputar">
-            <div className="bar"></div>
-            <div className="bar"></div>
-            <div className="bar"></div>
-          </div>
-        ) : (
-          <Play size={16} className="play-icon" />
-        )}
-      </button>
-      
-      <div className="volume-wrapper">
+    <div className="audio-player-wrapper">
+      <div className="audio-player-container" role="region" aria-label="Pemutar Musik Latar">
+        <audio 
+          ref={audioRef} 
+          src="/background-music.mp3?v=3" 
+          loop 
+          preload="auto"
+          onPlay={() => setIsPlaying(true)}
+          onPause={() => setIsPlaying(false)}
+        />
         <button 
-          onClick={toggleMute} 
-          aria-label={isMuted || volume === 0 ? "Nyalakan Suara" : "Matikan Suara"} 
-          title={isMuted || volume === 0 ? "Nyalakan Suara" : "Matikan Suara"}
+          onClick={togglePlay} 
+          aria-label={isPlaying ? "Jeda Musik" : "Putar Musik"} 
+          title={isPlaying ? "Jeda Musik Latar" : "Putar Musik Latar"}
           className="audio-control-btn"
         >
-          {isMuted || volume === 0 ? <VolumeX size={17} /> : <Volume2 size={17} />}
+          {isPlaying ? (
+            <div className="equalizer playing" title="Musik sedang berputar">
+              <div className="bar"></div>
+              <div className="bar"></div>
+              <div className="bar"></div>
+            </div>
+          ) : (
+            <Play size={16} className="play-icon" />
+          )}
         </button>
-        <div className="volume-slider-container">
-          <input 
-            type="range" 
-            min="0" 
-            max="1" 
-            step="0.05" 
-            value={isMuted ? 0 : volume} 
-            onChange={handleVolumeChange} 
-            className="volume-slider"
-            aria-label="Volume Musik"
-            title={`Volume: ${Math.round((isMuted ? 0 : volume) * 100)}%`}
-          />
+        
+        <div className="volume-wrapper">
+          <button 
+            onClick={toggleMute} 
+            aria-label={isMuted || volume === 0 ? "Nyalakan Suara" : "Matikan Suara"} 
+            title={isMuted || volume === 0 ? "Nyalakan Suara" : "Matikan Suara"}
+            className="audio-control-btn"
+          >
+            {isMuted || volume === 0 ? <VolumeX size={17} /> : <Volume2 size={17} />}
+          </button>
+          <div className="volume-slider-container">
+            <input 
+              type="range" 
+              min="0" 
+              max="1" 
+              step="0.05" 
+              value={isMuted ? 0 : volume} 
+              onChange={handleVolumeChange} 
+              className="volume-slider"
+              aria-label="Volume Musik"
+              title={`Volume: ${Math.round((isMuted ? 0 : volume) * 100)}%`}
+            />
+          </div>
         </div>
+      </div>
+      <div className="audio-track-info" aria-label="Informasi Lagu">
+        <span className="marquee-text">Rayuan Pulau Kelapa (All Artis) - Cipt. Ismail Marzuki</span>
       </div>
     </div>
   );

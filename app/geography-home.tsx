@@ -512,7 +512,7 @@ const mitigationPhases: MitigationPhaseData[] = [
     title: 'Kenali Tempat Berlindung, Jalur Evakuasi, dan Titik Kumpul',
     desc: 'Kenali tempat berlindung, jalur evakuasi, dan titik kumpul di sekolah maupun di rumah.',
     badge: 'Rute & Titik Kumpul Aman',
-    image: '/mitigasi-sebelum-1.jpg',
+    image: '/mitigasi-sebelum-1.gif',
     caption: 'Memahami rambu hijau darurat, arah panah lantai menuju titik kumpul lapangan terbuka, serta posisi Drop-Cover-Hold On di bawah meja kokoh.',
     tips: [
      'Hafalkan arah panah hijau jalur keluar darurat di koridor sekolah dan rumah',
@@ -530,7 +530,7 @@ const mitigationPhases: MitigationPhaseData[] = [
     title: 'Amankan Lemari & Taruh Benda Berat di Bagian Bawah',
     desc: 'Bersama orang dewasa, amankan lemari, rak buku, dan letakkan benda berat di bagian bawah agar tidak mudah jatuh.',
     badge: 'Pencegahan Bahaya Ruangan',
-    image: '/mitigasi-sebelum-2.jpg',
+    image: '/mitigasi-sebelum-2.gif',
     caption: 'Memasang siku pengunci dinding (L-bracket) pada lemari tinggi dan menata barang berat pada rak bagian paling bawah.',
     tips: [
      'Pasang siku pengunci (L-bracket) antara lemari tinggi dan dinding kokoh',
@@ -548,7 +548,7 @@ const mitigationPhases: MitigationPhaseData[] = [
     title: 'Siapkan Tas Darurat Bencana (Emergency Bag)',
     desc: 'Siapkan tas darurat berisi air minum, makanan ringan, senter, peluit, dan kotak P3K.',
     badge: 'Kebutuhan Darurat 72 Jam',
-    image: '/mitigasi-sebelum-3.jpg',
+    image: '/mitigasi-sebelum-3.gif',
     caption: 'Tas siaga bencana tahan air berisi logistik bertahan hidup 72 jam pertama yang siap disambar kapan saja.',
     tips: [
      'Air minum botol mineral & makanan padat energi tahan lama',

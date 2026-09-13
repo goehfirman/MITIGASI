@@ -585,7 +585,7 @@ export const QUIZ_BANK: QuizQuestion[] = [
     category: 'mitigasi',
     categoryLabel: 'Mitigasi Gempa Bumi',
     question: 'Langkah persiapan mitigasi sebelum gempa yang dilakukan terhadap lemari dan perabotan berat di rumah adalah...',
-    image: '/mitigasi-sebelum-2.jpg',
+    image: '/mitigasi-sebelum-2.gif',
     options: [
       'Mengunci atau memaku lemari ke dinding agar tidak roboh menimpa orang saat berguncang',
       'Menumpuk barang pecah belah di rak paling atas lemari',
@@ -683,7 +683,7 @@ export const QUIZ_BANK: QuizQuestion[] = [
     category: 'mitigasi',
     categoryLabel: 'Mitigasi Gempa Bumi',
     question: 'Simulasi gempa bumi secara berkala di sekolah membuat siswa dan guru lebih tenang, tidak panik, dan terbiasa mengevakuasi diri dengan tertib.',
-    image: '/mitigasi-sebelum-3.jpg',
+    image: '/mitigasi-sebelum-3.gif',
     options: ['Benar', 'Salah'],
     correctAnswer: 0,
     explanation: 'Benar. Latihan simulasi rutin membentuk memori gerak refleks sehingga saat bencana sesungguhnya terjadi, murid dan guru siap bertindak cepat tanpa panik.'
