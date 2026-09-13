@@ -3,7 +3,7 @@ import {useState,useMemo,useEffect,useRef,useLayoutEffect} from 'react';
 import {geoMercator,geoPath,geoGraticule} from 'd3-geo';
 import {Globe2,BookOpen,ShieldCheck,ArrowRight,Triangle,Pause,Play,Sun,Mountain,Leaf,Waves,House,Backpack,MoveRight,Expand,Maximize,ZoomIn,ZoomOut} from 'lucide-react';
 import {Button} from '@/components/ui/button';
-import {Tabs,TabsList,TabsTrigger,TabsContent} from '@/components/ui/tabs';
+
 import region from '@/lib/indonesia-region.json';
 import equatorPlaces from '@/lib/equator-places.json';
 import './geography.css';
@@ -38,7 +38,7 @@ export default function GeographyHome({section='home'}:{section?:'home'|'belajar
   if (accept) document.documentElement.requestFullscreen().catch(()=>{});
  }
 
- return <div className={'geo-home '+(section==='home'?'is-home':section==='belajar'?'is-learning':'')}>
+ return <div className={'geo-home '+(section==='home'?'is-home':(section==='belajar'||section==='mitigasi')?'is-learning':'')}>
  {showPrompt && section === 'home' && (
    <div className="prompt-overlay">
      <div className="prompt-dialog">
@@ -307,4 +307,17 @@ function Learning(){
  </section>
 }
 function LightPrompt(){return <Leaf aria-hidden="true"/>}
-function Mitigation(){return <section className="geo-lesson"><Link href="/" className="back-home">← Kembali ke beranda</Link><span className="geo-kicker">MITIGASI GEMPA</span><h1>Kenali risikonya.<br/>Latih kesiapsiagaannya.</h1><p className="lesson-intro">Mitigasi adalah upaya mengurangi risiko bencana. Mulailah dari lingkungan terdekat dan berlatihlah bersama guru serta keluarga.</p><Tabs defaultValue="sebelum" className="mitigation-tabs"><TabsList aria-label="Tahapan kesiapsiagaan"><TabsTrigger value="sebelum">Sebelum gempa</TabsTrigger><TabsTrigger value="saat">Saat gempa</TabsTrigger><TabsTrigger value="sesudah">Sesudah gempa</TabsTrigger></TabsList><TabsContent value="sebelum"><div className="safety-content"><Backpack/><div><h2>Siapkan, kenali, dan berlatih.</h2><ol><li>Kenali tempat berlindung, jalur evakuasi, dan titik kumpul sekolah.</li><li>Bersama orang dewasa, amankan lemari dan letakkan benda berat di bawah.</li><li>Siapkan perlengkapan darurat: air, makanan, senter, serta kotak P3K.</li></ol></div></div></TabsContent><TabsContent value="saat"><div className="safety-content"><ShieldCheck/><div><h2>Lindungi diri dari benda yang jatuh.</h2><ol><li>Di dalam ruangan, merunduk, lindungi kepala dan leher, lalu berlindung di bawah meja kokoh dan berpegangan.</li><li>Jauhi kaca. Jangan menggunakan lift. Ikuti arahan guru.</li><li>Di luar, jauhi bangunan, tiang, dan pohon. Di pesisir, setelah guncangan kuat atau lama berhenti, segera evakuasi ke tempat tinggi melalui jalur aman.</li></ol></div></div></TabsContent><TabsContent value="sesudah"><div className="safety-content"><House/><div><h2>Keluar tertib dan tetap waspada.</h2><ol><li>Setelah guncangan berhenti, ikuti jalur aman menuju titik kumpul bersama guru.</li><li>Laporkan orang yang terluka kepada orang dewasa. Hindari bangunan yang rusak.</li><li>Waspadai gempa susulan dan ikuti informasi resmi BMKG serta petugas.</li></ol></div></div></TabsContent></Tabs><p className="safety-source">Panduan pembelajaran diringkas dari <a href="https://www.bmkg.go.id/gempabumi/mitigasi/antisipasi-gempabumi" target="_blank" rel="noreferrer">BMKG: Antisipasi Gempa Bumi</a>. Sesuaikan latihan dengan prosedur sekolah.</p><div className="lab-invitation"><span className="lab-invitation-icon"><Triangle/></span><div><span className="geo-kicker">LANJUTKAN DENGAN EKSPERIMEN</span><h2>Bisakah menaramu bertahan?</h2><p>Bangun dari nol menggunakan marshmallow dan tusuk gigi virtual. Uji guncangan, lalu perbaiki desainmu.</p></div><Button asChild><Link href="/lab">Masuk aplikasi <ArrowRight/></Link></Button></div><p className="model-note">Laboratorium adalah model pembelajaran struktur sederhana, bukan pengujian keamanan bangunan nyata.</p></section>}
+function Mitigation(){
+ const [slide,setSlide]=useState(0);
+ const titles=['Sebelum Gempa','Saat Gempa','Setelah Gempa'];
+ return <section className={'learning-deck mitigation-deck miti-theme-'+slide} aria-label="Slide Mitigasi Gempa Bumi" onKeyDown={e=>{if(e.key==='ArrowRight'){e.preventDefault();setSlide(s=>Math.min(2,s+1));}if(e.key==='ArrowLeft'){e.preventDefault();setSlide(s=>Math.max(0,s-1));}}}>
+ <div className="slide-top"><Link href="/" aria-label="Kembali ke Beranda"><House /></Link></div>
+ <h1>Mitigasi Gempa Bumi</h1>
+ <div className="slide-body">
+ {slide===0&&<article className="slide-glass"><Backpack/><h2>Sebelum Gempa</h2><p>Siapkan diri, kenali lingkungan, dan berlatih rutin agar siap saat bencana datang.</p><h3>Langkah Kesiapsiagaan</h3><ul className="slide-aspects"><li><strong>1.</strong> Kenali tempat berlindung, jalur evakuasi, dan titik kumpul di sekolah maupun di rumah.</li><li><strong>2.</strong> Bersama orang dewasa, amankan lemari, rak buku, dan letakkan benda berat di bagian bawah agar tidak mudah jatuh.</li><li><strong>3.</strong> Siapkan tas darurat berisi air minum, makanan ringan, senter, peluit, dan kotak P3K.</li><li><strong>4.</strong> Ikuti simulasi gempa secara berkala di sekolah dan di lingkungan rumah.</li></ul></article>}
+ {slide===1&&<article className="slide-glass"><ShieldCheck/><h2>Saat Gempa</h2><p>Lindungi diri dari benda yang jatuh. Tetap tenang dan ikuti prosedur keselamatan.</p><h3>Tindakan Perlindungan</h3><ul className="slide-aspects"><li><strong>1.</strong> <em>Di dalam ruangan</em> — Merunduk, lindungi kepala dan leher, berlindung di bawah meja kokoh, dan berpegangan kuat.</li><li><strong>2.</strong> Jauhi kaca, jendela, dan benda yang bisa jatuh. Jangan menggunakan lift.</li><li><strong>3.</strong> <em>Di luar ruangan</em> — Jauhi bangunan, tiang listrik, dan pohon besar. Cari area terbuka.</li><li><strong>4.</strong> <em>Di pesisir</em> — Setelah guncangan kuat berhenti, segera evakuasi ke tempat tinggi melalui jalur aman (waspada tsunami).</li></ul></article>}
+ {slide===2&&<article className="slide-glass"><House/><h2>Setelah Gempa</h2><p>Keluar dengan tertib, tetap waspada terhadap gempa susulan, dan ikuti arahan petugas.</p><h3>Langkah Pasca Gempa</h3><ul className="slide-aspects"><li><strong>1.</strong> Setelah guncangan berhenti, ikuti jalur aman menuju titik kumpul bersama guru atau keluarga.</li><li><strong>2.</strong> Laporkan orang yang terluka kepada orang dewasa atau petugas. Jangan masuk ke bangunan yang rusak.</li><li><strong>3.</strong> Waspadai gempa susulan — tetap di luar bangunan dan di area terbuka.</li><li><strong>4.</strong> Ikuti informasi resmi dari BMKG dan instruksi petugas. Jangan percaya informasi yang belum terverifikasi.</li></ul><p className="miti-source">Panduan diringkas dari <a href="https://www.bmkg.go.id/gempabumi/mitigasi/antisipasi-gempabumi" target="_blank" rel="noreferrer">BMKG: Antisipasi Gempa Bumi</a>.</p></article>}
+ </div>
+ <nav className="slide-navigation" aria-label="Navigasi slide" style={{justifyContent: 'center'}}><div className="slide-selectors">{titles.map((title,i)=><button key={title} onClick={()=>setSlide(i)} aria-label={`Slide ${i+1}: ${title}`} aria-current={slide===i?'step':undefined}>{i+1}</button>)}</div></nav>
+ </section>
+}
