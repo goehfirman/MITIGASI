@@ -1,12 +1,12 @@
 "use client";
 import {useEffect,useState} from 'react';
-import Scene from './tower-scene';
+import Scene, { type Target } from './tower-scene';
 import {Button} from '@/components/ui/button';
 import {Dialog,DialogContent,DialogTitle,DialogDescription} from '@/components/ui/dialog';
 import {Tabs,TabsList,TabsTrigger} from '@/components/ui/tabs';
 import {Switch} from '@/components/ui/switch';
 import {Select,SelectTrigger,SelectValue,SelectContent,SelectItem} from '@/components/ui/select';
-import {Box,Rotate3D,Plus,Link2,Move,Trash2,Undo2,Redo2,Ruler,Play,Maximize,Users,BookOpen,History,Triangle,Square,ZoomIn,ZoomOut,GraduationCap,Download,Check,ArrowRight,Layers,Lightbulb,RotateCcw,House} from 'lucide-react';
+import {Box,Rotate3D,Plus,Link2,Move,Trash2,Undo2,Redo2,Ruler,Play,Maximize,Users,BookOpen,History,Triangle,Square,ZoomIn,ZoomOut,GraduationCap,Download,Check,ArrowRight,Layers,Lightbulb,RotateCcw,House,X} from 'lucide-react';
 import {preset,height,validDesign,type Design,type Result} from '@/lib/tower';
 type Session={token:string,role:string,code?:string,name:string,challenge?:string,strength?:string};
 const tools=[['orbit','Putar',Rotate3D],['add','Titik',Plus],['connect','Sambung',Link2],['move','Geser',Move],['delete','Hapus',Trash2]] as const;
@@ -20,10 +20,10 @@ export default function TowerApp(){
   document.addEventListener('fullscreenchange', handleFullscreenChange);
   return () => document.removeEventListener('fullscreenchange', handleFullscreenChange);
  }, []);
- const [design,setDesign]=useState<Design>(()=>({nodes:[],beams:[]})),[past,setPast]=useState<Design[]>([]),[future,setFuture]=useState<Design[]>([]),[tool,setTool]=useState('add'),[selected,setSelected]=useState<number|null>(null),[level,setLevel]=useState(0),[view,setView]=useState('3/4'),[zoom,setZoom]=useState(1),[low,setLow]=useState(false),[wire,setWire]=useState(false),[mode,setMode]=useState('Bebas'),[strength,setStrength]=useState('Ringan'),[direction,setDirection]=useState('X-Y'),[run,setRun]=useState(0),[time,setTime]=useState(0),[result,setResult]=useState<Result|null>(null),[history,setHistory]=useState<Result[]>([]),[panel,setPanel]=useState(''),[message,setMessage]=useState('Mulai dari idemu sendiri. Ketuk petak untuk menambahkan marshmallow, lalu sambungkan titik-titiknya.'),[name,setName]=useState('Kelompok 1'),[session,setSession]=useState<Session|null>(null),[busy,setBusy]=useState(false),[reflection,setReflection]=useState(''),[className,setClassName]=useState('Kelas 6 — Eksperimen Gempa'),[code,setCode]=useState(''),[students,setStudents]=useState<any[]>([]),[classResults,setClassResults]=useState<Result[]>([]),[saved,setSaved]=useState(false);
+ const [design,setDesign]=useState<Design>(()=>({nodes:[],beams:[]})),[past,setPast]=useState<Design[]>([]),[future,setFuture]=useState<Design[]>([]),[tool,setTool]=useState('add'),[selected,setSelected]=useState<number|null>(null),[selectedTarget,setSelectedTarget]=useState<Target|null>(null),[level,setLevel]=useState(0),[view,setView]=useState('3/4'),[zoom,setZoom]=useState(1),[low,setLow]=useState(false),[wire,setWire]=useState(false),[mode,setMode]=useState('Bebas'),[strength,setStrength]=useState('Ringan'),[direction,setDirection]=useState('X-Y'),[run,setRun]=useState(0),[time,setTime]=useState(0),[result,setResult]=useState<Result|null>(null),[history,setHistory]=useState<Result[]>([]),[panel,setPanel]=useState(''),[message,setMessage]=useState('Mulai dari idemu sendiri. Ketuk petak untuk menambahkan marshmallow, lalu sambungkan titik-titiknya.'),[name,setName]=useState('Kelompok 1'),[session,setSession]=useState<Session|null>(null),[busy,setBusy]=useState(false),[reflection,setReflection]=useState(''),[className,setClassName]=useState('Kelas 6 — Eksperimen Gempa'),[code,setCode]=useState(''),[students,setStudents]=useState<any[]>([]),[classResults,setClassResults]=useState<Result[]>([]),[saved,setSaved]=useState(false);
  useEffect(()=>{try{const s=sessionStorage.getItem('tower-session');if(s){const v=JSON.parse(s);setSession(v);setName(v.name);api('history',{token:v.token}).then(x=>setHistory(x.results)).catch(e=>setMessage(e.message));}}catch{}},[]);
  useEffect(()=>{if(panel!=='guru'||session?.role!=='teacher')return;const refresh=()=>api('dashboard',{token:session.token}).then(x=>{setStudents(x.students);setClassResults(x.results);}).catch(e=>setMessage(e.message));refresh();const t=setInterval(refresh,5000);return()=>clearInterval(t);},[panel,session]);
- function edit(next:Design){if(run&&!result)return;if(!validDesign(next)){setMessage('Batas area: 80 marshmallow, 240 tusuk gigi, dan tinggi 48 cm.');return;}setRun(0);setPast(p=>[...p.slice(-29),design]);setFuture([]);setDesign(next);setSelected(null);setResult(null);setSaved(false);}
+ function edit(next:Design){if(run&&!result)return;if(!validDesign(next)){setMessage('Batas area: 80 marshmallow, 240 tusuk gigi, dan tinggi 48 cm.');return;}setRun(0);setPast(p=>[...p.slice(-29),design]);setFuture([]);setDesign(next);setSelected(null);setSelectedTarget(null);setResult(null);setSaved(false);}
  function node(id:number){if(tool==='delete'){edit({nodes:design.nodes.filter(n=>n.id!==id),beams:design.beams.filter(b=>b.a!==id&&b.b!==id)});return;}if(tool==='connect'){if(selected===null){setSelected(id);setMessage('Sekarang ketuk marshmallow kedua.');}else if(selected!==id){const exists=design.beams.some(b=>(b.a===id&&b.b===selected)||(b.b===id&&b.a===selected));if(!exists)edit({...design,beams:[...design.beams,{a:selected,b:id}]});setSelected(null);setMessage(exists?'Dua titik ini sudah tersambung.':'Tusuk gigi tersambung.');}}}
  function place(x:number,y:number,z:number,id?:number){if(Math.abs(x)>4||Math.abs(z)>4){setMessage('Tempatkan titik di dalam meja.');return;}if(design.nodes.some(n=>n.id!==id&&n.x===x&&n.y===y&&n.z===z)){setMessage('Sudah ada marshmallow di titik itu.');return;}edit({...design,nodes:id===undefined?[...design.nodes,{id:Math.max(-1,...design.nodes.map(n=>n.id))+1,x,y,z}]:design.nodes.map(n=>n.id===id?{...n,x,y,z}:n)});}
  async function ensureSession(){if(session)return session;const s=await api('start',{name:name.trim()||'Kelompok 1'});setSession(s);sessionStorage.setItem('tower-session',JSON.stringify(s));return s;}
@@ -67,7 +67,95 @@ export default function TowerApp(){
 
   {/* Open 3D Structure Stage (NO BOX) */}
   <div className="lab-stage">
-    <Scene design={design} tool={tool} level={level} selected={selected} low={low} wire={wire} view={view} zoom={zoom} run={run} strength={strength} direction={direction} onNode={node} onPlace={place} onProgress={setTime} onDone={done}/>
+    <Scene design={design} tool={tool} level={level} selected={selected} selectedBeam={selectedTarget?.type==='beam'?selectedTarget.index:null} low={low} wire={wire} view={view} zoom={zoom} run={run} strength={strength} direction={direction} onNode={node} onPlace={place} onProgress={setTime} onDone={done} onSelectTarget={setSelectedTarget}/>
+    
+    {/* Floating Action Popup when clicking Marshmallow or Toothpick */}
+    {selectedTarget && !run && (
+      <div 
+        className="target-action-popup" 
+        style={{
+          left: Math.max(130, Math.min(typeof window !== 'undefined' ? window.innerWidth - 130 : 800, selectedTarget.screenX)),
+          top: Math.max(75, selectedTarget.screenY)
+        }}
+      >
+        <div className="popup-badge">
+          {selectedTarget.type === 'node' ? '🍡 Marshmallow' : '🥢 Tusuk Gigi'}
+        </div>
+        
+        {selectedTarget.type === 'node' && (
+          <>
+            <button 
+              type="button" 
+              className="popup-action-btn"
+              onClick={() => {
+                setTool('connect');
+                setSelected(selectedTarget.id);
+                setSelectedTarget(null);
+                setMessage('Titik pertama dipilih. Ketuk marshmallow kedua untuk menyambung.');
+              }}
+            >
+              <Link2 size={15}/> Sambung
+            </button>
+            <button 
+              type="button" 
+              className="popup-action-btn"
+              onClick={() => {
+                setTool('move');
+                setSelected(selectedTarget.id);
+                setSelectedTarget(null);
+                setMessage('Mode Geser aktif. Tarik marshmallow ini ke posisi baru.');
+              }}
+            >
+              <Move size={15}/> Geser
+            </button>
+            <button 
+              type="button" 
+              className="popup-action-btn delete"
+              onClick={() => {
+                edit({
+                  nodes: design.nodes.filter(n => n.id !== selectedTarget.id),
+                  beams: design.beams.filter(b => b.a !== selectedTarget.id && b.b !== selectedTarget.id)
+                });
+                setSelectedTarget(null);
+                setSelected(null);
+                setMessage('Marshmallow dan sambungannya berhasil dihapus.');
+              }}
+            >
+              <Trash2 size={15}/> Hapus
+            </button>
+          </>
+        )}
+
+        {selectedTarget.type === 'beam' && (
+          <button 
+            type="button" 
+            className="popup-action-btn delete"
+            onClick={() => {
+              edit({
+                ...design,
+                beams: design.beams.filter((_, i) => i !== selectedTarget.index)
+              });
+              setSelectedTarget(null);
+              setMessage('Tusuk gigi berhasil dihapus.');
+            }}
+          >
+            <Trash2 size={15}/> Hapus
+          </button>
+        )}
+
+        <button 
+          type="button" 
+          className="popup-close-btn"
+          onClick={() => {
+            setSelectedTarget(null);
+            setSelected(null);
+          }}
+          title="Tutup menu"
+        >
+          <X size={15}/>
+        </button>
+      </div>
+    )}
     
     {/* Floating HUD Top: Stats & Camera/Options */}
     <div className="stage-hud-top">

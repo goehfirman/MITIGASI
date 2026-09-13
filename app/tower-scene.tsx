@@ -4,7 +4,11 @@ import * as T from 'three';
 import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
 import {simulation} from '@/lib/physics';
 import type {Design} from '@/lib/tower';
-export type SceneProps={design:Design,tool:string,level:number,selected:number|null,low:boolean,wire:boolean,view:string,zoom:number,run:number,strength:string,direction:string,onNode:(id:number)=>void,onPlace:(x:number,y:number,z:number,id?:number)=>void,onProgress:(t:number)=>void,onDone:(duration:number,standing:boolean)=>void};
+export type Target=
+ | {type:'node',id:number,screenX:number,screenY:number}
+ | {type:'beam',index:number,a:number,b:number,screenX:number,screenY:number};
+
+export type SceneProps={design:Design,tool:string,level:number,selected:number|null,selectedBeam?:number|null,low:boolean,wire:boolean,view:string,zoom:number,run:number,strength:string,direction:string,onNode:(id:number)=>void,onPlace:(x:number,y:number,z:number,id?:number)=>void,onProgress:(t:number)=>void,onDone:(duration:number,standing:boolean)=>void,onSelectTarget?:(target:Target|null)=>void};
 export default function TowerScene(props:SceneProps){
  const host=useRef<HTMLDivElement>(null),latest=useRef(props),sceneRef=useRef<any>(null);latest.current=props;const [error,setError]=useState('');
  useEffect(()=>{if(!host.current)return;let renderer:T.WebGLRenderer;try{renderer=new T.WebGLRenderer({antialias:true,alpha:true});}catch{setError('Tampilan 3D tidak tersedia. Aktifkan WebGL atau buka aplikasi melalui Chrome / Edge di papan.');return;}
@@ -18,13 +22,48 @@ export default function TowerScene(props:SceneProps){
   const group=new T.Group();scene.add(group);const platform=new T.Mesh(new T.BoxGeometry(8,.22,8),new T.MeshStandardMaterial({color:0xc8d6e4,roughness:.9}));platform.position.y=-.24;platform.receiveShadow=true;scene.add(platform);
   const grid=new T.GridHelper(8,16,0x9aafc4,0xbdcddd);grid.position.y=-.12;scene.add(grid);const editGrid=new T.GridHelper(8,16,0x5b7bd2,0xc4d0e9);editGrid.visible=false;scene.add(editGrid);
   const projections=new T.Group();scene.add(projections);
-  const ray=new T.Raycaster(),pointer=new T.Vector2();let down={x:0,y:0,id:undefined as number|undefined,button:0,pointerType:'mouse'};let activeTouchCount=0;let hadMultiTouch=false;
+  const ray=new T.Raycaster(),pointer=new T.Vector2();let down={x:0,y:0,target:null as Target|null,button:0,pointerType:'mouse'};let activeTouchCount=0;let hadMultiTouch=false;
   function locate(e:PointerEvent){const r=renderer.domElement.getBoundingClientRect();pointer.set((e.clientX-r.left)/r.width*2-1,-(e.clientY-r.top)/r.height*2+1);ray.setFromCamera(pointer,camera);}
-  function pick(e:PointerEvent){locate(e);const nodes=group.children.filter(c=>c.userData.kind==='node');const hit=ray.intersectObjects(nodes)[0];if(hit)return hit.object.userData.id as number;const r=renderer.domElement.getBoundingClientRect();let nearest:number|undefined=undefined,best=25;for(const n of nodes){const p=n.position.clone().project(camera);const dist=Math.hypot((p.x+1)*r.width/2-(e.clientX-r.left),(1-p.y)*r.height/2-(e.clientY-r.top));if(p.z<1&&dist<best){best=dist;nearest=n.userData.id;}}return nearest;}
+  function pickTarget(e:PointerEvent):Target|null{
+    locate(e);const r=renderer.domElement.getBoundingClientRect();const sx=e.clientX,sy=e.clientY;
+    const nodes=group.children.filter(c=>c.userData.kind==='node');
+    const hitNode=ray.intersectObjects(nodes)[0];
+    if(hitNode)return{type:'node',id:hitNode.object.userData.id as number,screenX:sx,screenY:sy};
+    let nearestNode:number|undefined=undefined,bestNodeDist=24;
+    for(const n of nodes){
+      const p=n.position.clone().project(camera);
+      const dist=Math.hypot((p.x+1)*r.width/2-(sx-r.left),(1-p.y)*r.height/2-(sy-r.top));
+      if(p.z<1&&dist<bestNodeDist){bestNodeDist=dist;nearestNode=n.userData.id;}
+    }
+    if(nearestNode!==undefined)return{type:'node',id:nearestNode,screenX:sx,screenY:sy};
+    const beams=group.children.filter(c=>c.userData.kind==='beam');
+    const hitBeam=ray.intersectObjects(beams)[0];
+    if(hitBeam){const u=hitBeam.object.userData;return{type:'beam',index:u.index,a:u.a,b:u.b,screenX:sx,screenY:sy};}
+    const d=latest.current.design;
+    let nearestBeam:{index:number,a:number,b:number}|undefined=undefined,bestBeamDist=18;
+    for(let i=0;i<d.beams.length;i++){
+      const b=d.beams[i];const nA=d.nodes.find(n=>n.id===b.a);const nB=d.nodes.find(n=>n.id===b.b);
+      if(!nA||!nB)continue;
+      const pA=new T.Vector3(nA.x,nA.y,nA.z).project(camera);const pB=new T.Vector3(nB.x,nB.y,nB.z).project(camera);
+      if(pA.z>1&&pB.z>1)continue;
+      const ax=(pA.x+1)*r.width/2+r.left;const ay=(1-pA.y)*r.height/2+r.top;
+      const bx=(pB.x+1)*r.width/2+r.left;const by=(1-pB.y)*r.height/2+r.top;
+      const l2=(bx-ax)*(bx-ax)+(by-ay)*(by-ay);
+      let dist=999;
+      if(l2===0){dist=Math.hypot(sx-ax,sy-ay);}else{
+        let t=Math.max(0,Math.min(1,((sx-ax)*(bx-ax)+(sy-ay)*(by-ay))/l2));
+        dist=Math.hypot(sx-(ax+t*(bx-ax)),sy-(ay+t*(by-ay)));
+      }
+      if(dist<bestBeamDist){bestBeamDist=dist;nearestBeam={index:i,a:b.a,b:b.b};}
+    }
+    if(nearestBeam)return{type:'beam',index:nearestBeam.index,a:nearestBeam.a,b:nearestBeam.b,screenX:sx,screenY:sy};
+    return null;
+  }
   function start(e:PointerEvent){
     if(e.pointerType==='touch'){activeTouchCount++;if(activeTouchCount>=2)hadMultiTouch=true;}
-    down={x:e.clientX,y:e.clientY,id:pick(e),button:e.button,pointerType:e.pointerType};
-    if(latest.current.tool==='move'&&down.id!==undefined&&(e.button===0||e.pointerType==='touch')){
+    const target=pickTarget(e);
+    down={x:e.clientX,y:e.clientY,target,button:e.button,pointerType:e.pointerType};
+    if(latest.current.tool==='move'&&target?.type==='node'&&(e.button===0||e.pointerType==='touch')){
       controls.enableRotate=false;renderer.domElement.setPointerCapture(e.pointerId);
     }else{
       controls.enableRotate=true;
@@ -39,23 +78,33 @@ export default function TowerScene(props:SceneProps){
     const p=latest.current;if(p.run)return;
     const moved=Math.hypot(e.clientX-down.x,e.clientY-down.y)>8;
     if(e.button===2)return;
-    if(p.tool==='move'&&down.id!==undefined&&moved){
-      locate(e);const y=p.design.nodes.find(n=>n.id===down.id)?.y??p.level*1.5;const point=new T.Vector3();
+    if(p.tool==='move'&&down.target&&down.target.type==='node'&&moved){
+      const nodeId=down.target.id;
+      locate(e);const y=p.design.nodes.find(n=>n.id===nodeId)?.y??p.level*1.5;const point=new T.Vector3();
       if(ray.ray.intersectPlane(new T.Plane(new T.Vector3(0,1,0),-y),point)){
         const marker=projections.children.find(m=>Math.hypot(m.position.x-point.x,m.position.z-point.z)<=.23);
-        p.onPlace(marker?marker.userData.x:Math.round(point.x*2)/2,y,marker?marker.userData.z:Math.round(point.z*2)/2,down.id);
+        p.onPlace(marker?marker.userData.x:Math.round(point.x*2)/2,y,marker?marker.userData.z:Math.round(point.z*2)/2,nodeId);
       }
       return;
     }
     if(!moved){
-      if(p.tool==='add'){
-        locate(e);const y=p.level*1.5;const point=new T.Vector3();
-        if(ray.ray.intersectPlane(new T.Plane(new T.Vector3(0,1,0),-y),point)){
-          const marker=projections.children.find(m=>Math.hypot(m.position.x-point.x,m.position.z-point.z)<=.23);
-          p.onPlace(marker?marker.userData.x:Math.round(point.x*2)/2,y,marker?marker.userData.z:Math.round(point.z*2)/2);
+      if(down.target){
+        if(p.tool==='connect'&&p.selected!==null&&down.target.type==='node'){
+          p.onNode(down.target.id);
+          if(p.onSelectTarget)p.onSelectTarget(null);
+        }else{
+          if(p.onSelectTarget)p.onSelectTarget(down.target);
+          if(down.target.type==='node'&&p.tool!=='move')p.onNode(down.target.id);
         }
-      }else if(p.tool!=='orbit'){
-        const id=pick(e);if(id!==undefined)p.onNode(id);
+      }else{
+        if(p.onSelectTarget)p.onSelectTarget(null);
+        if(p.tool==='add'){
+          locate(e);const y=p.level*1.5;const point=new T.Vector3();
+          if(ray.ray.intersectPlane(new T.Plane(new T.Vector3(0,1,0),-y),point)){
+            const marker=projections.children.find(m=>Math.hypot(m.position.x-point.x,m.position.z-point.z)<=.23);
+            p.onPlace(marker?marker.userData.x:Math.round(point.x*2)/2,y,marker?marker.userData.z:Math.round(point.z*2)/2);
+          }
+        }
       }
     }
   }
@@ -71,8 +120,8 @@ export default function TowerScene(props:SceneProps){
  },[]);
  useEffect(()=>{const s=sceneRef.current;if(!s)return;s.sim=null;s.platform.position.set(0,-.24,0);for(const c of [...s.group.children]){s.group.remove(c);c.geometry.dispose();c.material.dispose();}
  props.design.nodes.forEach((n,i)=>{const m=new T.Mesh(new T.SphereGeometry(.15,12,8),new T.MeshStandardMaterial({color:n.id===props.selected?0x5279ee:0xe53935,roughness:.85,wireframe:props.wire}));m.castShadow=true;m.userData={kind:'node',id:n.id,index:i};s.group.add(m);});
- props.design.beams.forEach((b,i)=>{const m=new T.Mesh(new T.CylinderGeometry(.035,.035,1,7),new T.MeshStandardMaterial({color:0xc49858,roughness:.8,wireframe:props.wire}));m.castShadow=true;m.userData={kind:'beam',index:i};s.group.add(m);});s.updateMeshes(props.design.nodes.map(n=>new T.Vector3(n.x,n.y,n.z)));
- },[props.design,props.selected,props.wire]);
+  props.design.beams.forEach((b,i)=>{const isSel=props.selectedBeam===i;const m=new T.Mesh(new T.CylinderGeometry(.035,.035,1,7),new T.MeshStandardMaterial({color:isSel?0x5279ee:0xc49858,roughness:.8,wireframe:props.wire}));m.castShadow=true;m.userData={kind:'beam',index:i,a:b.a,b:b.b};s.group.add(m);});s.updateMeshes(props.design.nodes.map(n=>new T.Vector3(n.x,n.y,n.z)));
+  },[props.design,props.selected,props.selectedBeam,props.wire]);
  useEffect(()=>{const s=sceneRef.current;if(s){s.controls.enabled=true;s.controls.enableZoom=true;s.controls.touches={ONE:props.tool==='orbit'||!!props.run?T.TOUCH.ROTATE:null,TWO:T.TOUCH.DOLLY_ROTATE};s.editGrid.visible=props.tool==='add'&&!props.run;s.grid.visible=!s.editGrid.visible;s.editGrid.position.y=props.level*1.5;s.renderer.setPixelRatio(props.low?1:Math.min(devicePixelRatio,1.5));s.renderer.shadowMap.enabled=!props.low;}},[props.tool,props.level,props.run,props.low]);
  useEffect(()=>{const s=sceneRef.current;if(!s)return;
  for(const marker of [...s.projections.children]){s.projections.remove(marker);marker.geometry.dispose();marker.material.dispose();}
