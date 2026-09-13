@@ -1058,7 +1058,6 @@ function Mitigation() {
          <div className="miti-card-body">
           <div className="miti-card-title-row">
            <h4>{pt.shortTitle}</h4>
-           {isActive && <span className="miti-active-pill">Aktif</span>}
           </div>
           <p className="miti-card-desc">{pt.desc}</p>
          </div>
