@@ -438,6 +438,7 @@ const mitigationPhases: MitigationPhaseData[] = [
     title: 'Jauhi Kaca Jendela & Dilarang Menggunakan Lift',
     desc: 'Jauhi kaca, jendela, dan benda yang bisa jatuh. Jangan menggunakan lift.',
     badge: 'Area Bahaya Bangunan',
+    image: '/mitigasi-saat-2.jpg',
     caption: 'Kaca jendela mudah pecah menjadi serpihan tajam, sedangkan lift berisiko mati total akibat putusnya aliran listrik.',
     tips: [
      'Menjauh minimal 2–3 meter dari jendela, pintu kaca, dan cermin dinding',
