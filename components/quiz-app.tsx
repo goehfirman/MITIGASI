@@ -154,10 +154,9 @@ export default function QuizApp() {
 
   return (
     <div className="quiz-view-wrap">
-      <div className="slide-top">
-        <Link href="/" aria-label="Kembali ke Beranda" className="quiz-home-btn">
-          <House className="w-5 h-5" />
-          <span>Beranda</span>
+      <div className="quiz-top-bar">
+        <Link href="/" aria-label="Kembali ke Beranda" className="quiz-home-icon-btn" title="Kembali ke Beranda">
+          <House className="w-6 h-6" />
         </Link>
       </div>
 
