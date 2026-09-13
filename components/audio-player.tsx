@@ -132,7 +132,7 @@ export default function AudioPlayer({ autoPlayRequested }: { autoPlayRequested?:
     <div className="audio-player-container" role="region" aria-label="Pemutar Musik Latar">
       <audio 
         ref={audioRef} 
-        src="/background-music.mp3?v=2" 
+        src="/background-music.mp3?v=3" 
         loop 
         preload="auto"
         onPlay={() => setIsPlaying(true)}
