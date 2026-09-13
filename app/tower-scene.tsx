@@ -9,7 +9,7 @@ export default function TowerScene(props:SceneProps){
  const host=useRef<HTMLDivElement>(null),latest=useRef(props),sceneRef=useRef<any>(null);latest.current=props;const [error,setError]=useState('');
  useEffect(()=>{if(!host.current)return;let renderer:T.WebGLRenderer;try{renderer=new T.WebGLRenderer({antialias:true,alpha:true});}catch{setError('Tampilan 3D tidak tersedia. Aktifkan WebGL atau buka aplikasi melalui Chrome / Edge di papan.');return;}
  const el=host.current;renderer.setPixelRatio(Math.min(devicePixelRatio,1.5));renderer.shadowMap.enabled=true;el.appendChild(renderer.domElement);
- const scene=new T.Scene();scene.background=new T.Color('#eef3f8');const camera=new T.PerspectiveCamera(38,1,.1,100);camera.position.set(9,8,11);
+ const scene=new T.Scene();const camera=new T.PerspectiveCamera(38,1,.1,100);camera.position.set(9,8,11);
  const controls=new OrbitControls(camera,renderer.domElement);controls.target.set(0,2,0);controls.enableDamping=true;controls.minDistance=4;controls.maxDistance=32;controls.maxPolarAngle=Math.PI*.49;
  scene.add(new T.HemisphereLight(0xffffff,0x8090a8,2.7));const light=new T.DirectionalLight(0xffffff,3);light.position.set(4,9,5);light.castShadow=true;light.shadow.mapSize.set(1024,1024);scene.add(light);
  const group=new T.Group();scene.add(group);const platform=new T.Mesh(new T.BoxGeometry(8,.22,8),new T.MeshStandardMaterial({color:0xc8d6e4,roughness:.9}));platform.position.y=-.24;platform.receiveShadow=true;scene.add(platform);

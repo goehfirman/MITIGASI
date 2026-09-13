@@ -32,27 +32,348 @@ export default function TowerApp(){
  function start(){if(design.nodes.length<4||!design.nodes.some(n=>n.y>0)||design.beams.length<3){setMessage('Buat menara dengan titik di atas dasar dan minimal 3 sambungan.');return;}setSelected(null);setResult(null);setSaved(false);setTime(0);setRun(Date.now());setMessage('Amati gerakan menara selama 10 detik.');}
  async function enter(action:string){setBusy(true);try{const s=await api(action,{name:name.trim(),code:code.toUpperCase().trim(),className,challenge:mode,strength});setSession(s);sessionStorage.setItem('tower-session',JSON.stringify(s));setHistory([]);setName(s.name);if(s.challenge)setMode(s.challenge);if(s.strength)setStrength(s.strength);setMessage(action==='create'?'Kelas berhasil dibuat.':'Berhasil bergabung ke kelas.');if(action==='join')setPanel('');}catch(e:any){setMessage(e.message);}finally{setBusy(false);}}
  function csv(rows:Result[]){const esc=(v:any)=>'"'+String(v??'').replace(/^[=+@-]/,"'").replaceAll('"','""')+'"';const text='\uFEFF'+[['Nama','Tanggal','Tinggi (cm)','Gempa','Arah','Bertahan (detik)','Skor','Hasil','Refleksi'],...rows.map(r=>[r.name,r.date,r.height,r.strength,r.direction,r.duration,r.score,r.standing?'Berdiri':'Roboh',r.reflection||''])].map(row=>row.map(esc).join(',')).join('\r\n');const u=URL.createObjectURL(new Blob([text],{type:'text/csv;charset=utf-8'}));const a=document.createElement('a');a.href=u;a.download='hasil-toothpick-tower.csv';a.click();URL.revokeObjectURL(u);}
- return <main className="lab">
- <div style={{position:'absolute',top:'18px',left:'18px',zIndex:50}}>
-  <Button asChild variant="ghost" style={{width:'48px',height:'48px',padding:0,display:'flex',alignItems:'center',justifyContent:'center',color:'white',background:'rgba(8,39,59,.48)',border:'1px solid #ffffff90',borderRadius:'14px',backdropFilter:'blur(14px)',WebkitBackdropFilter:'blur(14px)'}}><a href="/"><House size={20} aria-label="Kembali ke Beranda"/></a></Button>
- </div>
- <div style={{position:'absolute',top:'18px',right:'18px',zIndex:50}}>
-  <Button variant="ghost" style={{width:'48px',height:'48px',padding:0,display:'flex',alignItems:'center',justifyContent:'center',color:'white',background:'rgba(8,39,59,.48)',border:'1px solid #ffffff90',borderRadius:'14px',backdropFilter:'blur(14px)',WebkitBackdropFilter:'blur(14px)'}} onClick={async()=>{try{if(document.fullscreenElement)await document.exitFullscreen();else await document.documentElement.requestFullscreen();}catch{setMessage('Gunakan pintasan browser.');}}} aria-label={fullscreen?'Keluar layar penuh':'Layar penuh'}>{fullscreen?<Maximize size={20} aria-label="Keluar layar penuh"/>:<Maximize size={20} aria-label="Layar penuh"/>}</Button>
- </div>
- <div className="workspace-head" style={{paddingTop: '24px', paddingLeft: '84px'}}><div><h2 style={{display:'flex',alignItems:'center',gap:'12px',color:'white',marginTop:'0'}}><img src="/stem-logo.png" alt="STEM" style={{height:'36px',objectFit:'contain',marginBottom:'4px',display:'block'}}/>Lab Maya Struktur Anti Gempa</h2></div><div className="session-label"><Users size={20}/><input aria-label="Nama kelompok" value={name} maxLength={40} disabled={!!session||!!run} onChange={e=>setName(e.target.value)}/>{session?.code&&<span>{session.code}</span>}</div></div>
- <div className="workspace"><aside className="build-panel"><div className="step-title"><span>01</span><h3>Bangun menaramu</h3></div><Tabs value={mode} onValueChange={setMode}><TabsList><TabsTrigger disabled={!!run} value="Bebas">Bebas</TabsTrigger><TabsTrigger disabled={!!run} value="Tantangan">Tantangan</TabsTrigger></TabsList></Tabs>
- {mode==='Bebas'&&<div className="challenge" style={{background:'#f6f8fc',border:'1px dashed #dbe4ee'}}><strong>Mode bebas</strong><p>Eksplorasi tanpa batas. Uji berbagai bentuk tanpa batasan bahan.</p></div>}
- {mode==='Tantangan'&&<div className="challenge"><strong>Misi: tinggi & tangguh</strong><p>Bangun ≥18 cm, gunakan ≤50 tusuk gigi, dan bertahan 10 detik.</p></div>}
- <label className="section-label">CONTOH OPSIONAL</label><div className="preset-grid"><Button disabled={!!run} variant="outline" onClick={()=>edit(preset(true))}><Triangle/><span>Segitiga<small>Dengan penguat</small></span></Button><Button disabled={!!run} variant="outline" onClick={()=>edit(preset(false,3,false))}><Square/><span>Segi empat<small>Tanpa penguat</small></span></Button></div>
- <label className="section-label">ALAT BANGUN</label><div className="tool-grid">{tools.map(([id,label,Icon])=><Button key={id} disabled={!!run} variant="outline" aria-pressed={tool===id} className={tool===id?'active':''} onClick={()=>{setTool(id);setSelected(null);}}><Icon/>{label}</Button>)}</div>
- <div className="level-row"><label>Tingkat titik baru</label><div><Button aria-label="Turunkan tingkat" disabled={level===0||!!run} variant="outline" onClick={()=>setLevel(level-1)}>−</Button><strong>{level}</strong><Button aria-label="Naikkan tingkat" disabled={level===8||!!run} variant="outline" onClick={()=>setLevel(level+1)}>+</Button></div><small>{level*6} cm dari dasar</small></div>
- <div className="materials"><div><span className="material-dot wood"/>Tusuk gigi<strong>{design.beams.length}<small> / 240</small></strong></div><div><span className="material-dot"/>Marshmallow<strong>{design.nodes.length}<small> / 80</small></strong></div></div>
- <div className="undo-row"><Button aria-label="Urungkan" disabled={!past.length||!!run} variant="outline" onClick={()=>{setFuture([design,...future]);setDesign(past[past.length-1]);setPast(past.slice(0,-1));setSelected(null);setResult(null);}}><Undo2/></Button><Button aria-label="Ulangi" disabled={!future.length||!!run} variant="outline" onClick={()=>{setPast([...past,design]);setDesign(future[0]);setFuture(future.slice(1));setSelected(null);setResult(null);}}><Redo2/></Button><Button disabled={!!run} variant="ghost" onClick={()=>edit({nodes:[],beams:[]})}><RotateCcw/>Kosongkan</Button></div></aside>
- <section className="canvas-panel"><div className="canvas-top"><span><Box size={17}/> Meja eksperimen 3D</span><span className="canvas-badge">{run&&!result?'Gempa berlangsung':result?'Uji selesai':'Mode membangun'}</span></div><Scene design={design} tool={tool} level={level} selected={selected} low={low} wire={wire} view={view} zoom={zoom} run={run} strength={strength} direction={direction} onNode={node} onPlace={place} onProgress={setTime} onDone={done}/><div className="camera-tools"><div>{['Depan','Atas','3/4'].map(v=><Button key={v} variant="outline" aria-pressed={view===v} className={view===v?'active':''} onClick={()=>setView(v)}>{v}</Button>)}</div><div><Button aria-label="Perkecil" variant="outline" onClick={()=>setZoom(Math.max(.6,zoom-.2))}><ZoomOut/></Button><Button aria-label="Perbesar" variant="outline" onClick={()=>setZoom(Math.min(2.5,zoom+.2))}><ZoomIn/></Button></div></div><div className="canvas-hint"><Move size={18}/>{run?'Kamera tetap dapat diputar saat pengujian.':help[tool]}</div><div className="canvas-settings"><label><Switch checked={wire} disabled={!!run} onCheckedChange={setWire}/>Lihat rangka</label><label><Switch checked={low} onCheckedChange={setLow}/>Grafis ringan</label><span>1 petak = 2 cm</span></div></section>
- <aside className="test-panel"><div className="step-title"><span>02</span><h3>Uji ketangguhan</h3></div><div className="height-card"><Ruler/><span>Tinggi menara<strong>{height(design)}<small>cm</small></strong></span><Button variant="ghost" onClick={()=>setMessage('Tinggi menara saat ini '+height(design)+' cm. Diukur dari dasar hingga sambungan tertinggi.')} aria-label="Ukur tinggi"><ArrowRight/></Button></div><label className="section-label">KEKUATAN GUNCANGAN</label><div className="strengths">{['Ringan','Sedang','Kuat'].map((s,i)=><Button key={s} disabled={!!run} variant="outline" aria-pressed={strength===s} className={strength===s?'active':''} onClick={()=>setStrength(s)}><span className="bars">{'▂▄▆'.slice(0,i+1)}</span>{s}</Button>)}</div><label className="section-label">ARAH GUNCANGAN</label><Choice label="Arah guncangan" value={direction} onChange={setDirection} values={run?[direction]:['X','X-Y']}/><p className="micro">{direction==='X-Y'?'Dua arah mendatar: kiri–kanan dan depan–belakang.':'Satu arah mendatar: kiri–kanan.'}</p><div className="duration"><span>Durasi pengujian</span><strong>10 detik</strong></div>
- <Button className="simulate" disabled={!!run&&!result} onClick={()=>{if(result){setRun(0);setResult(null);setMessage('Desain dipulihkan. Perbaiki sebelum menguji lagi.');}else start();}}>{result?<RotateCcw/>:<Play/>}{result?'Perbaiki desain':run?'Sedang menguji…':'Simulasikan gempa'}</Button>{!!run&&<div className="progress"><div style={{width:Math.min(100,time*10)+'%'}}/><span>{Math.min(10,time).toFixed(1)} / 10 detik</span></div>}
- {result?<div className={'result-card '+(result.standing?'success':'retry')} aria-live="polite"><strong>{result.standing?'Menara bertahan!':'Coba perkuat lagi'}</strong><div><b>{result.score}<small>/100</small></b><span>Bertahan<br/>{result.duration} detik</span></div>{mode==='Bebas'&&<p style={{color:result.standing?'#23654b':'#9b5427'}}>{result.standing?'Desain yang bagus! Eksplorasi bentuk lainnya.':'Analisis bagian yang lemah dan perkuat.'}</p>}{mode==='Tantangan'&&<p>{result.standing&&result.height>=18&&design.beams.length<=50?'Misi berhasil!':'Misi belum tercapai. Periksa tinggi, bahan, dan ketahanan.'}</p>}<Button variant="outline" onClick={()=>setPanel('refleksi')}>Tulis refleksi</Button>{!saved&&<Button disabled={busy} variant="ghost" onClick={()=>save(result)}>Simpan lagi</Button>}</div>:<div className="science-note"><Lightbulb/><strong>Mengapa segitiga?</strong><p>Penguat diagonal membantu rangka mempertahankan bentuk saat menerima gaya.</p></div>}
- </aside></div><footer className="bottom-bar"><p role="status">{busy?'Menyimpan / menghubungkan…':message}</p></footer>
+  return <main className="lab">
+  {/* Top Navigation Bar */}
+  <header className="lab-top-nav">
+    <Button asChild variant="ghost" className="lab-icon-btn">
+      <a href="/"><House size={20} aria-label="Kembali ke Beranda"/></a>
+    </Button>
+    <div className="lab-title-area">
+      <img src="/stem-logo.png" alt="STEM" className="lab-stem-logo" />
+      <h2>Lab Maya Struktur Anti Gempa</h2>
+    </div>
+    <div className="lab-top-right">
+      <div className="lab-session-box">
+        <Users size={16}/>
+        <input 
+          aria-label="Nama kelompok" 
+          value={name} 
+          maxLength={40} 
+          disabled={!!session||!!run} 
+          onChange={e=>setName(e.target.value)}
+        />
+        {session?.code && <span className="session-code-badge">{session.code}</span>}
+      </div>
+      <Button 
+        variant="ghost" 
+        className="lab-icon-btn" 
+        onClick={async()=>{try{if(document.fullscreenElement)await document.exitFullscreen();else await document.documentElement.requestFullscreen();}catch{setMessage('Gunakan pintasan browser.');}}} 
+        aria-label={fullscreen?'Keluar layar penuh':'Layar penuh'}
+      >
+        <Maximize size={20}/>
+      </Button>
+    </div>
+  </header>
+
+  {/* Open 3D Structure Stage (NO BOX) */}
+  <div className="lab-stage">
+    <Scene design={design} tool={tool} level={level} selected={selected} low={low} wire={wire} view={view} zoom={zoom} run={run} strength={strength} direction={direction} onNode={node} onPlace={place} onProgress={setTime} onDone={done}/>
+    
+    {/* Floating HUD Top: Stats & Camera/Options */}
+    <div className="stage-hud-top">
+      <div className="hud-group">
+        <div className="hud-pill">
+          <Ruler size={16} style={{color:'#f59e0b'}}/>
+          <span>Tinggi: <strong>{height(design)} cm</strong></span>
+        </div>
+        <div className="hud-pill">
+          <span className="material-dot wood"/>
+          <span>Tusuk gigi: <strong>{design.beams.length}</strong>/240</span>
+        </div>
+        <div className="hud-pill">
+          <span className="material-dot"/>
+          <span>Marshmallow: <strong>{design.nodes.length}</strong>/80</span>
+        </div>
+      </div>
+
+      <div className="hud-group">
+        <div className="hud-camera-pills">
+          {(['3/4','Depan','Atas'] as const).map(v => (
+            <button 
+              key={v} 
+              type="button"
+              className={`hud-cam-btn ${view===v?'active':''}`} 
+              onClick={()=>setView(v)}
+            >
+              {v}
+            </button>
+          ))}
+          <div className="hud-divider"/>
+          <button 
+            type="button"
+            className="hud-cam-btn" 
+            onClick={()=>setZoom(Math.max(.6,zoom-.2))} 
+            title="Perkecil"
+          >
+            <ZoomOut size={14}/>
+          </button>
+          <button 
+            type="button"
+            className="hud-cam-btn" 
+            onClick={()=>setZoom(Math.min(2.5,zoom+.2))} 
+            title="Perbesar"
+          >
+            <ZoomIn size={14}/>
+          </button>
+        </div>
+
+        <div className="hud-pill hud-pill-toggle">
+          <label>
+            <Switch checked={wire} disabled={!!run} onCheckedChange={setWire}/>
+            <span>Rangka</span>
+          </label>
+        </div>
+      </div>
+    </div>
+
+    {/* Center Result Overlay when simulation finishes */}
+    {result && (
+      <div className={`result-overlay ${result.standing?'success':'retry'}`}>
+        <div className="result-icon">{result.standing ? '🎉' : '💥'}</div>
+        <div className="result-header">
+          <h3>{result.standing ? 'Menara Bertahan!' : 'Coba Perkuat Lagi'}</h3>
+        </div>
+        <div className="result-stats">
+          <div className="result-stat-box">
+            <span className="result-stat-val">{result.score}</span>
+            <span className="result-stat-lbl">Skor / 100</span>
+          </div>
+          <div className="result-stat-box">
+            <span className="result-stat-val">{result.duration}s</span>
+            <span className="result-stat-lbl">Bertahan</span>
+          </div>
+          <div className="result-stat-box">
+            <span className="result-stat-val">{height(design)}cm</span>
+            <span className="result-stat-lbl">Tinggi</span>
+          </div>
+        </div>
+        {mode==='Tantangan' && (
+          <p className="result-challenge-msg">
+            {result.standing && result.height>=18 && design.beams.length<=50
+              ? '🎯 Misi berhasil! Menara tinggi dan tangguh.'
+              : '⚠️ Misi belum tercapai. Target: tinggi ≥18 cm, tusuk gigi ≤50.'}
+          </p>
+        )}
+        <div className="result-actions">
+          <button 
+            type="button"
+            className="result-btn-reset" 
+            onClick={()=>{setRun(0);setResult(null);setMessage('Desain dipulihkan. Perbaiki sebelum menguji lagi.');}}
+          >
+            <RotateCcw size={16}/> Perbaiki Desain
+          </button>
+          <Button 
+            variant="outline" 
+            className="result-btn-reflect" 
+            onClick={()=>setPanel('refleksi')}
+          >
+            Tulis Refleksi
+          </Button>
+        </div>
+      </div>
+    )}
+
+    {/* Floating Hint right above bottom toolbar */}
+    <div className="stage-hint">
+      <Lightbulb size={15} style={{color:'#facc15'}}/>
+      <span>{run && !result ? 'Gempa sedang berlangsung... Amati kestabilan rangka menara!' : help[tool]}</span>
+    </div>
+  </div>
+
+  {/* Simplified Bottom Toolbar */}
+  <footer className="lab-toolbar">
+    {/* Section 1: Mode & Preset */}
+    <div className="tb-section tb-mode">
+      <div className="tb-pill-switch">
+        <button 
+          type="button" 
+          disabled={!!run} 
+          className={`tb-switch-btn ${mode==='Bebas'?'active':''}`} 
+          onClick={()=>setMode('Bebas')}
+        >
+          Bebas
+        </button>
+        <button 
+          type="button" 
+          disabled={!!run} 
+          className={`tb-switch-btn ${mode==='Tantangan'?'active':''}`} 
+          onClick={()=>setMode('Tantangan')}
+        >
+          Tantangan
+        </button>
+      </div>
+      <div className="tb-presets">
+        <button 
+          type="button" 
+          disabled={!!run} 
+          className="tb-preset-btn" 
+          onClick={()=>edit(preset(true))}
+          title="Contoh Struktur Segitiga"
+        >
+          <Triangle size={13}/> Segitiga
+        </button>
+        <button 
+          type="button" 
+          disabled={!!run} 
+          className="tb-preset-btn" 
+          onClick={()=>edit(preset(false,3,false))}
+          title="Contoh Struktur Segi Empat"
+        >
+          <Square size={13}/> Segiempat
+        </button>
+      </div>
+    </div>
+
+    <div className="tb-divider"/>
+
+    {/* Section 2: Alat Bangun (5 tools) */}
+    <div className="tb-section tb-tools">
+      {tools.map(([id, label, Icon]) => (
+        <button
+          key={id}
+          type="button"
+          disabled={!!run}
+          className={`tb-tool-btn ${tool===id?'active':''}`}
+          onClick={()=>{setTool(id);setSelected(null);}}
+          title={label}
+        >
+          <Icon size={18}/>
+          <span>{label}</span>
+        </button>
+      ))}
+    </div>
+
+    <div className="tb-divider"/>
+
+    {/* Section 3: Tingkat & Edit */}
+    <div className="tb-section tb-level-edit">
+      <div className="tb-level-control">
+        <button 
+          type="button" 
+          aria-label="Turunkan tingkat" 
+          disabled={level===0||!!run} 
+          className="tb-btn-icon" 
+          onClick={()=>setLevel(level-1)}
+        >
+          −
+        </button>
+        <div className="tb-level-info">
+          <span className="tb-level-num">Tk {level}</span>
+          <span className="tb-level-cm">{level*6}cm</span>
+        </div>
+        <button 
+          type="button" 
+          aria-label="Naikkan tingkat" 
+          disabled={level===8||!!run} 
+          className="tb-btn-icon" 
+          onClick={()=>setLevel(level+1)}
+        >
+          +
+        </button>
+      </div>
+
+      <div className="tb-edit-actions">
+        <button 
+          type="button" 
+          aria-label="Urungkan" 
+          disabled={!past.length||!!run} 
+          className="tb-btn-icon" 
+          onClick={()=>{setFuture([design,...future]);setDesign(past[past.length-1]);setPast(past.slice(0,-1));setSelected(null);setResult(null);}}
+          title="Urungkan (Undo)"
+        >
+          <Undo2 size={16}/>
+        </button>
+        <button 
+          type="button" 
+          aria-label="Ulangi" 
+          disabled={!future.length||!!run} 
+          className="tb-btn-icon" 
+          onClick={()=>{setPast([...past,design]);setDesign(future[0]);setFuture(future.slice(1));setSelected(null);setResult(null);}}
+          title="Ulangi (Redo)"
+        >
+          <Redo2 size={16}/>
+        </button>
+        <button 
+          type="button" 
+          disabled={!!run} 
+          className="tb-btn-icon tb-clear-btn" 
+          onClick={()=>edit({nodes:[],beams:[]})}
+          title="Kosongkan Meja"
+        >
+          <RotateCcw size={16}/>
+        </button>
+      </div>
+    </div>
+
+    <div className="tb-divider"/>
+
+    {/* Section 4: Pengaturan Gempa */}
+    <div className="tb-section tb-quake">
+      <div className="tb-quake-sub">
+        <span className="tb-label">Kekuatan:</span>
+        <div className="tb-pill-group">
+          {['Ringan','Sedang','Kuat'].map(s => (
+            <button
+              key={s}
+              type="button"
+              disabled={!!run}
+              className={`tb-pill-btn ${strength===s?'active':''}`}
+              onClick={()=>setStrength(s)}
+            >
+              {s}
+            </button>
+          ))}
+        </div>
+      </div>
+      <div className="tb-quake-sub">
+        <span className="tb-label">Arah:</span>
+        <div className="tb-pill-group">
+          {(run?[direction]:['X','X-Y']).map(d => (
+            <button
+              key={d}
+              type="button"
+              disabled={!!run}
+              className={`tb-pill-btn ${direction===d?'active':''}`}
+              onClick={()=>setDirection(d)}
+            >
+              {d}
+            </button>
+          ))}
+        </div>
+      </div>
+    </div>
+
+    <div className="tb-divider"/>
+
+    {/* Section 5: Tombol Simulasi Utama */}
+    <div className="tb-section tb-simulate-section">
+      <button 
+        type="button"
+        className={`tb-simulate-btn ${run&&!result?'testing':result?'reset':'ready'}`}
+        disabled={!!run&&!result}
+        onClick={() => {
+          if (result) {
+            setRun(0);
+            setResult(null);
+            setMessage('Desain dipulihkan. Perbaiki sebelum menguji lagi.');
+          } else {
+            start();
+          }
+        }}
+      >
+        {result ? (
+          <><RotateCcw size={17}/><span>Perbaiki Desain</span></>
+        ) : run ? (
+          <div className="tb-sim-progress">
+            <span className="tb-sim-pulse" />
+            <span>Menguji ({Math.min(10, time).toFixed(1)}s)</span>
+          </div>
+        ) : (
+          <><Play size={17} fill="currentColor"/><span>Simulasikan Gempa</span></>
+        )}
+      </button>
+    </div>
+  </footer>
  <Dialog open={!!panel} onOpenChange={o=>{if(!o)setPanel('')}}><DialogContent className="lab-dialog"><DialogTitle>{({belajar:'Belajar lewat eksperimen',riwayat:'Riwayat percobaan',guru:'Ruang guru',kelas:'Gabung kelas',refleksi:'Ceritakan penemuanmu'} as any)[panel]}</DialogTitle><DialogDescription>{panel==='guru'?'Kelola kegiatan dan hasil kelompok.':panel==='riwayat'?'Bandingkan desain pada kekuatan dan arah gempa yang sama.':'Toothpick Tower · Laboratorium STEM kelas 6'}</DialogDescription>
  {panel==='belajar'&&<div className="learning"><h3>Cara membangun di papan</h3><ol><li>Pilih menara contoh atau tekan Kosongkan.</li><li>Pilih Titik, atur tingkat, lalu ketuk petak meja.</li><li>Pilih Sambung dan ketuk dua marshmallow. Tambahkan penguat diagonal.</li><li>Pilih Putar untuk memeriksa sisi lain. Lalu uji gempa!</li></ol><div className="learning-grid"><article><strong>Sains · Titik berat</strong><p>Dasar lebar dan bagian atas yang ringan membantu menjaga titik berat tetap di atas bidang dasar.</p></article><article><strong>Rekayasa · Segitiga</strong><p>Segi empat dapat berubah bentuk. Penguat diagonal membaginya menjadi segitiga yang lebih kaku.</p></article><article><strong>Matematika · Pengukuran</strong><p>Bandingkan tinggi, jumlah bahan, dan waktu bertahan. Ubah satu hal setiap percobaan agar perbandingan adil.</p></article><article><strong>Teknologi · Model</strong><p>Ini model pembelajaran: sambungan dasar ditambatkan, batang dimodelkan sebagai penghubung jarak, dan sambungan dapat terputus. Skor = waktu bertahan ÷ 10 × 100. Roboh terdeteksi bila tinggi bagian atas turun lebih dari 40% atau penghubung putus.</p></article></div><p>Ringan, sedang, dan kuat adalah tingkat simulasi, bukan magnitudo gempa atau penilaian keamanan bangunan nyata. Saat latihan kesiapsiagaan di sekolah, ikuti arahan guru dan prosedur sekolah.</p></div>}
  {panel==='riwayat'&&<><Results rows={history} onLoad={r=>{setRun(0);edit(r.design);setPanel('');setMessage('Desain percobaan dimuat kembali.');}}/><Button disabled={!history.length} onClick={()=>csv(history)}><Download/>Unduh laporan CSV</Button></>}
