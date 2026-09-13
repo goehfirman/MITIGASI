@@ -8,6 +8,11 @@ export default function ViewportFit({children}:{children:ReactNode}){
   const measure=()=>{cancelAnimationFrame(frame);frame=requestAnimationFrame(()=>{
    if(!host.current||!page.current)return;
    const available=host.current.getBoundingClientRect();
+   const isHome = !!page.current.querySelector(".is-home");
+   if (isHome) {
+     setSize({width: available.width, scale: 1, left: 0, ready: true});
+     return;
+   }
    const width=page.current.querySelector(".learning-deck")?1440:Math.max(1280,available.width);
    if(page.current.offsetWidth!==Math.round(width)){setSize(s=>({...s,width}));return;}
    const height=page.current.scrollHeight;
