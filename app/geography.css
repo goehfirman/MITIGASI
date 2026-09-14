@@ -820,8 +820,8 @@
   right: 14px;
   width: 32px;
   height: 32px;
-  background: rgba(255, 255, 255, 0.15);
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  background: transparent;
+  border: none;
   border-radius: 50%;
   color: #fff;
   font-size: 20px;
@@ -1286,8 +1286,8 @@
   width: 36px;
   height: 36px;
   border-radius: 50%;
-  border: 1px solid rgba(255, 255, 255, 0.18);
-  background: rgba(255, 255, 255, 0.08);
+  background: transparent;
+  border: none;
   color: #94a3b8;
   font-size: 15px;
   font-weight: 700;
@@ -1299,10 +1299,8 @@
 }
 
 .miti-intro-close:hover {
-  background: rgba(239, 68, 68, 0.25);
-  border-color: rgba(239, 68, 68, 0.5);
   color: #fca5a5;
-  transform: scale(1.08);
+  transform: scale(1.15);
 }
 
 .miti-intro-icon-wrap {

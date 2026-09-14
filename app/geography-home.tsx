@@ -25,45 +25,18 @@ function MitigationIntroModal({
   onClose: () => void;
   onProceed: () => void;
 }) {
-  const [displayedText, setDisplayedText] = useState('');
-  const [isFinished, setIsFinished] = useState(false);
-
-  useEffect(() => {
-    if (!isOpen) {
-      setDisplayedText('');
-      setIsFinished(false);
-      return;
-    }
-
-    setDisplayedText('');
-    setIsFinished(false);
-    let index = 0;
-
-    const timer = setInterval(() => {
-      index++;
-      if (index <= MITIGATION_INTRO_TEXT.length) {
-        setDisplayedText(MITIGATION_INTRO_TEXT.slice(0, index));
-      } else {
-        clearInterval(timer);
-        setIsFinished(true);
-      }
-    }, 20);
-
-    return () => clearInterval(timer);
-  }, [isOpen]);
-
   useEffect(() => {
     if (!isOpen) return;
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
         onClose();
-      } else if (e.key === 'Enter' && isFinished) {
+      } else if (e.key === 'Enter') {
         onProceed();
       }
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [isOpen, isFinished, onClose, onProceed]);
+  }, [isOpen, onClose, onProceed]);
 
   if (!isOpen) return null;
 
@@ -92,36 +65,24 @@ function MitigationIntroModal({
           <span className="miti-intro-badge">PERINGATAN DINI & MITIGASI BENCANA</span>
         </div>
 
-        <div
-          className="miti-intro-content"
-          onClick={() => {
-            if (!isFinished) {
-              setDisplayedText(MITIGATION_INTRO_TEXT);
-              setIsFinished(true);
-            }
-          }}
-          title={!isFinished ? "Klik untuk mempercepat teks" : undefined}
-        >
+        <div className="miti-intro-content">
           <p className="miti-intro-text">
-            {displayedText}
-            {!isFinished && <span className="miti-typewriter-cursor">|</span>}
+            {MITIGATION_INTRO_TEXT}
           </p>
         </div>
 
-        {isFinished && (
-          <div className="miti-intro-action-wrap">
-            <button
-              type="button"
-              className="miti-intro-action-btn"
-              onClick={onProceed}
-              autoFocus
-            >
-              <ShieldAlert className="miti-btn-shield" />
-              <span>Mitigasi Gempa</span>
-              <ArrowRight className="miti-btn-arrow" />
-            </button>
-          </div>
-        )}
+        <div className="miti-intro-action-wrap">
+          <button
+            type="button"
+            className="miti-intro-action-btn"
+            onClick={onProceed}
+            autoFocus
+          >
+            <ShieldAlert className="miti-btn-shield" />
+            <span>Mitigasi Gempa</span>
+            <ArrowRight className="miti-btn-arrow" />
+          </button>
+        </div>
       </div>
     </div>
   );
