@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 import { useMemo, useState } from 'react';
 import { geoMercator, geoPath, geoGraticule } from 'd3-geo';
 import region from '@/lib/indonesia-region.json';
@@ -64,7 +64,7 @@ export default function QuizMap({ type, onLocationSelected }: { type: 'island' |
             const p = map.projection(i.point as [number, number])!;
             const isSelected = selectedName === i.name;
             return (
-              <g key={i.name} transform={\	ranslate(\ + p[0] + \,\ + p[1] + \)\} onClick={() => handleClick(i.name)} style={{ cursor: 'pointer' }}>
+              <g key={i.name} transform={"translate(" + p[0] + "," + p[1] + ")"} onClick={() => handleClick(i.name)} style={{ cursor: 'pointer' }}>
                 <circle r="40" fill={isSelected ? 'rgba(52, 211, 153, 0.4)' : 'transparent'} />
                 <text y="5" textAnchor="middle" fill={isSelected ? '#34d399' : '#cbd5e1'} fontSize="16" fontWeight="bold">{i.name}</text>
               </g>
@@ -74,7 +74,7 @@ export default function QuizMap({ type, onLocationSelected }: { type: 'island' |
             const p = map.projection(v.point as [number, number])!;
             const isSelected = selectedName === v.name;
             return (
-              <g key={v.name} transform={\	ranslate(\ + p[0] + \,\ + p[1] + \)\} onClick={() => handleClick(v.name)} style={{ cursor: 'pointer' }}>
+              <g key={v.name} transform={"translate(" + p[0] + "," + p[1] + ")"} onClick={() => handleClick(v.name)} style={{ cursor: 'pointer' }}>
                 <circle r="24" fill={isSelected ? 'rgba(52, 211, 153, 0.3)' : 'rgba(239, 68, 68, 0.2)'} />
                 <circle r="6" fill={isSelected ? '#34d399' : '#ef4444'} />
                 <text y="-10" textAnchor="middle" fill={isSelected ? '#34d399' : '#fff'} fontSize="14">{v.name}</text>
