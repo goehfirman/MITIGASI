@@ -11,7 +11,7 @@ export type Target=
 export type SceneProps={design:Design,tool:string,level:number,selected:number|null,selectedBeam?:number|null,low:boolean,wire:boolean,view:string,zoom:number,run:number,strength:string,direction:string,onNode:(id:number)=>void,onPlace:(x:number,y:number,z:number,id?:number)=>void,onProgress:(t:number)=>void,onDone:(duration:number,standing:boolean)=>void,onSelectTarget?:(target:Target|null)=>void};
 export default function TowerScene(props:SceneProps){
  const host=useRef<HTMLDivElement>(null),latest=useRef(props),sceneRef=useRef<any>(null);latest.current=props;const [error,setError]=useState('');
- useEffect(()=>{if(!host.current)return;let renderer:T.WebGLRenderer;try{renderer=new T.WebGLRenderer({antialias:true,alpha:true});}catch{setError('Tampilan 3D tidak tersedia. Aktifkan WebGL atau buka aplikasi melalui Chrome / Edge di papan.');return;}
+ useEffect(()=>{if(!host.current)return;let renderer:T.WebGLRenderer;try{renderer=new T.WebGLRenderer({antialias:true,alpha:true,preserveDrawingBuffer:true});}catch{setError('Tampilan 3D tidak tersedia. Aktifkan WebGL atau buka aplikasi melalui Chrome / Edge di papan.');return;}
  const el=host.current;renderer.setPixelRatio(Math.min(devicePixelRatio,1.5));renderer.shadowMap.enabled=true;el.appendChild(renderer.domElement);
  const scene=new T.Scene();const camera=new T.PerspectiveCamera(38,1,.1,100);camera.position.set(9,8,11);
   const controls=new OrbitControls(camera,renderer.domElement);controls.target.set(0,2,0);controls.enableDamping=true;controls.dampingFactor=0.08;controls.minDistance=4;controls.maxDistance=32;controls.maxPolarAngle=Math.PI*.49;controls.enableZoom=true;controls.zoomSpeed=1.2;

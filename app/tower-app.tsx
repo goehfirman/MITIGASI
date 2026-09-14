@@ -7,7 +7,7 @@ import {Dialog,DialogContent,DialogTitle,DialogDescription} from '@/components/u
 import {Tabs,TabsList,TabsTrigger} from '@/components/ui/tabs';
 import {Switch} from '@/components/ui/switch';
 import {Select,SelectTrigger,SelectValue,SelectContent,SelectItem} from '@/components/ui/select';
-import {Box,Rotate3D,Plus,Link2,Move,Trash2,Undo2,Redo2,Ruler,Play,Maximize,Users,BookOpen,History,Triangle,Square,ZoomIn,ZoomOut,GraduationCap,Download,Check,ArrowRight,Layers,Lightbulb,RotateCcw,House,X} from 'lucide-react';
+import {Box,Rotate3D,Plus,Link2,Move,Trash2,Undo2,Redo2,Ruler,Play,Maximize,Users,BookOpen,History,Triangle,Square,ZoomIn,ZoomOut,GraduationCap,Download,Check,ArrowRight,Layers,Lightbulb,RotateCcw,House,X,Camera} from 'lucide-react';
 import {preset,height,validDesign,type Design,type Result} from '@/lib/tower';
 type Session={token:string,role:string,code?:string,name:string,challenge?:string,strength?:string};
 const tools=[['orbit','Putar',Rotate3D],['add','Titik',Plus],['connect','Sambung',Link2],['move','Geser',Move],['delete','Hapus',Trash2]] as const;
@@ -39,6 +39,23 @@ export default function TowerApp(){
  function start(){if(design.nodes.length<4||!design.nodes.some(n=>n.y>0)||design.beams.length<3){setMessage('Buat menara dengan titik di atas dasar dan minimal 3 sambungan.');return;}setSelected(null);setResult(null);setSaved(false);setTime(0);setRun(Date.now());setMessage('Amati gerakan menara selama 10 detik.');}
  async function enter(action:string){setBusy(true);try{const s=await api(action,{name:name.trim(),code:code.toUpperCase().trim(),className,challenge:mode,strength});setSession(s);sessionStorage.setItem('tower-session',JSON.stringify(s));setHistory([]);setName(s.name);if(s.challenge)setMode(s.challenge);if(s.strength)setStrength(s.strength);setMessage(action==='create'?'Kelas berhasil dibuat.':'Berhasil bergabung ke kelas.');if(action==='join')setPanel('');}catch(e:any){setMessage(e.message);}finally{setBusy(false);}}
  function csv(rows:Result[]){const esc=(v:any)=>'"'+String(v??'').replace(/^[=+@-]/,"'").replaceAll('"','""')+'"';const text='\uFEFF'+[['Nama','Tanggal','Tinggi (cm)','Gempa','Arah','Bertahan (detik)','Skor','Hasil','Refleksi'],...rows.map(r=>[r.name,r.date,r.height,r.strength,r.direction,r.duration,r.score,r.standing?'Berdiri':'Roboh',r.reflection||''])].map(row=>row.map(esc).join(',')).join('\r\n');const u=URL.createObjectURL(new Blob([text],{type:'text/csv;charset=utf-8'}));const a=document.createElement('a');a.href=u;a.download='hasil-toothpick-tower.csv';a.click();URL.revokeObjectURL(u);}
+ function handleCapture() {
+   const canvas = document.querySelector('.lab-stage canvas') as HTMLCanvasElement;
+   if (!canvas) {
+     setMessage('Gagal menangkap layar. Coba lagi.');
+     return;
+   }
+   try {
+     const url = canvas.toDataURL('image/jpeg', 0.9);
+     const a = document.createElement('a');
+     a.href = url;
+     a.download = `Desain-Anti-Gempa-${Date.now()}.jpg`;
+     a.click();
+     setMessage('Desain berhasil disimpan sebagai gambar JPG!');
+   } catch (e) {
+     setMessage('Gagal menyimpan gambar.');
+   }
+ }
   return <main className="lab">
   {showLabIntro && (
     <div className="dev-modal-overlay" onClick={() => { setShowLabIntro(false); sessionStorage.setItem('lab_intro_seen_v2', 'true'); }} role="dialog" aria-modal="true" style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(0,0,0,0.7)', zIndex: 9999, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -89,6 +106,15 @@ export default function TowerApp(){
       <h2>Lab Maya Struktur Anti Gempa</h2>
     </div>
     <div className="lab-top-right">
+      <Button 
+        variant="ghost" 
+        className="lab-icon-btn" 
+        onClick={handleCapture} 
+        aria-label="Simpan JPG"
+        title="Simpan gambar desain (JPG)"
+      >
+        <Camera size={20}/>
+      </Button>
       <Button 
         variant="ghost" 
         className="lab-icon-btn" 
