@@ -157,10 +157,6 @@ export default function QuizApp() {
         <Link href="/" aria-label="Kembali ke Beranda" title="Kembali ke Beranda">
           <House />
         </Link>
-        <div className="quiz-top-badge">
-          <Sparkles className="w-4 h-4 text-sky-400" />
-          <span>IPAS KELAS 6 • EVALUASI PEMBELAJARAN</span>
-        </div>
       </div>
 
       {/* Row 2: Standard Page Title */}
