@@ -4,90 +4,239 @@ import { geoMercator, geoPath, geoGraticule } from 'd3-geo';
 import region from '@/lib/indonesia-region.json';
 
 const islands = [
-  {name: 'SUMATRA', point: [100, 2.4]},
-  {name: 'JAWA', point: [111, -6]},
-  {name: 'KALIMANTAN', point: [114, 1.3]},
-  {name: 'SULAWESI', point: [121.1, -3.9]},
-  {name: 'PAPUA', point: [137, -3.3]},
-  {name: 'NUSA TENGGARA', point: [119, -10.4]},
-  {name: 'MALUKU', point: [130.4, -1.9]}
+  { name: 'SUMATRA', point: [100, 2.4] },
+  { name: 'JAWA', point: [111, -6] },
+  { name: 'KALIMANTAN', point: [114, 1.3] },
+  { name: 'SULAWESI', point: [121.1, -3.9] },
+  { name: 'PAPUA', point: [137, -3.3] },
+  { name: 'NUSA TENGGARA', point: [119, -10.4] },
+  { name: 'MALUKU', point: [130.4, -1.9] }
 ];
 
 const volcanoes = [
-  {name: "Sinabung", point: [98.392, 3.17]},
-  {name: "Kerinci", point: [101.264, -1.697]},
-  {name: "Anak Krakatau", point: [105.423, -6.101]},
-  {name: "Tangkuban Parahu", point: [107.6, -6.77]},
-  {name: "Merapi", point: [110.446, -7.54]},
-  {name: "Semeru", point: [112.922, -8.108]},
-  {name: "Ijen", point: [114.242, -8.058]},
-  {name: "Agung", point: [115.508, -8.343]},
-  {name: "Rinjani", point: [116.47, -8.42]},
-  {name: "Tambora", point: [118, -8.25]},
-  {name: "Kelimutu", point: [121.82, -8.77]},
-  {name: "Lokon", point: [124.7992, 1.3644]},
-  {name: "Soputan", point: [124.737, 1.112]},
-  {name: "Dukono", point: [127.8783, 1.6992]},
-  {name: "Ibu", point: [127.6324, 1.4941]},
-  {name: "Gamalama", point: [127.3322, 0.81]}
+  { name: "Sinabung", point: [98.392, 3.17] },
+  { name: "Kerinci", point: [101.264, -1.697] },
+  { name: "Anak Krakatau", point: [105.423, -6.101] },
+  { name: "Tangkuban Parahu", point: [107.6, -6.77] },
+  { name: "Merapi", point: [110.446, -7.54] },
+  { name: "Semeru", point: [112.922, -8.108] },
+  { name: "Ijen", point: [114.242, -8.058] },
+  { name: "Agung", point: [115.508, -8.343] },
+  { name: "Rinjani", point: [116.47, -8.42] },
+  { name: "Tambora", point: [118, -8.25] },
+  { name: "Kelimutu", point: [121.82, -8.77] },
+  { name: "Lokon", point: [124.7992, 1.3644] },
+  { name: "Soputan", point: [124.737, 1.112] },
+  { name: "Dukono", point: [127.8783, 1.6992] },
+  { name: "Ibu", point: [127.6324, 1.4941] },
+  { name: "Gamalama", point: [127.3322, 0.81] }
 ];
 
 export default function QuizMap({ type, onLocationSelected }: { type: 'island' | 'volcano'; onLocationSelected: (name: string) => void }) {
   const [selectedName, setSelectedName] = useState<string | null>(null);
 
   const map = useMemo(() => {
-    const projection = geoMercator().fitSize([1200, 490], region as any);
-    const path = geoPath().projection(projection);
-    const graticule = geoPath().projection(projection)(geoGraticule()());
-    return { projection, path, graticule };
+    // Focus strictly on Indonesia (IDN) to make Indonesia fill the entire 1200x490 viewBox
+    const indonesia = region.features.find((f: any) => f.properties.id === 'IDN')!;
+    const projection = geoMercator().fitExtent([[35, 25], [1165, 465]], indonesia as any);
+    const path = geoPath(projection);
+    const graticule = path(geoGraticule().extent([[90, -18], [149, 12]]).step([5, 5])());
+
+    const arcs = [
+      path({ type: 'LineString', coordinates: volcanoes.slice(0, 11).map(v => v.point) }),
+      path({ type: 'LineString', coordinates: [volcanoes[12].point, volcanoes[11].point] }),
+      path({ type: 'LineString', coordinates: [volcanoes[15].point, volcanoes[14].point, volcanoes[13].point] })
+    ];
+
+    return { projection, path, graticule, arcs };
   }, []);
 
   const handleClick = (name: string) => {
     setSelectedName(name);
     setTimeout(() => {
       onLocationSelected(name);
-    }, 400); // give a little feedback delay
+    }, 350);
   };
 
   return (
-    <div style={{ width: '100%', height: '100%', background: 'rgba(0,0,0,0.2)', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.1)', position: 'relative', overflow: 'hidden' }}>
-      <svg viewBox="0 0 1200 490" style={{ width: '100%', height: '100%', display: 'block' }}>
+    <div style={{
+      width: '100%',
+      height: '100%',
+      background: '#0a2228',
+      borderRadius: '16px',
+      border: '1px solid rgba(56, 189, 248, 0.3)',
+      boxShadow: 'inset 0 0 50px rgba(0,0,0,0.6)',
+      position: 'relative',
+      overflow: 'hidden',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center'
+    }}>
+      <svg
+        viewBox="0 0 1200 490"
+        className="indonesia-map"
+        style={{ width: '100%', height: '100%', display: 'block' }}
+      >
         <defs>
-          <clipPath id="quiz-map-clip"><rect width="1200" height="490"/></clipPath>
+          <clipPath id="quiz-map-clip"><rect width="1200" height="490" /></clipPath>
         </defs>
         <g clipPath="url(#quiz-map-clip)">
-          <path d={map.graticule || ''} style={{ fill: 'none', stroke: 'rgba(255,255,255,0.05)', strokeWidth: 1 }} />
-          {region.features.map(f => (
-            <path key={f.properties.id} d={map.path(f as any) || ''} style={{ fill: f.properties.id === 'IDN' ? 'rgba(56,189,248,0.2)' : 'rgba(255,255,255,0.05)', stroke: 'rgba(255,255,255,0.1)', strokeWidth: 1 }} />
+          {/* Graticule lines */}
+          <path d={map.graticule || ''} className="map-graticule" />
+
+          {/* Landmass: Indonesia (#8fc9ac) and Neighbors (#2b5058) */}
+          {region.features.map((f: any) => (
+            <path
+              key={f.properties.id}
+              d={map.path(f) || ''}
+              className={f.properties.id === 'IDN' ? 'map-land' : 'map-neighbor'}
+            />
           ))}
+
+          {/* Ocean Labels */}
+          <text x="135" y="420" className="ocean-label">SAMUDRA HINDIA</text>
+          <text x="980" y="75" className="ocean-label">SAMUDRA PASIFIK</text>
+
+          {/* Ring of Fire arcs if volcano question */}
+          {type === 'volcano' && (
+            <g className="fire-paths">
+              {map.arcs.map((d, i) => (
+                <g key={i}>
+                  <path className="fire-glow" d={d || ''} />
+                  <path className="fire-route" d={d || ''} />
+                </g>
+              ))}
+            </g>
+          )}
+
+          {/* Island Clickable Badges */}
           {type === 'island' && islands.map(i => {
             const p = map.projection(i.point as [number, number])!;
             const isSelected = selectedName === i.name;
             return (
-              <g key={i.name} transform={"translate(" + p[0] + "," + p[1] + ")"} onClick={() => handleClick(i.name)} style={{ cursor: 'pointer' }}>
-                <circle r="40" fill={isSelected ? 'rgba(52, 211, 153, 0.4)' : 'transparent'} />
-                <text y="5" textAnchor="middle" fill={isSelected ? '#34d399' : '#cbd5e1'} fontSize="16" fontWeight="bold">{i.name}</text>
+              <g
+                key={i.name}
+                transform={"translate(" + p[0] + "," + p[1] + ")"}
+                onClick={() => handleClick(i.name)}
+                style={{ cursor: 'pointer' }}
+              >
+                <rect
+                  x="-72"
+                  y="-18"
+                  width="144"
+                  height="36"
+                  rx="18"
+                  fill={isSelected ? "rgba(52, 211, 153, 0.45)" : "rgba(8, 29, 46, 0.85)"}
+                  stroke={isSelected ? "#34d399" : "rgba(255, 255, 255, 0.45)"}
+                  strokeWidth={isSelected ? 2.5 : 1.2}
+                />
+                <circle
+                  cx="-48"
+                  cy="0"
+                  r="5"
+                  fill={isSelected ? "#34d399" : "#38bdf8"}
+                />
+                <text
+                  x="8"
+                  y="5"
+                  textAnchor="middle"
+                  fill={isSelected ? "#34d399" : "#ffffff"}
+                  fontSize="13"
+                  fontWeight="bold"
+                  letterSpacing="0.8px"
+                >
+                  {i.name}
+                </text>
               </g>
             );
           })}
+
+          {/* Volcano Clickable Points */}
           {type === 'volcano' && volcanoes.map(v => {
             const p = map.projection(v.point as [number, number])!;
             const isSelected = selectedName === v.name;
             return (
-              <g key={v.name} transform={"translate(" + p[0] + "," + p[1] + ")"} onClick={() => handleClick(v.name)} style={{ cursor: 'pointer' }}>
-                <circle r="24" fill={isSelected ? 'rgba(52, 211, 153, 0.3)' : 'rgba(239, 68, 68, 0.2)'} />
-                <circle r="6" fill={isSelected ? '#34d399' : '#ef4444'} />
-                <text y="-10" textAnchor="middle" fill={isSelected ? '#34d399' : '#fff'} fontSize="14">{v.name}</text>
+              <g
+                key={v.name}
+                transform={"translate(" + p[0] + "," + p[1] + ")"}
+                onClick={() => handleClick(v.name)}
+                style={{ cursor: 'pointer' }}
+              >
+                {/* Large clickable hit-box */}
+                <circle r="26" fill="transparent" />
+
+                {/* Pulse ring */}
+                <circle
+                  r={isSelected ? 20 : 13}
+                  className={isSelected ? "" : "volcano-pulse"}
+                  fill={isSelected ? "rgba(52, 211, 153, 0.5)" : "rgba(251, 108, 83, 0.45)"}
+                  stroke={isSelected ? "#34d399" : "none"}
+                  strokeWidth={isSelected ? 2.5 : 0}
+                />
+
+                {/* Center dot */}
+                <circle
+                  r={isSelected ? 8 : 6}
+                  fill={isSelected ? "#34d399" : "#fd624b"}
+                  stroke={isSelected ? "#ffffff" : "#ffe2b1"}
+                  strokeWidth={isSelected ? 2 : 1.5}
+                />
+
+                {/* Tooltip / Label shown on selection */}
+                {isSelected && (
+                  <g transform="translate(0, -22)">
+                    <rect
+                      x="-65"
+                      y="-22"
+                      width="130"
+                      height="24"
+                      rx="6"
+                      fill="rgba(15, 23, 42, 0.95)"
+                      stroke="#34d399"
+                      strokeWidth="1.5"
+                    />
+                    <text
+                      x="0"
+                      y="-6"
+                      textAnchor="middle"
+                      fill="#34d399"
+                      fontSize="12"
+                      fontWeight="bold"
+                    >
+                      {v.name}
+                    </text>
+                  </g>
+                )}
               </g>
             );
           })}
         </g>
       </svg>
-      <div style={{ position: 'absolute', bottom: '16px', left: '16px', right: '16px', textAlign: 'center', pointerEvents: 'none' }}>
-        <div style={{ display: 'inline-block', background: 'rgba(0,0,0,0.6)', padding: '8px 16px', borderRadius: '8px', color: '#fff', fontSize: '14px', fontWeight: 'bold' }}>
-          {type === 'island' ? 'Klik nama pulau yang diminta pada peta' : 'Klik titik gunung yang diminta pada peta'}
+
+      {/* Floating Instructions */}
+      <div style={{
+        position: 'absolute',
+        bottom: '12px',
+        left: '50%',
+        transform: 'translateX(-50%)',
+        textAlign: 'center',
+        pointerEvents: 'none'
+      }}>
+        <div style={{
+          display: 'inline-block',
+          background: 'rgba(8, 29, 46, 0.85)',
+          border: '1px solid rgba(255, 255, 255, 0.2)',
+          backdropFilter: 'blur(8px)',
+          padding: '6px 18px',
+          borderRadius: '20px',
+          color: '#e2ecee',
+          fontSize: '13px',
+          fontWeight: 600
+        }}>
+          {type === 'island' ? '👆 Klik tombol nama pulau yang sesuai pada peta' : '🌋 Klik titik merah gunung api yang sesuai pada peta'}
         </div>
       </div>
     </div>
   );
 }
+

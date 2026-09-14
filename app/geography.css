@@ -1991,10 +1991,14 @@
   overflow: hidden;
 }
 
+.quiz-active-card:has(.quiz-active-grid-map) {
+  padding: 16px 20px;
+}
+
 .quiz-active-grid-map {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 10px;
   height: 100%;
   min-height: 0;
 }
