@@ -566,7 +566,7 @@ const mitigationPhases: MitigationPhaseData[] = [
     title: 'Ikuti Simulasi Evakuasi Gempa Berkala',
     desc: 'Ikuti simulasi gempa secara berkala di sekolah dan di lingkungan rumah.',
     badge: 'Latihan Refleks & Tanggap Darurat',
-    image: '/mitigasi-sebelum-4.jpg',
+    image: '/mitigasi-sebelum-4.gif',
     caption: 'Siswa berjalan tertib dengan melindungi kepala menggunakan buku menuju titik kumpul lapangan terbuka dipandu guru.',
     tips: [
      'Latih refleks spontan merunduk begitu alarm tanda bahaya berbunyi',
@@ -1074,7 +1074,15 @@ function MitigationVisualizer({
  }, []);
 
  const isGif = point.image?.endsWith('.gif');
- const currentImageSrc = point.image ? (isGif && !isPlaying ? point.image.replace('.gif', '.jpg') : point.image) : undefined;
+ let pausedImg = point.image;
+ if (isGif && point.image) {
+  if (point.image.includes('sebelum-1') || point.image.includes('sebelum-2')) {
+   pausedImg = point.image.replace('.gif', '.png');
+  } else {
+   pausedImg = point.image.replace('.gif', '.jpg');
+  }
+ }
+ const currentImageSrc = point.image ? (isGif && !isPlaying ? pausedImg : point.image) : undefined;
 
  return (
   <>

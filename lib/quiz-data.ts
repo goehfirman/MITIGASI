@@ -531,7 +531,7 @@ export const QUIZ_BANK: QuizQuestion[] = [
     category: 'mitigasi',
     categoryLabel: 'Mitigasi Gempa Bumi',
     question: 'Perhatikan perlengkapan pada gambar. Benda ini harus disiapkan keluarga sebelum bencana terjadi dan mudah diraih saat darurat. Benda ini adalah...',
-    image: '/mitigasi-sebelum-4.jpg',
+    image: '/mitigasi-sebelum-4.gif',
     options: [
       'Tas Siaga Bencana (Emergency Kit)',
       'Koper pakaian liburan akhir tahun',
