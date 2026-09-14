@@ -4,13 +4,13 @@ import { geoMercator, geoPath, geoGraticule } from 'd3-geo';
 import region from '@/lib/indonesia-region.json';
 
 const islands = [
-  { name: 'SUMATRA', point: [100, 2.4] },
-  { name: 'JAWA', point: [111, -6] },
-  { name: 'KALIMANTAN', point: [114, 1.3] },
-  { name: 'SULAWESI', point: [121.1, -3.9] },
-  { name: 'PAPUA', point: [137, -3.3] },
-  { name: 'NUSA TENGGARA', point: [119, -10.4] },
-  { name: 'MALUKU', point: [130.4, -1.9] }
+  { name: 'SUMATRA', point: [101.5, -0.2] },
+  { name: 'JAWA', point: [110.2, -7.3] },
+  { name: 'KALIMANTAN', point: [113.8, -0.2] },
+  { name: 'SULAWESI', point: [120.8, -2.2] },
+  { name: 'PAPUA', point: [137.0, -4.2] },
+  { name: 'NUSA TENGGARA', point: [120.0, -8.6] },
+  { name: 'MALUKU', point: [128.5, -3.2] }
 ];
 
 const volcanoes = [
@@ -109,7 +109,7 @@ export default function QuizMap({ type, onLocationSelected }: { type: 'island' |
             </g>
           )}
 
-          {/* Island Clickable Badges */}
+          {/* Island Clickable Points (No text labels so students have to identify the island themselves) */}
           {type === 'island' && islands.map(i => {
             const p = map.projection(i.point as [number, number])!;
             const isSelected = selectedName === i.name;
@@ -120,33 +120,42 @@ export default function QuizMap({ type, onLocationSelected }: { type: 'island' |
                 onClick={() => handleClick(i.name)}
                 style={{ cursor: 'pointer' }}
               >
-                <rect
-                  x="-72"
-                  y="-18"
-                  width="144"
-                  height="36"
-                  rx="18"
-                  fill={isSelected ? "rgba(52, 211, 153, 0.45)" : "rgba(8, 29, 46, 0.85)"}
-                  stroke={isSelected ? "#34d399" : "rgba(255, 255, 255, 0.45)"}
-                  strokeWidth={isSelected ? 2.5 : 1.2}
-                />
+                {/* Large clickable hit-box */}
+                <circle r="30" fill="transparent" />
+
+                {/* Pulse ring */}
                 <circle
-                  cx="-48"
-                  cy="0"
-                  r="5"
-                  fill={isSelected ? "#34d399" : "#38bdf8"}
+                  r={isSelected ? 22 : 14}
+                  className={isSelected ? "" : "volcano-pulse"}
+                  fill={isSelected ? "rgba(52, 211, 153, 0.45)" : "rgba(56, 189, 248, 0.35)"}
+                  stroke={isSelected ? "#34d399" : "#38bdf8"}
+                  strokeWidth={isSelected ? 2.5 : 1}
                 />
-                <text
-                  x="8"
-                  y="5"
-                  textAnchor="middle"
-                  fill={isSelected ? "#34d399" : "#ffffff"}
-                  fontSize="13"
-                  fontWeight="bold"
-                  letterSpacing="0.8px"
-                >
-                  {i.name}
-                </text>
+
+                {/* Outer circle */}
+                <circle
+                  r={isSelected ? 10 : 8}
+                  fill={isSelected ? "#059669" : "#0284c7"}
+                  stroke={isSelected ? "#34d399" : "#ffffff"}
+                  strokeWidth={2}
+                />
+
+                {/* Center dot */}
+                <circle
+                  r={isSelected ? 4 : 3}
+                  fill={isSelected ? "#ffffff" : "#bae6fd"}
+                />
+
+                {/* Selection ring feedback */}
+                {isSelected && (
+                  <circle
+                    r="16"
+                    fill="none"
+                    stroke="#34d399"
+                    strokeWidth="2"
+                    strokeDasharray="3 3"
+                  />
+                )}
               </g>
             );
           })}
@@ -218,7 +227,7 @@ export default function QuizMap({ type, onLocationSelected }: { type: 'island' |
           fontSize: '13px',
           fontWeight: 600
         }}>
-          {type === 'island' ? '👆 Klik tombol nama pulau yang sesuai pada peta' : '🌋 Klik titik merah gunung api yang sesuai pada peta'}
+          {type === 'island' ? '👆 Klik titik pulau yang sesuai pada peta' : '🌋 Klik titik merah gunung api yang sesuai pada peta'}
         </div>
       </div>
     </div>
