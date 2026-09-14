@@ -316,6 +316,8 @@
 .hero-glass-menu a:hover{background:rgba(8,39,59,.65);transform:translateY(-2px)}
 .hero-glass-menu a.hero-btn-quiz{border-color:rgba(245,158,11,.65)}
 .hero-glass-menu a.hero-btn-quiz:hover{background:rgba(18,54,78,.85);border-color:#ffd166;box-shadow:inset 0 1px 0 #ffffff55,0 6px 24px rgba(245,158,11,.35)}
+.hero-glass-menu a.hero-btn-game{border-color:rgba(52,211,153,.75);box-shadow:inset 0 1px 0 #ffffff55,0 6px 24px rgba(16,185,129,.35)}
+.hero-glass-menu a.hero-btn-game:hover{background:rgba(6,78,59,.85);border-color:#34d399;box-shadow:inset 0 1px 0 #ffffff55,0 8px 28px rgba(16,185,129,.55)}
 .hero-glass-menu a:focus-visible{outline:3px solid #ffe386;outline-offset:4px}
 .hero-glass-menu svg{width:24px;height:24px;flex-shrink:0}
 @media(max-width:900px){.hero-glass-menu{gap:8px;bottom:3%;width:96%;flex-wrap:wrap}.hero-glass-menu a{font-size:14px;min-height:46px;padding:8px 14px;gap:6px;border-radius:12px;flex:1 1 40%}.hero-glass-menu svg{width:18px;height:18px}}
@@ -352,6 +354,8 @@
 .viewport-fit:has(.miti-theme-1){background:radial-gradient(ellipse at 80% 15%,#a85a38 0%,transparent 60%),linear-gradient(130deg,#3a1e14,#6b3328)}
 .viewport-fit:has(.miti-theme-2){background:radial-gradient(ellipse at 80% 15%,#4a7f96 0%,transparent 60%),linear-gradient(130deg,#1a3040,#2d5a6a)}
 .viewport-fit:has(.quiz-theme){background:radial-gradient(ellipse at 80% 12%,#245770 0%,transparent 60%),linear-gradient(130deg,#0e2a3a,#16485d)}
+.viewport-fit:has(.game-deck),
+.viewport-fit:has(.is-bermain){background:linear-gradient(180deg, rgba(8, 28, 44, 0.74) 0%, rgba(8, 28, 44, 0.88) 100%),url('/mitigasi-sebelum-3.jpg') center center / cover no-repeat fixed !important}
 .quiz-theme{background-image:radial-gradient(ellipse at 80% 20%,rgba(56,189,248,.15) 0%,transparent 55%),linear-gradient(130deg,rgba(8,29,46,.45),rgba(16,78,99,.45))}
 .mitigation-deck .slide-body{justify-content:center}
 .mitigation-deck .slide-glass{max-width:min(780px,100%)}

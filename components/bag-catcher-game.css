@@ -1,0 +1,1674 @@
+/* Bag Catcher Game - Permainan Tangkap Benda Tas Siaga Bencana */
+
+.viewport-fit:has(.game-deck),
+.viewport-fit:has(.is-bermain) {
+  background: linear-gradient(180deg, rgba(8, 28, 44, 0.74) 0%, rgba(8, 28, 44, 0.88) 100%),
+              url('/mitigasi-sebelum-3.jpg') center center / cover no-repeat fixed !important;
+}
+
+.learning-deck.game-deck {
+  height: 920px;
+  min-height: 920px;
+  max-height: 920px;
+  padding: 16px 36px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  box-sizing: border-box;
+  overflow: hidden;
+  background: linear-gradient(180deg, rgba(8, 28, 44, 0.72) 0%, rgba(8, 28, 44, 0.86) 100%),
+              url('/mitigasi-sebelum-3.jpg') center center / cover no-repeat !important;
+  border-radius: 20px;
+}
+
+.learning-deck.game-deck > .slide-top {
+  flex-shrink: 0;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  position: relative;
+}
+
+.learning-deck.game-deck > .slide-top a,
+.learning-deck.game-deck > .slide-top button.game-top-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  min-height: 44px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  color: #e0efef;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+}
+
+.learning-deck.game-deck > .slide-top a:hover,
+.learning-deck.game-deck > .slide-top button.game-top-btn:hover {
+  background: rgba(255, 255, 255, 0.24);
+  color: #34d399;
+  border-color: #34d399;
+  transform: scale(1.06);
+}
+
+.game-deck-body {
+  flex: 1;
+  min-height: 0;
+  width: 100%;
+}
+
+.game-stage-centered {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+/* ======================================================== */
+/* 1. START SCREEN                                          */
+/* ======================================================== */
+.game-glass-card {
+  background: rgba(9, 38, 59, 0.72);
+  border: 1px solid rgba(130, 230, 246, 0.25);
+  border-radius: 20px;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.45);
+  color: #e2f1f5;
+  box-sizing: border-box;
+}
+
+.game-start-card {
+  width: 920px;
+  max-width: 95vw;
+  max-height: none;
+  overflow: hidden !important;
+  padding: 28px 36px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.game-start-card.game-start-card-clean {
+  width: 760px;
+  max-width: 95vw;
+  padding: 34px 40px;
+  gap: 20px;
+  overflow: hidden !important;
+  border-radius: 24px;
+}
+
+.game-card-head h2 {
+  font-size: 28px;
+  font-weight: 800;
+  color: #ffffff;
+  margin: 6px 0 8px;
+  background: linear-gradient(135deg, #ffffff 0%, #a7f3d0 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.game-start-desc {
+  font-size: 15px;
+  line-height: 1.5;
+  color: #cbe7f0;
+  margin: 0;
+}
+
+.game-rules-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.rule-box {
+  border-radius: 14px;
+  padding: 16px;
+  font-size: 13px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.rule-box.rule-catch {
+  background: rgba(16, 185, 129, 0.12);
+  border: 1px solid rgba(52, 211, 153, 0.35);
+}
+
+.rule-box.rule-avoid {
+  background: rgba(239, 68, 68, 0.12);
+  border: 1px solid rgba(248, 113, 113, 0.35);
+}
+
+.rule-header {
+  font-size: 14px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.rule-catch .rule-header { color: #34d399; }
+.rule-avoid .rule-header { color: #f87171; }
+
+.item-chip-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 4px;
+}
+
+.item-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.rule-catch .item-chip {
+  background: rgba(52, 211, 153, 0.18);
+  border: 1px solid rgba(52, 211, 153, 0.4);
+  color: #d1fae5;
+}
+
+.rule-avoid .item-chip {
+  background: rgba(248, 113, 113, 0.18);
+  border: 1px solid rgba(248, 113, 113, 0.4);
+  color: #fee2e2;
+}
+
+.game-controls-instruction {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 14px;
+  padding: 14px 18px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.control-badge-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  background: rgba(56, 189, 248, 0.2);
+  color: #38bdf8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.control-instruction-text strong {
+  display: block;
+  font-size: 14px;
+  color: #e2f1f5;
+  margin-bottom: 2px;
+}
+
+.control-instruction-text p {
+  font-size: 12.5px;
+  color: #94a3b8;
+  margin: 0;
+  line-height: 1.4;
+}
+
+.game-name-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-top: 6px;
+}
+
+.game-name-label {
+  font-size: 15.5px;
+  font-weight: 700;
+  color: #a7f3d0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.game-input-row {
+  display: flex;
+  gap: 14px;
+}
+
+.game-name-input {
+  flex: 1;
+  height: 54px;
+  border-radius: 14px;
+  background: rgba(15, 23, 42, 0.7);
+  border: 1.5px solid rgba(130, 230, 246, 0.35);
+  color: #ffffff;
+  padding: 0 20px;
+  font-size: 16.5px;
+  outline: none;
+  transition: all 0.2s;
+  box-sizing: border-box;
+}
+
+.game-name-input:focus {
+  border-color: #34d399;
+  box-shadow: 0 0 0 3px rgba(52, 211, 153, 0.25);
+}
+
+.game-start-btn {
+  height: 54px;
+  padding: 0 32px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  border: 1px solid #34d399;
+  color: #ffffff;
+  font-size: 16.5px;
+  font-weight: 800;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
+  white-space: nowrap;
+}
+
+.game-start-btn:hover {
+  background: linear-gradient(135deg, #34d399 0%, #10b981 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(16, 185, 129, 0.5);
+}
+
+/* ======================================================== */
+/* 2. PLAYING SCREEN LAYOUT                                 */
+/* ======================================================== */
+.game-stage-active {
+  display: flex;
+  justify-content: center;
+  align-items: stretch;
+  height: 100%;
+  min-height: 0;
+  width: 100%;
+}
+
+/* Arena Container */
+.game-arena-card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+  width: 960px;
+  max-width: 100%;
+  padding: 16px;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Arena Top HUD */
+.arena-hud {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 18px;
+  background: rgba(15, 23, 42, 0.75);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 14px;
+  margin-bottom: 12px;
+  flex-shrink: 0;
+}
+
+.hud-pill {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.hud-pill-label {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #94a3b8;
+  font-weight: 700;
+}
+
+.hud-pill-val {
+  font-size: 18px;
+  font-weight: 800;
+  color: #fff;
+}
+
+.hud-lives {
+  display: flex;
+  gap: 4px;
+}
+
+.hud-heart {
+  color: #ef4444;
+  filter: drop-shadow(0 0 6px rgba(239, 68, 68, 0.6));
+  transition: transform 0.2s;
+}
+
+.hud-heart.empty {
+  color: rgba(255, 255, 255, 0.2);
+  filter: none;
+}
+
+.hud-score-val {
+  color: #34d399;
+  text-shadow: 0 0 10px rgba(52, 211, 153, 0.5);
+}
+
+.hud-combo-badge {
+  background: linear-gradient(135deg, #f59e0b, #ef4444);
+  color: #fff;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 800;
+  animation: pulse 1s infinite alternate;
+}
+
+/* Play Field (Sky Chute) */
+.game-playfield {
+  flex: 1;
+  min-height: 0;
+  position: relative;
+  background: linear-gradient(180deg, #051622 0%, #092c3e 70%, #0d465c 100%);
+  border: 1.5px solid rgba(130, 230, 246, 0.3);
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: inset 0 0 30px rgba(0, 0, 0, 0.6);
+  user-select: none;
+  touch-action: none;
+}
+
+.playfield-grid-bg {
+  position: absolute;
+  inset: 0;
+  background-image: 
+    linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+  background-size: 40px 40px;
+  pointer-events: none;
+}
+
+/* Warning alert border when in danger / low lives */
+.game-playfield.is-danger-shake {
+  animation: shake 0.35s cubic-bezier(.36,.07,.19,.97) both;
+  border-color: #ef4444 !important;
+  box-shadow: inset 0 0 40px rgba(239, 68, 68, 0.4), 0 0 20px rgba(239, 68, 68, 0.5);
+}
+
+/* Falling Item Style */
+.falling-item {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  z-index: 5;
+  transition: transform 0.05s linear;
+}
+
+.item-avatar {
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 26px;
+  background: rgba(15, 23, 42, 0.92);
+  border: 2px solid rgba(130, 230, 246, 0.55);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.5), 0 0 10px rgba(56, 189, 248, 0.25);
+  overflow: hidden;
+  padding: 5px;
+}
+
+.item-avatar-img {
+  width: 44px;
+  height: 44px;
+  object-fit: contain;
+  pointer-events: none;
+  filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.5));
+}
+
+/* Lingkaran semua benda seragam (cyan glass subtle glow) tanpa perbedaan warna merah/hijau */
+.falling-item .item-avatar {
+  border: 2px solid rgba(130, 230, 246, 0.55);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.5), 0 0 10px rgba(56, 189, 248, 0.25);
+}
+
+.item-name-tag {
+  margin-top: 3px;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 2px 7px;
+  border-radius: 6px;
+  white-space: nowrap;
+  background: rgba(10, 25, 40, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #f1f5f9;
+  letter-spacing: 0.2px;
+}
+
+/* Floating Feedback Popups */
+.floating-feedback {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  font-size: 15px;
+  font-weight: 800;
+  padding: 6px 14px;
+  border-radius: 20px;
+  pointer-events: none;
+  z-index: 20;
+  animation: floatUp 0.85s forwards ease-out;
+  white-space: nowrap;
+}
+
+.floating-feedback.positive {
+  background: rgba(16, 185, 129, 0.95);
+  color: #ffffff;
+  box-shadow: 0 4px 14px rgba(16, 185, 129, 0.6);
+}
+
+.floating-feedback.hazard {
+  background: rgba(239, 68, 68, 0.95);
+  color: #ffffff;
+  box-shadow: 0 4px 14px rgba(239, 68, 68, 0.7);
+}
+
+.floating-feedback.penalty {
+  background: rgba(245, 158, 11, 0.95);
+  color: #ffffff;
+  box-shadow: 0 4px 14px rgba(245, 158, 11, 0.6);
+}
+
+/* Tas Siaga Player Basket */
+.player-bag {
+  position: absolute;
+  bottom: 14px;
+  transform: translateX(-50%);
+  width: 120px;
+  height: 120px;
+  z-index: 10;
+  pointer-events: none;
+  filter: drop-shadow(0 8px 20px rgba(0, 0, 0, 0.65));
+  transition: transform 0.05s ease-out;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.bag-sprite-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  user-select: none;
+  pointer-events: none;
+  filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.4));
+  transition: transform 0.12s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.player-bag.is-open .bag-sprite-img {
+  transform: scale(1.08);
+}
+
+.player-bag.is-catching {
+  animation: bagBounce 0.25s ease-out;
+}
+
+.bag-basket-aura {
+  position: absolute;
+  top: 8px;
+  left: 15%;
+  right: 15%;
+  height: 14px;
+  border-radius: 999px;
+  background: radial-gradient(ellipse at center, rgba(52, 211, 153, 0.7) 0%, transparent 80%);
+  filter: blur(5px);
+  opacity: 0;
+  transition: opacity 0.15s ease;
+}
+
+.player-bag.is-open .bag-basket-aura {
+  opacity: 1;
+}
+
+/* Catch zone visual guide */
+.catch-zone-line {
+  position: absolute;
+  bottom: 75px;
+  left: 0;
+  right: 0;
+  height: 1px;
+  border-top: 1px dashed rgba(52, 211, 153, 0.25);
+  pointer-events: none;
+}
+
+/* ======================================================== */
+/* ON-SCREEN CONTROLS (TOMBOL DI LAYAR)                     */
+/* ======================================================== */
+.on-screen-controls {
+  flex-shrink: 0;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 14px;
+  margin-top: 12px;
+  padding: 4px 0 0;
+}
+
+.control-btn {
+  height: 64px;
+  border-radius: 16px;
+  border: 2px solid rgba(52, 211, 153, 0.4);
+  background: linear-gradient(180deg, rgba(16, 185, 129, 0.25) 0%, rgba(6, 78, 59, 0.5) 100%);
+  color: #ffffff;
+  font-size: 17px;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  cursor: pointer;
+  user-select: none;
+  touch-action: manipulation;
+  transition: all 0.12s ease;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+.control-btn:hover {
+  background: linear-gradient(180deg, rgba(16, 185, 129, 0.4) 0%, rgba(6, 78, 59, 0.7) 100%);
+  border-color: #34d399;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(16, 185, 129, 0.35);
+}
+
+.control-btn:active,
+.control-btn.is-active {
+  background: linear-gradient(180deg, #10b981 0%, #059669 100%);
+  border-color: #a7f3d0;
+  transform: translateY(2px) scale(0.98);
+  box-shadow: 0 2px 8px rgba(16, 185, 129, 0.6), inset 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.control-btn svg {
+  width: 26px;
+  height: 26px;
+}
+
+.control-center-track {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-width: 130px;
+  gap: 4px;
+}
+
+.track-slider-box {
+  width: 100%;
+  height: 8px;
+  background: rgba(15, 23, 42, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 999px;
+  position: relative;
+  overflow: hidden;
+}
+
+.track-slider-thumb {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 20%;
+  border-radius: 999px;
+  background: #34d399;
+  box-shadow: 0 0 8px #34d399;
+  transform: translateX(-50%);
+  transition: left 0.05s linear;
+}
+
+.track-hint-text {
+  font-size: 11px;
+  color: #94a3b8;
+  font-weight: 600;
+}
+
+/* ======================================================== */
+/* RIGHT SIDEBAR (STATUS & CHECKLIST)                       */
+/* ======================================================== */
+.game-sidebar-card {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  height: 100%;
+  min-height: 0;
+  padding: 20px;
+  overflow-y: auto;
+}
+
+.sidebar-section-title {
+  font-size: 14px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: #a7f3d0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 10px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid rgba(52, 211, 153, 0.2);
+}
+
+.bag-inventory-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.inventory-item-card {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  border-radius: 10px;
+  background: rgba(15, 23, 42, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  transition: all 0.2s;
+}
+
+.inventory-item-card.is-collected {
+  background: rgba(16, 185, 129, 0.15);
+  border-color: rgba(52, 211, 153, 0.4);
+}
+
+.inventory-icon {
+  font-size: 18px;
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.inventory-item-card.is-collected .inventory-icon {
+  background: rgba(52, 211, 153, 0.25);
+}
+
+.inventory-info {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.inventory-name {
+  font-size: 11.5px;
+  font-weight: 700;
+  color: #cbd5e1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.inventory-item-card.is-collected .inventory-name {
+  color: #a7f3d0;
+}
+
+.inventory-count {
+  font-size: 10px;
+  font-weight: 600;
+  color: #64748b;
+}
+
+.inventory-item-card.is-collected .inventory-count {
+  color: #34d399;
+}
+
+.sidebar-stem-tip {
+  background: rgba(56, 189, 248, 0.1);
+  border: 1px solid rgba(56, 189, 248, 0.25);
+  border-radius: 12px;
+  padding: 12px;
+  font-size: 12.5px;
+  line-height: 1.45;
+  color: #bae6fd;
+}
+
+.sidebar-stem-tip strong {
+  display: block;
+  color: #38bdf8;
+  margin-bottom: 4px;
+}
+
+/* ======================================================== */
+/* 3. GAMEOVER / RESULT SCREEN                              */
+/* ======================================================== */
+.game-result-card {
+  width: 1000px;
+  max-width: 96vw;
+  max-height: none !important;
+  overflow: hidden !important;
+  padding: 16px 26px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  text-align: center;
+  box-sizing: border-box;
+}
+
+.result-stars-row {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+}
+
+.result-star-icon {
+  width: 34px;
+  height: 34px;
+  color: #f59e0b;
+  filter: drop-shadow(0 0 10px rgba(245, 158, 11, 0.6));
+  animation: starPop 0.5s ease-out;
+}
+
+.result-star-icon.empty {
+  color: rgba(255, 255, 255, 0.15);
+  filter: none;
+}
+
+.result-headline h2 {
+  font-size: 23px;
+  font-weight: 800;
+  margin: 0 0 3px;
+  color: #fff;
+  line-height: 1.2;
+}
+
+.result-headline p {
+  font-size: 13.5px;
+  color: #cbe7f0;
+  margin: 0;
+  line-height: 1.35;
+}
+
+.result-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+}
+
+.stat-box {
+  background: rgba(15, 23, 42, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 8px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.stat-box .stat-label {
+  font-size: 11px;
+  text-transform: uppercase;
+  color: #94a3b8;
+  font-weight: 700;
+}
+
+.stat-box .stat-val {
+  font-size: 21px;
+  font-weight: 800;
+  color: #34d399;
+}
+
+/* Educational Explanations Section */
+.result-edu-section {
+  text-align: left;
+  background: rgba(15, 23, 42, 0.65);
+  border: 1px solid rgba(130, 230, 246, 0.2);
+  border-radius: 14px;
+  padding: 10px 14px;
+}
+
+.result-edu-section h3 {
+  font-size: 13.5px;
+  font-weight: 700;
+  color: #a7f3d0;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin: 0 0 8px;
+}
+
+.edu-items-list {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px 10px;
+}
+
+.edu-item-row {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 5px 10px;
+  border-radius: 10px;
+  transition: transform 0.2s ease, background 0.2s ease;
+}
+
+.edu-item-row:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.edu-item-row .edu-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  min-width: 40px;
+  min-height: 40px;
+  border-radius: 50%;
+  border: 2px solid #ffffff;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.14) 0%, rgba(15, 23, 42, 0.88) 100%);
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.35), 0 0 8px rgba(255, 255, 255, 0.3);
+  box-sizing: border-box;
+  flex-shrink: 0;
+  overflow: hidden;
+  padding: 4px;
+}
+
+.edu-item-img {
+  width: 28px;
+  height: 28px;
+  object-fit: contain;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.5));
+}
+
+.edu-item-row strong {
+  display: block;
+  font-size: 12.5px;
+  font-weight: 700;
+  color: #ffffff;
+  margin-bottom: 1px;
+  line-height: 1.2;
+}
+
+.edu-item-row p {
+  font-size: 11px;
+  color: #cbd5e1;
+  margin: 0;
+  line-height: 1.3;
+}
+
+.result-actions-row {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 2px;
+}
+
+.btn-result-action {
+  height: 42px;
+  padding: 0 20px;
+  border-radius: 11px;
+  font-size: 14px;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-decoration: none;
+}
+
+.btn-result-action.primary {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  border: 1px solid #34d399;
+  color: #ffffff;
+  box-shadow: 0 4px 16px rgba(16, 185, 129, 0.4);
+}
+
+.btn-result-action.primary:hover {
+  background: linear-gradient(135deg, #34d399 0%, #10b981 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(16, 185, 129, 0.5);
+}
+
+.btn-result-action.secondary {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  color: #e2f1f5;
+}
+
+.btn-result-action.secondary:hover {
+  background: rgba(255, 255, 255, 0.2);
+  color: #38bdf8;
+  border-color: #38bdf8;
+  transform: translateY(-2px);
+}
+
+/* ======================================================== */
+/* ANIMATIONS                                               */
+/* ======================================================== */
+@keyframes floatUp {
+  0% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(0.9);
+  }
+  50% {
+    opacity: 1;
+    transform: translate(-50%, -100%) scale(1.1);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -150%) scale(1);
+  }
+}
+
+@keyframes bagBounce {
+  0% { transform: translateX(-50%) scale(1); }
+  50% { transform: translateX(-50%) scale(1.12, 0.88); }
+  100% { transform: translateX(-50%) scale(1); }
+}
+
+@keyframes shake {
+  10%, 90% { transform: translate3d(-2px, 0, 0); }
+  20%, 80% { transform: translate3d(4px, 0, 0); }
+  30%, 50%, 70% { transform: translate3d(-6px, 0, 0); }
+  40%, 60% { transform: translate3d(6px, 0, 0); }
+}
+
+@keyframes pulse-danger {
+  0% { transform: scale(1); }
+  100% { transform: scale(1.08); }
+}
+
+@keyframes starPop {
+  0% { transform: scale(0.3) rotate(-30deg); opacity: 0; }
+  60% { transform: scale(1.2) rotate(10deg); }
+  100% { transform: scale(1) rotate(0deg); opacity: 1; }
+}
+
+/* ======================================================== */
+/* RESPONSIVE STYLES                                        */
+/* ======================================================== */
+@media (max-width: 1080px) {
+  .game-stage-active {
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr auto;
+  }
+  
+  .game-sidebar-card {
+    display: none; /* keep arena primary on narrower displays */
+  }
+}
+
+@media (max-width: 680px) {
+  .learning-deck.game-deck {
+    padding: 12px 16px;
+  }
+  .control-btn {
+    height: 54px;
+    font-size: 15px;
+  }
+  .game-rules-grid {
+    grid-template-columns: 1fr;
+  }
+  .result-stats-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+  .edu-items-list {
+    grid-template-columns: 1fr;
+  }
+  .pvp-input-grid {
+    grid-template-columns: 1fr;
+  }
+  .pvp-comparison-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ======================================================== */
+/* 1.5. MODE SWITCHER TABS & PVP FORM                       */
+/* ======================================================== */
+.game-mode-tabs {
+  display: flex;
+  background: rgba(15, 23, 42, 0.65);
+  border: 1px solid rgba(130, 230, 246, 0.3);
+  border-radius: 16px;
+  padding: 6px;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+.mode-tab-btn {
+  flex: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 13px 22px;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 800;
+  color: #94a3b8;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.mode-tab-btn:hover {
+  color: #e2f1f5;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.mode-tab-btn.is-active {
+  background: linear-gradient(135deg, rgba(56, 189, 248, 0.3) 0%, rgba(14, 165, 233, 0.45) 100%);
+  color: #38bdf8;
+  border: 1px solid rgba(56, 189, 248, 0.55);
+  box-shadow: 0 4px 14px rgba(56, 189, 248, 0.25);
+}
+
+/* PvP Input Grid */
+.pvp-input-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.pvp-input-col {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  background: rgba(15, 23, 42, 0.6);
+  border: 1.5px solid rgba(255, 255, 255, 0.12);
+  padding: 18px 22px;
+  border-radius: 18px;
+  box-sizing: border-box;
+}
+
+.pvp-input-col.p1 {
+  border-color: rgba(56, 189, 248, 0.4);
+  box-shadow: 0 6px 18px rgba(56, 189, 248, 0.12);
+}
+
+.pvp-input-col.p2 {
+  border-color: rgba(245, 158, 11, 0.4);
+  box-shadow: 0 6px 18px rgba(245, 158, 11, 0.12);
+}
+
+.pvp-label-p1 {
+  color: #38bdf8 !important;
+  font-size: 16px !important;
+  font-weight: 800 !important;
+}
+
+.pvp-label-p2 {
+  color: #fbbf24 !important;
+  font-size: 16px !important;
+  font-weight: 800 !important;
+}
+
+.pvp-badge-tag {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 3px 10px;
+  font-size: 12px;
+  font-weight: 800;
+  border-radius: 8px;
+  letter-spacing: 0.5px;
+}
+
+.pvp-badge-tag.p1 {
+  background: rgba(56, 189, 248, 0.25);
+  color: #38bdf8;
+  border: 1px solid rgba(56, 189, 248, 0.5);
+}
+
+.pvp-badge-tag.p2 {
+  background: rgba(245, 158, 11, 0.25);
+  color: #fbbf24;
+  border: 1px solid rgba(245, 158, 11, 0.5);
+}
+
+.pvp-control-hint {
+  font-size: 12.5px;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.pvp-control-hint.p1 { color: #7dd3fc; }
+.pvp-control-hint.p2 { color: #fde68a; }
+
+.pvp-start-btn {
+  height: 56px !important;
+  font-size: 17.5px !important;
+  font-weight: 800 !important;
+  border-radius: 14px !important;
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 50%, #b45309 100%) !important;
+  box-shadow: 0 6px 20px rgba(245, 158, 11, 0.45) !important;
+  letter-spacing: 0.3px;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 10px !important;
+}
+
+.pvp-start-btn:hover {
+  box-shadow: 0 8px 26px rgba(245, 158, 11, 0.65) !important;
+  transform: translateY(-2px);
+}
+
+/* ======================================================== */
+/* PVP DUAL HUD & ARENA ELEMENTS                            */
+/* ======================================================== */
+.arena-hud-pvp {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.hud-pvp-card {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 6px 14px;
+  border-radius: 12px;
+  background: rgba(15, 23, 42, 0.7);
+  backdrop-filter: blur(8px);
+  min-width: 170px;
+}
+
+.hud-pvp-card.hud-pvp-p1 {
+  border: 1px solid rgba(56, 189, 248, 0.4);
+}
+
+.hud-pvp-card.hud-pvp-p2 {
+  border: 1px solid rgba(245, 158, 11, 0.4);
+}
+
+.hud-pvp-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.hud-pvp-p2 .hud-pvp-head {
+  justify-content: flex-end;
+}
+
+.hud-pvp-name {
+  font-size: 13.5px;
+  color: #f1f5f9;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 130px;
+}
+
+.hud-pvp-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.hud-pvp-p2 .hud-pvp-row {
+  justify-content: flex-end;
+}
+
+.hud-pvp-score {
+  font-size: 18px;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+
+.hud-pvp-score.p1 { color: #38bdf8; }
+.hud-pvp-score.p2 { color: #fbbf24; }
+
+.hud-combo-badge.p1 {
+  background: rgba(56, 189, 248, 0.25);
+  color: #7dd3fc;
+  border: 1px solid rgba(56, 189, 248, 0.4);
+}
+
+.hud-combo-badge.p2 {
+  background: rgba(245, 158, 11, 0.25);
+  color: #fde68a;
+  border: 1px solid rgba(245, 158, 11, 0.4);
+}
+
+.hud-center-pvp {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Bag styling for P1 and P2 */
+.player-bag.bag-p1 {
+  filter: drop-shadow(0 8px 22px rgba(56, 189, 248, 0.45));
+}
+
+.player-bag.bag-p2 {
+  filter: drop-shadow(0 8px 22px rgba(245, 158, 11, 0.45));
+}
+
+.bag-name-tag {
+  position: absolute;
+  top: -24px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 11px;
+  font-weight: 800;
+  padding: 2px 8px;
+  border-radius: 999px;
+  white-space: nowrap;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+  z-index: 12;
+}
+
+.bag-name-tag.p1 {
+  background: rgba(14, 165, 233, 0.9);
+  color: #ffffff;
+  border: 1px solid rgba(186, 230, 253, 0.8);
+}
+
+.bag-name-tag.p2 {
+  background: rgba(217, 119, 6, 0.9);
+  color: #ffffff;
+  border: 1px solid rgba(254, 243, 199, 0.8);
+}
+
+.bag-basket-aura.aura-p1 {
+  background: radial-gradient(ellipse at center, rgba(56, 189, 248, 0.85) 0%, transparent 80%);
+}
+
+.bag-basket-aura.aura-p2 {
+  background: radial-gradient(ellipse at center, rgba(245, 158, 11, 0.85) 0%, transparent 80%);
+}
+
+/* Floating feedback per player */
+.floating-feedback.player-p1 {
+  border: 1px solid rgba(56, 189, 248, 0.7);
+  box-shadow: 0 4px 14px rgba(56, 189, 248, 0.5);
+}
+
+.floating-feedback.player-p2 {
+  border: 1px solid rgba(245, 158, 11, 0.7);
+  box-shadow: 0 4px 14px rgba(245, 158, 11, 0.5);
+}
+
+/* ======================================================== */
+/* PVP SPLITSCREEN LAYOUT (DUEL BERDAMPINGAN KIRI-KANAN)    */
+/* ======================================================== */
+.pvp-splitscreen-layout {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  height: 100%;
+  min-height: 0;
+  position: relative;
+  overflow: hidden;
+}
+
+.pvp-top-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(15, 23, 42, 0.72);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 14px;
+  padding: 6px 18px;
+  backdrop-filter: blur(8px);
+  flex-shrink: 0;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
+}
+
+.pvp-header-side {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.pvp-header-player-name {
+  font-size: 14.5px;
+  font-weight: 700;
+  color: #f8fafc;
+  max-width: 180px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.pvp-header-side.p1 .pvp-header-player-name {
+  color: #7dd3fc;
+}
+
+.pvp-header-side.p2 .pvp-header-player-name {
+  color: #fde68a;
+}
+
+.pvp-header-center {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.pvp-splitscreen-grid {
+  flex: 1;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+.pvp-split-pane {
+  background: rgba(15, 23, 42, 0.72);
+  backdrop-filter: blur(12px);
+  border-radius: 18px;
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.5);
+  border: 2px solid rgba(255, 255, 255, 0.12);
+  position: relative;
+  overflow: hidden;
+  height: 100%;
+  box-sizing: border-box;
+}
+
+.pvp-split-pane.p1 {
+  border-color: rgba(56, 189, 248, 0.45);
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.5), inset 0 0 24px rgba(56, 189, 248, 0.08);
+}
+
+.pvp-split-pane.p2 {
+  border-color: rgba(245, 158, 11, 0.45);
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.5), inset 0 0 24px rgba(245, 158, 11, 0.08);
+}
+
+.pvp-split-pane.is-danger-shake {
+  animation: shake 0.35s ease-in-out;
+  border-color: #ef4444 !important;
+}
+
+.pvp-split-hud {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(10, 20, 35, 0.75);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 6px 14px;
+  flex-shrink: 0;
+}
+
+.pvp-split-hud.p1 {
+  border-color: rgba(56, 189, 248, 0.35);
+}
+
+.pvp-split-hud.p2 {
+  border-color: rgba(245, 158, 11, 0.35);
+}
+
+.pvp-hud-name-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.pvp-hud-player-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: #f1f5f9;
+  max-width: 140px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.pvp-hud-score-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.pvp-score-num {
+  font-size: 22px;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+
+.pvp-score-num.p1 { color: #38bdf8; }
+.pvp-score-num.p2 { color: #fbbf24; }
+
+.pvp-split-pane .game-playfield {
+  flex: 1;
+  min-height: 0;
+  height: 100%;
+}
+
+.pvp-split-pane .player-bag {
+  width: 105px;
+  height: 105px;
+  bottom: 8px;
+}
+
+.pvp-split-controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.pvp-split-controls .control-btn.pvp-btn {
+  flex: 1;
+  height: 48px;
+  font-size: 14px;
+  border-radius: 12px;
+}
+
+.control-btn.pvp-btn.p1 {
+  border-color: rgba(56, 189, 248, 0.4);
+  background: linear-gradient(180deg, rgba(56, 189, 248, 0.25) 0%, rgba(14, 116, 144, 0.5) 100%);
+}
+
+.control-btn.pvp-btn.p1:active,
+.control-btn.pvp-btn.p1.is-active {
+  background: linear-gradient(180deg, #0284c7 0%, #0369a1 100%);
+  border-color: #7dd3fc;
+  box-shadow: 0 0 16px rgba(56, 189, 248, 0.6);
+}
+
+.control-btn.pvp-btn.p2 {
+  border-color: rgba(245, 158, 11, 0.4);
+  background: linear-gradient(180deg, rgba(245, 158, 11, 0.25) 0%, rgba(180, 83, 9, 0.5) 100%);
+}
+
+.control-btn.pvp-btn.p2:active,
+.control-btn.pvp-btn.p2.is-active {
+  background: linear-gradient(180deg, #d97706 0%, #b45309 100%);
+  border-color: #fde68a;
+  box-shadow: 0 0 16px rgba(245, 158, 11, 0.6);
+}
+
+.pvp-track-hint {
+  font-size: 11px;
+  font-weight: 600;
+  color: #94a3b8;
+  white-space: nowrap;
+  text-align: center;
+  padding: 0 6px;
+}
+
+.pvp-pause-overlay {
+  position: absolute;
+  inset: 0;
+  background-color: rgba(10, 25, 41, 0.88);
+  backdrop-filter: blur(6px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 40;
+  border-radius: 18px;
+}
+
+/* ======================================================== */
+/* PVP GAMEOVER & COMPARISON CARD                           */
+/* ======================================================== */
+.pvp-winner-icon-row {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: -4px;
+}
+
+.pvp-trophy-badge {
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(245, 158, 11, 0.3) 0%, transparent 70%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.pvp-draw-badge {
+  font-size: 32px;
+}
+
+.result-headline.pvp-headline h2 {
+  font-size: 22px;
+  font-weight: 800;
+  margin: 0 0 2px;
+}
+
+.result-headline.pvp-headline p {
+  font-size: 13px;
+  color: #cbe7f0;
+  margin: 0;
+  line-height: 1.35;
+}
+
+.pvp-comparison-grid {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 12px;
+  margin: 2px 0;
+}
+
+.pvp-player-card {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 10px 16px;
+  border-radius: 14px;
+  background: rgba(15, 23, 42, 0.7);
+  border: 2px solid rgba(255, 255, 255, 0.12);
+  transition: all 0.25s ease;
+}
+
+.pvp-player-card.p1 {
+  border-color: rgba(56, 189, 248, 0.35);
+}
+
+.pvp-player-card.p2 {
+  border-color: rgba(245, 158, 11, 0.35);
+}
+
+.pvp-player-card.is-winner {
+  transform: scale(1.02);
+  box-shadow: 0 8px 24px rgba(245, 158, 11, 0.3);
+}
+
+.pvp-player-card.p1.is-winner {
+  border-color: #38bdf8;
+  box-shadow: 0 8px 24px rgba(56, 189, 248, 0.35);
+}
+
+.pvp-player-card.p2.is-winner {
+  border-color: #fbbf24;
+  box-shadow: 0 8px 24px rgba(245, 158, 11, 0.4);
+}
+
+.pvp-card-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.pvp-win-tag {
+  margin-left: auto;
+  font-size: 10.5px;
+  font-weight: 800;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: #10b981;
+  color: #ffffff;
+}
+
+.pvp-card-score {
+  font-size: 24px;
+  font-weight: 800;
+  color: #ffffff;
+  line-height: 1.1;
+}
+
+.pvp-player-card.p1 .pvp-card-score { color: #7dd3fc; }
+.pvp-player-card.p2 .pvp-card-score { color: #fde68a; }
+
+.pvp-card-detail {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: #94a3b8;
+}
+
+.pvp-detail-dot {
+  color: rgba(255, 255, 255, 0.3);
+  font-weight: bold;
+}
+
+.pvp-vs-divider {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  font-size: 14px;
+  font-weight: 900;
+  color: #fbbf24;
+}
+
+.btn-result-action.mode-switch-btn {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  color: #e2f1f5;
+}
+
+.btn-result-action.mode-switch-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: #38bdf8;
+  color: #38bdf8;
+}
