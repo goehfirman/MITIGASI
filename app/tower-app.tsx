@@ -109,12 +109,12 @@ export default function TowerApp(){
       <div 
         className="target-action-popup" 
         style={{
-          left: Math.max(130, Math.min(typeof window !== 'undefined' ? window.innerWidth - 130 : 800, selectedTarget.screenX)),
-          top: Math.max(75, selectedTarget.screenY)
+          left: Math.max(80, Math.min(typeof window !== 'undefined' ? window.innerWidth - 80 : 800, selectedTarget.screenX)),
+          top: Math.max(75, selectedTarget.screenY - 30)
         }}
       >
-        <div className="popup-badge">
-          {selectedTarget.type === 'node' ? '🍡 Marshmallow' : '🥢 Tusuk Gigi'}
+        <div className="popup-badge" style={{ padding: '0 4px', fontSize: '18px' }}>
+          {selectedTarget.type === 'node' ? '🍡' : '🥢'}
         </div>
         
         {selectedTarget.type === 'node' && (
@@ -122,6 +122,7 @@ export default function TowerApp(){
             <button 
               type="button" 
               className="popup-action-btn"
+              title="Sambung"
               onClick={() => {
                 setTool('connect');
                 setSelected(selectedTarget.id);
@@ -129,11 +130,12 @@ export default function TowerApp(){
                 setMessage('Titik pertama dipilih. Ketuk marshmallow kedua untuk menyambung.');
               }}
             >
-              <Link2 size={15}/> Sambung
+              <Link2 size={18}/>
             </button>
             <button 
               type="button" 
               className="popup-action-btn"
+              title="Geser"
               onClick={() => {
                 setTool('move');
                 setSelected(selectedTarget.id);
@@ -141,11 +143,12 @@ export default function TowerApp(){
                 setMessage('Mode Geser aktif. Tarik marshmallow ini ke posisi baru.');
               }}
             >
-              <Move size={15}/> Geser
+              <Move size={18}/>
             </button>
             <button 
               type="button" 
               className="popup-action-btn delete"
+              title="Hapus"
               onClick={() => {
                 edit({
                   nodes: design.nodes.filter(n => n.id !== selectedTarget.id),
@@ -156,7 +159,7 @@ export default function TowerApp(){
                 setMessage('Marshmallow dan sambungannya berhasil dihapus.');
               }}
             >
-              <Trash2 size={15}/> Hapus
+              <Trash2 size={18}/>
             </button>
           </>
         )}
@@ -165,29 +168,29 @@ export default function TowerApp(){
           <button 
             type="button" 
             className="popup-action-btn delete"
+            title="Hapus"
             onClick={() => {
               edit({
                 ...design,
-                beams: design.beams.filter((_, i) => i !== selectedTarget.index)
+                beams: design.beams.filter((_, idx) => idx !== selectedTarget.index)
               });
               setSelectedTarget(null);
               setMessage('Tusuk gigi berhasil dihapus.');
             }}
           >
-            <Trash2 size={15}/> Hapus
+            <Trash2 size={18}/>
           </button>
         )}
 
+        <div className="popup-divider" style={{ width: '1px', height: '24px', background: 'rgba(255,255,255,0.1)', margin: '0 4px' }} />
         <button 
           type="button" 
           className="popup-close-btn"
-          onClick={() => {
-            setSelectedTarget(null);
-            setSelected(null);
-          }}
-          title="Tutup menu"
+          title="Tutup"
+          onClick={() => setSelectedTarget(null)}
+          style={{ background: 'transparent', border: 'none', color: '#94a3b8', cursor: 'pointer', padding: '4px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
         >
-          <X size={15}/>
+          <X size={16}/>
         </button>
       </div>
     )}
