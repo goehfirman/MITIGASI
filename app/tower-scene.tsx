@@ -29,7 +29,7 @@ export default function TowerScene(props:SceneProps){
     const nodes=group.children.filter(c=>c.userData.kind==='node');
     const hitNode=ray.intersectObjects(nodes)[0];
     if(hitNode)return{type:'node',id:hitNode.object.userData.id as number,screenX:sx,screenY:sy};
-    let nearestNode:number|undefined=undefined,bestNodeDist=24;
+    let nearestNode:number|undefined=undefined,bestNodeDist=12;
     for(const n of nodes){
       const p=n.position.clone().project(camera);
       const dist=Math.hypot((p.x+1)*r.width/2-(sx-r.left),(1-p.y)*r.height/2-(sy-r.top));
@@ -40,7 +40,7 @@ export default function TowerScene(props:SceneProps){
     const hitBeam=ray.intersectObjects(beams)[0];
     if(hitBeam){const u=hitBeam.object.userData;return{type:'beam',index:u.index,a:u.a,b:u.b,screenX:sx,screenY:sy};}
     const d=latest.current.design;
-    let nearestBeam:{index:number,a:number,b:number}|undefined=undefined,bestBeamDist=18;
+    let nearestBeam:{index:number,a:number,b:number}|undefined=undefined,bestBeamDist=10;
     for(let i=0;i<d.beams.length;i++){
       const b=d.beams[i];const nA=d.nodes.find(n=>n.id===b.a);const nB=d.nodes.find(n=>n.id===b.b);
       if(!nA||!nB)continue;
