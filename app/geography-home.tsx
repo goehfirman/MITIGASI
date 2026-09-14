@@ -223,19 +223,41 @@ export default function GeographyHome({section='home'}:{section?:'home'|'belajar
           </h2>
           <button onClick={() => setShowInfoModal(false)} style={{ background: 'transparent', border: 'none', color: '#94a3b8', cursor: 'pointer', fontSize: '18px' }}>✕</button>
         </div>
-        <div style={{ fontSize: '14px', lineHeight: 1.6, display: 'flex', flexDirection: 'column', gap: '12px' }}>
-          <p style={{ margin: 0 }}>
-            <strong>Tujuan Pembelajaran:</strong><br />
-            Analisis Pengaruh Kondisi Geografis (Iklim dan Bentang Alam) terhadap Kehidupan.
-          </p>
-          <p style={{ margin: 0 }}>
-            <strong>Materi mencakup sub-bahasan:</strong>
-          </p>
-          <ol style={{ margin: 0, paddingLeft: '20px', display: 'flex', flexDirection: 'column', gap: '6px' }}>
-            <li>Dampak kondisi geografis Indonesia terhadap sektor ekonomi, sosial, dan budaya.</li>
-            <li>Pengaruh letak Indonesia di jalur <em>Ring of Fire</em> terhadap potensi dan mitigasi bencana gempa bumi.</li>
-            <li>Melalui pembelajaran STEM murid dapat merangkai struktur anti gempa.</li>
-          </ol>
+        <div style={{ fontSize: '14px', lineHeight: 1.6, display: 'flex', flexDirection: 'column', gap: '16px' }}>
+          <div>
+            <h3 style={{ fontSize: '15px', color: '#ffd166', margin: '0 0 12px 0', borderBottom: '1px solid rgba(255,209,102,0.2)', paddingBottom: '8px' }}>Rincian Ringkasan TP (Per Indikator)</h3>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+              <div style={{ display: 'flex', gap: '12px', alignItems: 'flex-start' }}>
+                <div style={{ background: 'rgba(56, 189, 248, 0.15)', padding: '8px', borderRadius: '8px', color: '#38bdf8', marginTop: '2px' }}>
+                  <Globe2 className="w-5 h-5" />
+                </div>
+                <div>
+                  <strong style={{ display: 'block', color: '#e2f1f5', marginBottom: '4px', fontSize: '15px' }}>Analisis Geografis & Sosial-Budaya</strong>
+                  <span style={{ color: '#cbd5e1' }}>Murid mampu menganalisis pengaruh iklim dan bentang alam Indonesia terhadap mata pencaharian (ekonomi), interaksi sosial, dan tradisi budaya lokal.</span>
+                </div>
+              </div>
+
+              <div style={{ display: 'flex', gap: '12px', alignItems: 'flex-start' }}>
+                <div style={{ background: 'rgba(239, 68, 68, 0.15)', padding: '8px', borderRadius: '8px', color: '#ef4444', marginTop: '2px' }}>
+                  <ShieldAlert className="w-5 h-5" />
+                </div>
+                <div>
+                  <strong style={{ display: 'block', color: '#e2f1f5', marginBottom: '4px', fontSize: '15px' }}>Mitigasi Bencana & Ring of Fire</strong>
+                  <span style={{ color: '#cbd5e1' }}>Murid mampu menjelaskan konsekuensi letak Indonesia di jalur Ring of Fire dan merumuskan langkah mitigasi bencana gempa bumi secara mandiri.</span>
+                </div>
+              </div>
+
+              <div style={{ display: 'flex', gap: '12px', alignItems: 'flex-start' }}>
+                <div style={{ background: 'rgba(16, 185, 129, 0.15)', padding: '8px', borderRadius: '8px', color: '#10b981', marginTop: '2px' }}>
+                  <Building className="w-5 h-5" />
+                </div>
+                <div>
+                  <strong style={{ display: 'block', color: '#e2f1f5', marginBottom: '4px', fontSize: '15px' }}>Keterampilan STEM (Praktik/Projek)</strong>
+                  <span style={{ color: '#cbd5e1' }}>Murid mampu merancang dan merangkai prototipe struktur bangunan tahan gempa dengan menerapkan prinsip-prinsip STEM (Science, Technology, Engineering, & Math).</span>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
