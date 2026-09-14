@@ -139,10 +139,6 @@ export default function TowerApp(){
           top: Math.max(75, selectedTarget.screenY - 30)
         }}
       >
-        <div className="popup-badge" style={{ padding: '0 4px', fontSize: '18px' }}>
-          {selectedTarget.type === 'node' ? '🍡' : '🥢'}
-        </div>
-        
         {selectedTarget.type === 'node' && (
           <>
             <button 
