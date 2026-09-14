@@ -4,14 +4,14 @@ import ViewportFit from './viewport-fit';
 import AudioPlayer from '@/components/audio-player';
 
 export const metadata: Metadata = {
-  title: "Mengenal Kondisi Geografis Indonesia (Manfaat dan Ancaman)",
+  title: "Sigap Gempa",
   description: "Laboratorium STEM 3D untuk membangun menara dan menguji guncangan di Papan Interaktif Digital.",
   other: {
     "codex-preview": "development",
   },
   icons: {
-    icon: "/favicon.svg",
-    shortcut: "/favicon.svg",
+    icon: "/stem-logo.png",
+    shortcut: "/stem-logo.png",
   },
 };
 
