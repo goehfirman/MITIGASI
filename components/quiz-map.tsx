@@ -182,30 +182,15 @@ export default function QuizMap({ type, onLocationSelected }: { type: 'island' |
                   strokeWidth={isSelected ? 2 : 1.5}
                 />
 
-                {/* Tooltip / Label shown on selection */}
+                {/* Highlighted selection indicator without leaking volcano name */}
                 {isSelected && (
-                  <g transform="translate(0, -22)">
-                    <rect
-                      x="-65"
-                      y="-22"
-                      width="130"
-                      height="24"
-                      rx="6"
-                      fill="rgba(15, 23, 42, 0.95)"
-                      stroke="#34d399"
-                      strokeWidth="1.5"
-                    />
-                    <text
-                      x="0"
-                      y="-6"
-                      textAnchor="middle"
-                      fill="#34d399"
-                      fontSize="12"
-                      fontWeight="bold"
-                    >
-                      {v.name}
-                    </text>
-                  </g>
+                  <circle
+                    r="14"
+                    fill="none"
+                    stroke="#34d399"
+                    strokeWidth="2"
+                    strokeDasharray="3 3"
+                  />
                 )}
               </g>
             );

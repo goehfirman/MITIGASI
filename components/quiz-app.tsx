@@ -298,11 +298,6 @@ export default function QuizApp() {
                     type={currentQ.mapType || 'island'} 
                     onLocationSelected={(name) => handleSelectAnswer(name)} 
                   />
-                  {answers[currentIndex] && (
-                    <div style={{ position: 'absolute', top: '16px', right: '16px', background: 'rgba(0,0,0,0.8)', padding: '8px 16px', borderRadius: '8px', textAlign: 'center', color: '#34d399', fontWeight: 'bold' }}>
-                      Pilihan kamu: {answers[currentIndex]}
-                    </div>
-                  )}
                 </div>
               </div>
             ) : (
