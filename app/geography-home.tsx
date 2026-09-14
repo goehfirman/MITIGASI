@@ -215,13 +215,13 @@ export default function GeographyHome({section='home'}:{section?:'home'|'belajar
       aria-modal="true"
       aria-label="Info Pembelajaran"
     >
-      <div className="dev-modal-card" style={{ padding: '24px', maxWidth: '500px', backgroundColor: '#0f172a', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.1)', color: '#e2f1f5', textAlign: 'left', cursor: 'default' }} onClick={(e) => e.stopPropagation()}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
+      <div className="dev-modal-card" style={{ position: 'relative', padding: '24px', maxWidth: '500px', width: '90vw', backgroundColor: '#0f172a', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.1)', color: '#e2f1f5', textAlign: 'left', cursor: 'default' }} onClick={(e) => e.stopPropagation()}>
+        <button onClick={() => setShowInfoModal(false)} className="miti-intro-close" aria-label="Tutup">✕</button>
+        <div style={{ display: 'flex', alignItems: 'center', marginBottom: '20px' }}>
           <h2 style={{ fontSize: '18px', fontWeight: 600, margin: 0, display: 'flex', alignItems: 'center', gap: '8px' }}>
             <Info className="w-5 h-5" style={{ color: '#ffd166' }} />
             Info Pembelajaran
           </h2>
-          <button onClick={() => setShowInfoModal(false)} style={{ background: 'transparent', border: 'none', color: '#94a3b8', cursor: 'pointer', fontSize: '18px' }}>✕</button>
         </div>
         <div style={{ fontSize: '14px', lineHeight: 1.6, display: 'flex', flexDirection: 'column', gap: '16px' }}>
           <div>
