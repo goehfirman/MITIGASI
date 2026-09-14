@@ -643,6 +643,35 @@
 .miti-img-frame:hover .miti-img-display {
   transform: scale(1.02);
 }
+.miti-play-pause-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  z-index: 10;
+}
+.miti-play-pause-btn:hover {
+  background: rgba(0, 0, 0, 0.8);
+  transform: scale(1.1);
+}
+.miti-zoom-content .miti-play-pause-btn {
+  top: 16px;
+  right: 16px;
+  width: 48px;
+  height: 48px;
+}
 .miti-img-tag {
   position: absolute;
   top: 10px;

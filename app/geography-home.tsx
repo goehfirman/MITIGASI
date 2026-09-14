@@ -1059,6 +1059,11 @@ function MitigationVisualizer({
  onSelectPoint: (idx: number) => void;
 }) {
  const [isZoomed, setIsZoomed] = useState(false);
+ const [isPlaying, setIsPlaying] = useState(true);
+
+ useEffect(() => {
+  setIsPlaying(true);
+ }, [point.image]);
 
  useEffect(() => {
   const handleKey = (e: KeyboardEvent) => {
@@ -1068,12 +1073,27 @@ function MitigationVisualizer({
   return () => window.removeEventListener('keydown', handleKey);
  }, []);
 
+ const isGif = point.image?.endsWith('.gif');
+ const currentImageSrc = point.image ? (isGif && !isPlaying ? point.image.replace('.gif', '.jpg') : point.image) : undefined;
+
  return (
   <>
    {isZoomed && point.image && (
     <div className="miti-zoom-backdrop" onClick={() => setIsZoomed(false)}>
      <div className="miti-zoom-content" onClick={e => e.stopPropagation()}>
-      <img src={point.image} alt={point.title} className="miti-zoom-img" />
+      <img src={currentImageSrc} alt={point.title} className="miti-zoom-img" />
+      {isGif && (
+       <button
+        className="miti-play-pause-btn"
+        onClick={(e) => {
+         e.stopPropagation();
+         setIsPlaying(!isPlaying);
+        }}
+        title={isPlaying ? "Jeda Animasi" : "Putar Animasi"}
+       >
+        {isPlaying ? <Pause className="w-6 h-6" /> : <Play className="w-6 h-6" />}
+       </button>
+      )}
       <div className="miti-zoom-info">
        <h3>{point.title}</h3>
        <p>{point.caption}</p>
@@ -1128,7 +1148,19 @@ function MitigationVisualizer({
     <div className="miti-visual-display">
      {point.image ? (
       <div className="miti-img-frame" onClick={() => setIsZoomed(true)} title="Klik untuk memperbesar gambar">
-       <img src={point.image} alt={point.title} className="miti-img-display" />
+       <img src={currentImageSrc} alt={point.title} className="miti-img-display" />
+       {isGif && (
+        <button
+         className="miti-play-pause-btn"
+         onClick={(e) => {
+          e.stopPropagation();
+          setIsPlaying(!isPlaying);
+         }}
+         title={isPlaying ? "Jeda Animasi" : "Putar Animasi"}
+        >
+         {isPlaying ? <Pause className="w-5 h-5" /> : <Play className="w-5 h-5" />}
+        </button>
+       )}
        <div className="miti-img-tag">{point.badge}</div>
        <div className="miti-img-caption-overlay">
         <span>{point.caption}</span>
