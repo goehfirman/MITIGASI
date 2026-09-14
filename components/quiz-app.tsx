@@ -268,91 +268,116 @@ export default function QuizApp() {
       {stage === 'quiz' && currentQ && (
         <div className="quiz-deck-body quiz-stage-active">
           <article className="slide-glass quiz-glass-card quiz-active-card" aria-label={`Soal nomor ${currentIndex + 1}`}>
-            <div className="quiz-active-grid">
-              {/* Kolom Kiri: Meta, Pertanyaan, Gambar */}
-              <div className="quiz-q-left">
-                <div className="quiz-question-header">
-                  <div className="quiz-header-meta">
-                    <span className="quiz-category-tag">{currentQ.categoryLabel}</span>
-                    <span className="quiz-type-tag">
-                      {currentQ.type === 'multiple-choice' ? 'Pilihan Ganda' : 'Benar / Salah'}
-                    </span>
+            {currentQ.type === 'map-click' ? (
+              <div className="quiz-active-grid-map">
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', flexShrink: 0 }}>
+                  <div className="quiz-question-header">
+                    <div className="quiz-header-meta">
+                      <span className="quiz-category-tag">{currentQ.categoryLabel}</span>
+                    </div>
+                    <div className="quiz-counter-badge">
+                      Soal <strong>{currentIndex + 1}</strong> dari <strong>{questions.length}</strong>
+                    </div>
                   </div>
-                  <div className="quiz-counter-badge">
-                    Soal <strong>{currentIndex + 1}</strong> dari <strong>{questions.length}</strong>
+                  <div className="quiz-progress-track">
+                    <div className="quiz-progress-fill" style={{ width: `${progressPercent}%` }} />
                   </div>
-                </div>
-
-                <div className="quiz-progress-track">
-                  <div className="quiz-progress-fill" style={{ width: `${progressPercent}%` }} />
-                </div>
-
-                {currentQ.image && (
-                  <div className="quiz-image-container">
-                    <img 
-                      src={currentQ.image} 
-                      alt={`Ilustrasi Soal ${currentIndex + 1}`} 
-                      className="quiz-question-img" 
-                    />
-                  </div>
-                )}
-
-                <h2 className="quiz-question-text">{currentQ.question}</h2>
-              </div>
-
-              {/* Kolom Kanan: Pilihan Jawaban */}
-              <div className="quiz-q-right">
-                {currentQ.type === 'map-click' ? (
-                  <div style={{ width: '100%', height: '100%', minHeight: '300px' }}>
-                    <QuizMap 
-                      type={currentQ.mapType || 'island'} 
-                      onLocationSelected={(name) => handleSelectAnswer(name)} 
-                    />
-                    {answers[currentIndex] && (
-                      <div style={{ marginTop: '12px', textAlign: 'center', color: '#34d399', fontWeight: 'bold' }}>
-                        Pilihan kamu: {answers[currentIndex]}
-                      </div>
+                  <div style={{ display: 'flex', gap: '20px', alignItems: 'center', background: 'rgba(255,255,255,0.03)', padding: '12px', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.1)' }}>
+                    {currentQ.image && (
+                      <img 
+                        src={currentQ.image} 
+                        alt="Ilustrasi Soal" 
+                        style={{ height: '80px', width: '120px', borderRadius: '8px', objectFit: 'cover' }} 
+                      />
                     )}
+                    <h2 className="quiz-question-text" style={{ fontSize: '18px', margin: 0 }}>{currentQ.question}</h2>
                   </div>
-                ) : currentQ.type === 'multiple-choice' ? (
-                  <div className="quiz-options-grid">
-                    {currentQ.options.map((option, idx) => {
-                      const isSelected = answers[currentIndex] === idx;
-                      const letter = String.fromCharCode(65 + idx);
-                      return (
-                        <button
-                          key={idx}
-                          type="button"
-                          className={`quiz-option-card ${isSelected ? 'is-selected' : ''}`}
-                          onClick={() => handleSelectAnswer(idx)}
-                        >
-                          <div className="option-letter">{letter}</div>
-                          <div className="option-text">{option}</div>
-                        </button>
-                      );
-                    })}
-                  </div>
-                ) : (
-                  <div className="quiz-tf-grid">
-                    {currentQ.options.map((option, idx) => {
-                      const isSelected = answers[currentIndex] === idx;
-                      const isTrue = idx === 0;
-                      return (
-                        <button
-                          key={idx}
-                          type="button"
-                          className={`quiz-tf-btn ${isTrue ? 'tf-true' : 'tf-false'} ${isSelected ? 'is-selected' : ''}`}
-                          onClick={() => handleSelectAnswer(idx)}
-                        >
-                          <span className="tf-icon">{isTrue ? '✓' : '✗'}</span>
-                          <span className="tf-label">{option}</span>
-                        </button>
-                      );
-                    })}
-                  </div>
-                )}
+                </div>
+                <div style={{ flex: 1, minHeight: 0, position: 'relative' }}>
+                  <QuizMap 
+                    type={currentQ.mapType || 'island'} 
+                    onLocationSelected={(name) => handleSelectAnswer(name)} 
+                  />
+                  {answers[currentIndex] && (
+                    <div style={{ position: 'absolute', top: '16px', right: '16px', background: 'rgba(0,0,0,0.8)', padding: '8px 16px', borderRadius: '8px', textAlign: 'center', color: '#34d399', fontWeight: 'bold' }}>
+                      Pilihan kamu: {answers[currentIndex]}
+                    </div>
+                  )}
+                </div>
               </div>
-            </div>
+            ) : (
+              <div className="quiz-active-grid">
+                <div className="quiz-q-left">
+                  <div className="quiz-question-header">
+                    <div className="quiz-header-meta">
+                      <span className="quiz-category-tag">{currentQ.categoryLabel}</span>
+                      <span className="quiz-type-tag">
+                        {currentQ.type === 'multiple-choice' ? 'Pilihan Ganda' : 'Benar / Salah'}
+                      </span>
+                    </div>
+                    <div className="quiz-counter-badge">
+                      Soal <strong>{currentIndex + 1}</strong> dari <strong>{questions.length}</strong>
+                    </div>
+                  </div>
+
+                  <div className="quiz-progress-track">
+                    <div className="quiz-progress-fill" style={{ width: `${progressPercent}%` }} />
+                  </div>
+
+                  {currentQ.image && (
+                    <div className="quiz-image-container">
+                      <img 
+                        src={currentQ.image} 
+                        alt={`Ilustrasi Soal ${currentIndex + 1}`} 
+                        className="quiz-question-img" 
+                      />
+                    </div>
+                  )}
+
+                  <h2 className="quiz-question-text">{currentQ.question}</h2>
+                </div>
+
+                <div className="quiz-q-right">
+                  {currentQ.type === 'multiple-choice' ? (
+                    <div className="quiz-options-grid">
+                      {currentQ.options.map((option, idx) => {
+                        const isSelected = answers[currentIndex] === idx;
+                        const letter = String.fromCharCode(65 + idx);
+                        return (
+                          <button
+                            key={idx}
+                            type="button"
+                            className={`quiz-option-card ${isSelected ? 'is-selected' : ''}`}
+                            onClick={() => handleSelectAnswer(idx)}
+                          >
+                            <div className="option-letter">{letter}</div>
+                            <div className="option-text">{option}</div>
+                          </button>
+                        );
+                      })}
+                    </div>
+                  ) : (
+                    <div className="quiz-tf-grid">
+                      {currentQ.options.map((option, idx) => {
+                        const isSelected = answers[currentIndex] === idx;
+                        const isTrue = idx === 0;
+                        return (
+                          <button
+                            key={idx}
+                            type="button"
+                            className={`quiz-tf-btn ${isTrue ? 'tf-true' : 'tf-false'} ${isSelected ? 'is-selected' : ''}`}
+                            onClick={() => handleSelectAnswer(idx)}
+                          >
+                            <span className="tf-icon">{isTrue ? '✓' : '✗'}</span>
+                            <span className="tf-label">{option}</span>
+                          </button>
+                        );
+                      })}
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
           </article>
 
           {/* Row 4 Navigasi: Identik dengan .slide-navigation pada Belajar & Mitigasi */}

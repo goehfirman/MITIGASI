@@ -1991,6 +1991,14 @@
   overflow: hidden;
 }
 
+.quiz-active-grid-map {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  height: 100%;
+  min-height: 0;
+}
+
 .quiz-active-grid {
   display: grid;
   grid-template-columns: 1.15fr 1fr;
