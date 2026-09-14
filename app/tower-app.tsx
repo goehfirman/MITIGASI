@@ -52,12 +52,24 @@ export default function TowerApp(){
           <p style={{ marginBottom: '12px' }}>
             Lab Maya ini dirancang menggunakan pendekatan <strong>STEM</strong> <em>(Science, Technology, Engineering, and Math)</em> untuk melatih Anda merancang struktur bangunan tahan gempa.
           </p>
-          <ul style={{ margin: 0, paddingLeft: '24px', color: '#cbd5e1', listStyleType: 'disc' }}>
-            <li style={{ marginBottom: '8px' }}><strong>Sains:</strong> Memahami dampak gaya dan getaran gempa terhadap struktur.</li>
-            <li style={{ marginBottom: '8px' }}><strong>Teknologi:</strong> Menggunakan simulator virtual interaktif untuk pengujian.</li>
-            <li style={{ marginBottom: '8px' }}><strong>Engineering:</strong> Merangkai struktur bangunan yang kokoh menggunakan material simulasi (marshmallow & tusuk gigi).</li>
-            <li><strong>Matematika:</strong> Memperhitungkan keseimbangan dan geometri (misal pola segitiga) untuk mencapai tinggi maksimum yang stabil.</li>
-          </ul>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', color: '#cbd5e1' }}>
+            <div style={{ display: 'flex', gap: '8px', alignItems: 'flex-start' }}>
+              <span style={{ color: '#38bdf8', fontSize: '18px', lineHeight: '20px' }}>•</span>
+              <div><strong>Sains:</strong> Memahami dampak gaya dan getaran gempa terhadap struktur.</div>
+            </div>
+            <div style={{ display: 'flex', gap: '8px', alignItems: 'flex-start' }}>
+              <span style={{ color: '#38bdf8', fontSize: '18px', lineHeight: '20px' }}>•</span>
+              <div><strong>Teknologi:</strong> Menggunakan simulator virtual interaktif untuk pengujian.</div>
+            </div>
+            <div style={{ display: 'flex', gap: '8px', alignItems: 'flex-start' }}>
+              <span style={{ color: '#38bdf8', fontSize: '18px', lineHeight: '20px' }}>•</span>
+              <div><strong>Engineering:</strong> Merangkai struktur bangunan yang kokoh menggunakan material simulasi (marshmallow & tusuk gigi).</div>
+            </div>
+            <div style={{ display: 'flex', gap: '8px', alignItems: 'flex-start' }}>
+              <span style={{ color: '#38bdf8', fontSize: '18px', lineHeight: '20px' }}>•</span>
+              <div><strong>Matematika:</strong> Memperhitungkan keseimbangan dan geometri (misal pola segitiga) untuk mencapai tinggi maksimum yang stabil.</div>
+            </div>
+          </div>
         </div>
         <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
           <Button onClick={() => { setShowLabIntro(false); sessionStorage.setItem('lab_intro_seen', 'true'); }} style={{ background: '#38bdf8', color: '#0f172a', fontWeight: 'bold' }}>
