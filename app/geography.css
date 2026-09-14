@@ -355,7 +355,9 @@
 .viewport-fit:has(.miti-theme-2){background:radial-gradient(ellipse at 80% 15%,#4a7f96 0%,transparent 60%),linear-gradient(130deg,#1a3040,#2d5a6a)}
 .viewport-fit:has(.quiz-theme){background:radial-gradient(ellipse at 80% 12%,#245770 0%,transparent 60%),linear-gradient(130deg,#0e2a3a,#16485d)}
 .viewport-fit:has(.game-deck),
-.viewport-fit:has(.is-bermain){background:linear-gradient(180deg, rgba(8, 28, 44, 0.74) 0%, rgba(8, 28, 44, 0.88) 100%),url('/mitigasi-sebelum-3.jpg') center center / cover no-repeat fixed !important}
+.viewport-fit:has(.is-bermain),
+body:has(.is-bermain),
+body:has(.game-deck){background:linear-gradient(180deg, rgba(8, 28, 44, 0.35) 0%, rgba(8, 28, 44, 0.62) 100%),url('/bg%20main.png') center center / cover no-repeat !important}
 .quiz-theme{background-image:radial-gradient(ellipse at 80% 20%,rgba(56,189,248,.15) 0%,transparent 55%),linear-gradient(130deg,rgba(8,29,46,.45),rgba(16,78,99,.45))}
 .mitigation-deck .slide-body{justify-content:center}
 .mitigation-deck .slide-glass{max-width:min(780px,100%)}

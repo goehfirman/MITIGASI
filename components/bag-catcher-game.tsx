@@ -549,7 +549,7 @@ export default function BagCatcherGame() {
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const imagesToPreload = [
-        '/mitigasi-sebelum-3.jpg',
+        '/bg main.png',
         '/tas buka.png',
         '/tas tutup.png',
         // 20 Benda Siaga
@@ -633,6 +633,12 @@ export default function BagCatcherGame() {
   const playfieldRef2 = useRef<HTMLDivElement>(null);
   const isDraggingRef = useRef<boolean>(false);
   const isDraggingRef2 = useRef<boolean>(false);
+  const p1PlayfieldPointerIdRef = useRef<number | null>(null);
+  const p2PlayfieldPointerIdRef = useRef<number | null>(null);
+  const p1LeftPointerIdRef = useRef<number | null>(null);
+  const p1RightPointerIdRef = useRef<number | null>(null);
+  const p2LeftPointerIdRef = useRef<number | null>(null);
+  const p2RightPointerIdRef = useRef<number | null>(null);
 
   // State mirror refs for requestAnimationFrame
   const gameModeRef = useRef<'solo' | 'pvp'>('solo');
@@ -793,6 +799,19 @@ export default function BagCatcherGame() {
   const triggerGameOver = useCallback((reason: 'time' | 'death' | 'knockout', koWinner?: 'p1' | 'p2') => {
     setStage('gameover');
     stageRef.current = 'gameover';
+    keysRef.current = { p1Left: false, p1Right: false, p2Left: false, p2Right: false };
+    setIsP1LeftActive(false);
+    setIsP1RightActive(false);
+    setIsP2LeftActive(false);
+    setIsP2RightActive(false);
+    isDraggingRef.current = false;
+    isDraggingRef2.current = false;
+    p1LeftPointerIdRef.current = null;
+    p1RightPointerIdRef.current = null;
+    p2LeftPointerIdRef.current = null;
+    p2RightPointerIdRef.current = null;
+    p1PlayfieldPointerIdRef.current = null;
+    p2PlayfieldPointerIdRef.current = null;
 
     if (gameModeRef.current === 'solo') {
       if (reason === 'time') {
@@ -1207,6 +1226,8 @@ export default function BagCatcherGame() {
 
   // Touch / Pointer dragging on playfield (Player 1 / Solo)
   const handlePointerDownPlayfield = (e: React.PointerEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    p1PlayfieldPointerIdRef.current = e.pointerId;
     isDraggingRef.current = true;
     updateP1BagPositionFromPointer(e.clientX);
     try {
@@ -1216,14 +1237,18 @@ export default function BagCatcherGame() {
 
   const handlePointerMovePlayfield = (e: React.PointerEvent<HTMLDivElement>) => {
     if (!isDraggingRef.current) return;
+    if (p1PlayfieldPointerIdRef.current !== null && p1PlayfieldPointerIdRef.current !== e.pointerId) return;
     updateP1BagPositionFromPointer(e.clientX);
   };
 
   const handlePointerUpPlayfield = (e: React.PointerEvent<HTMLDivElement>) => {
-    isDraggingRef.current = false;
-    try {
-      e.currentTarget.releasePointerCapture?.(e.pointerId);
-    } catch {}
+    if (p1PlayfieldPointerIdRef.current === null || p1PlayfieldPointerIdRef.current === e.pointerId) {
+      isDraggingRef.current = false;
+      p1PlayfieldPointerIdRef.current = null;
+      try {
+        e.currentTarget.releasePointerCapture?.(e.pointerId);
+      } catch {}
+    }
   };
 
   const updateP1BagPositionFromPointer = (clientX: number) => {
@@ -1238,6 +1263,8 @@ export default function BagCatcherGame() {
 
   // Touch / Pointer dragging on playfield (Player 2 - PvP)
   const handlePointerDownPlayfield2 = (e: React.PointerEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    p2PlayfieldPointerIdRef.current = e.pointerId;
     isDraggingRef2.current = true;
     updateP2BagPositionFromPointer(e.clientX);
     try {
@@ -1247,14 +1274,18 @@ export default function BagCatcherGame() {
 
   const handlePointerMovePlayfield2 = (e: React.PointerEvent<HTMLDivElement>) => {
     if (!isDraggingRef2.current) return;
+    if (p2PlayfieldPointerIdRef.current !== null && p2PlayfieldPointerIdRef.current !== e.pointerId) return;
     updateP2BagPositionFromPointer(e.clientX);
   };
 
   const handlePointerUpPlayfield2 = (e: React.PointerEvent<HTMLDivElement>) => {
-    isDraggingRef2.current = false;
-    try {
-      e.currentTarget.releasePointerCapture?.(e.pointerId);
-    } catch {}
+    if (p2PlayfieldPointerIdRef.current === null || p2PlayfieldPointerIdRef.current === e.pointerId) {
+      isDraggingRef2.current = false;
+      p2PlayfieldPointerIdRef.current = null;
+      try {
+        e.currentTarget.releasePointerCapture?.(e.pointerId);
+      } catch {}
+    }
   };
 
   const updateP2BagPositionFromPointer = (clientX: number) => {
@@ -1268,43 +1299,87 @@ export default function BagCatcherGame() {
   };
 
   // On-screen Button handlers for Player 1
-  const handleP1LeftDown = () => {
+  const handleP1LeftDown = (e: React.PointerEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    p1LeftPointerIdRef.current = e.pointerId;
     keysRef.current.p1Left = true;
     setIsP1LeftActive(true);
+    try {
+      e.currentTarget.setPointerCapture?.(e.pointerId);
+    } catch {}
     if (typeof navigator !== 'undefined' && navigator.vibrate) navigator.vibrate(25);
   };
-  const handleP1LeftUp = () => {
-    keysRef.current.p1Left = false;
-    setIsP1LeftActive(false);
+  const handleP1LeftUp = (e: React.PointerEvent<HTMLButtonElement>) => {
+    if (p1LeftPointerIdRef.current === null || p1LeftPointerIdRef.current === e.pointerId) {
+      keysRef.current.p1Left = false;
+      setIsP1LeftActive(false);
+      p1LeftPointerIdRef.current = null;
+      try {
+        e.currentTarget.releasePointerCapture?.(e.pointerId);
+      } catch {}
+    }
   };
-  const handleP1RightDown = () => {
+  const handleP1RightDown = (e: React.PointerEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    p1RightPointerIdRef.current = e.pointerId;
     keysRef.current.p1Right = true;
     setIsP1RightActive(true);
+    try {
+      e.currentTarget.setPointerCapture?.(e.pointerId);
+    } catch {}
     if (typeof navigator !== 'undefined' && navigator.vibrate) navigator.vibrate(25);
   };
-  const handleP1RightUp = () => {
-    keysRef.current.p1Right = false;
-    setIsP1RightActive(false);
+  const handleP1RightUp = (e: React.PointerEvent<HTMLButtonElement>) => {
+    if (p1RightPointerIdRef.current === null || p1RightPointerIdRef.current === e.pointerId) {
+      keysRef.current.p1Right = false;
+      setIsP1RightActive(false);
+      p1RightPointerIdRef.current = null;
+      try {
+        e.currentTarget.releasePointerCapture?.(e.pointerId);
+      } catch {}
+    }
   };
 
   // On-screen Button handlers for Player 2 (PvP)
-  const handleP2LeftDown = () => {
+  const handleP2LeftDown = (e: React.PointerEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    p2LeftPointerIdRef.current = e.pointerId;
     keysRef.current.p2Left = true;
     setIsP2LeftActive(true);
+    try {
+      e.currentTarget.setPointerCapture?.(e.pointerId);
+    } catch {}
     if (typeof navigator !== 'undefined' && navigator.vibrate) navigator.vibrate(25);
   };
-  const handleP2LeftUp = () => {
-    keysRef.current.p2Left = false;
-    setIsP2LeftActive(false);
+  const handleP2LeftUp = (e: React.PointerEvent<HTMLButtonElement>) => {
+    if (p2LeftPointerIdRef.current === null || p2LeftPointerIdRef.current === e.pointerId) {
+      keysRef.current.p2Left = false;
+      setIsP2LeftActive(false);
+      p2LeftPointerIdRef.current = null;
+      try {
+        e.currentTarget.releasePointerCapture?.(e.pointerId);
+      } catch {}
+    }
   };
-  const handleP2RightDown = () => {
+  const handleP2RightDown = (e: React.PointerEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    p2RightPointerIdRef.current = e.pointerId;
     keysRef.current.p2Right = true;
     setIsP2RightActive(true);
+    try {
+      e.currentTarget.setPointerCapture?.(e.pointerId);
+    } catch {}
     if (typeof navigator !== 'undefined' && navigator.vibrate) navigator.vibrate(25);
   };
-  const handleP2RightUp = () => {
-    keysRef.current.p2Right = false;
-    setIsP2RightActive(false);
+  const handleP2RightUp = (e: React.PointerEvent<HTMLButtonElement>) => {
+    if (p2RightPointerIdRef.current === null || p2RightPointerIdRef.current === e.pointerId) {
+      keysRef.current.p2Right = false;
+      setIsP2RightActive(false);
+      p2RightPointerIdRef.current = null;
+      try {
+        e.currentTarget.releasePointerCapture?.(e.pointerId);
+      } catch {}
+    }
   };
 
   // Star Rating calculation (Solo)
@@ -1465,50 +1540,55 @@ export default function BagCatcherGame() {
             <article className="game-glass-card game-arena-card" aria-label="Arena Tangkap Benda">
               {/* TOP HUD */}
               <div className="arena-hud">
-                {/* Timer */}
-                <div className="hud-pill">
-                  <span className="hud-pill-label">Waktu:</span>
-                  <span className="hud-pill-val" style={{ color: timeLeft <= 10 ? '#f87171' : '#38bdf8' }}>
-                    ⏱️ {timeLeft}s
-                  </span>
-                </div>
-
-                {/* Lives */}
-                <div className="hud-pill">
-                  <span className="hud-pill-label">Ketahanan Tas:</span>
-                  <div className="hud-lives" aria-label={`Sisa Nyawa: ${lives}`}>
-                    {[1, 2, 3].map((heartIndex) => (
-                      <Heart
-                        key={heartIndex}
-                        className={`w-6 h-6 hud-heart ${heartIndex <= lives ? 'fill-rose-500' : 'empty'}`}
-                      />
-                    ))}
+                {/* Sisi Kiri: Timer */}
+                <div className="arena-hud-side left">
+                  <div className="hud-pill hud-pill-timer">
+                    <span className="hud-pill-label">Waktu:</span>
+                    <span className="hud-pill-val" style={{ color: timeLeft <= 10 ? '#f87171' : '#38bdf8' }}>
+                      ⏱️ {timeLeft}s
+                    </span>
                   </div>
                 </div>
 
-                {/* Score & Combo */}
-                <div className="hud-pill">
-                  <span className="hud-pill-label">Skor:</span>
-                  <span className="hud-pill-val hud-score-val">{score}</span>
-                  {combo > 1 && (
-                    <span className="hud-combo-badge">
-                      <Flame className="w-3.5 h-3.5 inline mr-0.5" />
-                      x{combo} Combo!
-                    </span>
-                  )}
+                {/* Tengah: Ketahanan Tas (Terkunci di Posisi Tengah / Locked Center) */}
+                <div className="arena-hud-center">
+                  <div className="hud-pill hud-pill-lives">
+                    <span className="hud-pill-label">Ketahanan Tas:</span>
+                    <div className="hud-lives" aria-label={`Sisa Nyawa: ${lives}`}>
+                      {[1, 2, 3].map((heartIndex) => (
+                        <Heart
+                          key={heartIndex}
+                          className={`w-6 h-6 hud-heart ${heartIndex <= lives ? 'fill-rose-500' : 'empty'}`}
+                        />
+                      ))}
+                    </div>
+                  </div>
                 </div>
 
-                {/* Pause Button */}
-                <button
-                  type="button"
-                  onClick={() => setIsPaused(!isPaused)}
-                  className="game-top-btn"
-                  style={{ width: '36px', height: '36px', minHeight: '36px', borderRadius: '10px' }}
-                  title={isPaused ? "Lanjutkan" : "Jeda"}
-                  aria-label={isPaused ? "Lanjutkan" : "Jeda"}
-                >
-                  {isPaused ? <Play className="w-4 h-4 text-emerald-400" /> : <Pause className="w-4 h-4 text-amber-400" />}
-                </button>
+                {/* Sisi Kanan: Skor & Pause Button */}
+                <div className="arena-hud-side right">
+                  <div className="hud-pill hud-pill-score">
+                    <span className="hud-pill-label">Skor:</span>
+                    <span className="hud-pill-val hud-score-val">{score}</span>
+                    {combo > 1 && (
+                      <span className="hud-combo-badge">
+                        <Flame className="w-3.5 h-3.5 inline mr-0.5" />
+                        x{combo} Combo!
+                      </span>
+                    )}
+                  </div>
+
+                  <button
+                    type="button"
+                    onClick={() => setIsPaused(!isPaused)}
+                    className="game-top-btn"
+                    style={{ width: '36px', height: '36px', minHeight: '36px', borderRadius: '10px' }}
+                    title={isPaused ? "Lanjutkan" : "Jeda"}
+                    aria-label={isPaused ? "Lanjutkan" : "Jeda"}
+                  >
+                    {isPaused ? <Play className="w-4 h-4 text-emerald-400" /> : <Pause className="w-4 h-4 text-amber-400" />}
+                  </button>
+                </div>
               </div>
 
               {/* The Falling Arena (Sky Chute) */}
@@ -1519,6 +1599,7 @@ export default function BagCatcherGame() {
                 onPointerMove={handlePointerMovePlayfield}
                 onPointerUp={handlePointerUpPlayfield}
                 onPointerCancel={handlePointerUpPlayfield}
+                onContextMenu={(e) => e.preventDefault()}
               >
                 <div className="playfield-grid-bg" />
                 <div className="catch-zone-line" />
@@ -1618,6 +1699,7 @@ export default function BagCatcherGame() {
                   onPointerUp={handleP1LeftUp}
                   onPointerLeave={handleP1LeftUp}
                   onPointerCancel={handleP1LeftUp}
+                  onContextMenu={(e) => e.preventDefault()}
                   aria-label="Gerakkan Tas ke Kiri"
                 >
                   <ArrowLeft className="w-6 h-6" />
@@ -1640,6 +1722,7 @@ export default function BagCatcherGame() {
                   onPointerUp={handleP1RightUp}
                   onPointerLeave={handleP1RightUp}
                   onPointerCancel={handleP1RightUp}
+                  onContextMenu={(e) => e.preventDefault()}
                   aria-label="Gerakkan Tas ke Kanan"
                 >
                   <ArrowRight className="w-6 h-6" />
@@ -1713,6 +1796,7 @@ export default function BagCatcherGame() {
                   onPointerMove={handlePointerMovePlayfield}
                   onPointerUp={handlePointerUpPlayfield}
                   onPointerCancel={handlePointerUpPlayfield}
+                  onContextMenu={(e) => e.preventDefault()}
                 >
                   <div className="playfield-grid-bg" />
                   <div className="catch-zone-line" />
@@ -1783,6 +1867,7 @@ export default function BagCatcherGame() {
                     onPointerUp={handleP1LeftUp}
                     onPointerLeave={handleP1LeftUp}
                     onPointerCancel={handleP1LeftUp}
+                    onContextMenu={(e) => e.preventDefault()}
                     aria-label="P1 Kiri (A)"
                   >
                     <ArrowLeft className="w-6 h-6" />
@@ -1797,6 +1882,7 @@ export default function BagCatcherGame() {
                     onPointerUp={handleP1RightUp}
                     onPointerLeave={handleP1RightUp}
                     onPointerCancel={handleP1RightUp}
+                    onContextMenu={(e) => e.preventDefault()}
                     aria-label="P1 Kanan (D)"
                   >
                     <ArrowRight className="w-6 h-6" />
@@ -1834,6 +1920,7 @@ export default function BagCatcherGame() {
                   onPointerMove={handlePointerMovePlayfield2}
                   onPointerUp={handlePointerUpPlayfield2}
                   onPointerCancel={handlePointerUpPlayfield2}
+                  onContextMenu={(e) => e.preventDefault()}
                 >
                   <div className="playfield-grid-bg" />
                   <div className="catch-zone-line" />
@@ -1904,6 +1991,7 @@ export default function BagCatcherGame() {
                     onPointerUp={handleP2LeftUp}
                     onPointerLeave={handleP2LeftUp}
                     onPointerCancel={handleP2LeftUp}
+                    onContextMenu={(e) => e.preventDefault()}
                     aria-label="P2 Kiri"
                   >
                     <ArrowLeft className="w-6 h-6" />
@@ -1918,6 +2006,7 @@ export default function BagCatcherGame() {
                     onPointerUp={handleP2RightUp}
                     onPointerLeave={handleP2RightUp}
                     onPointerCancel={handleP2RightUp}
+                    onContextMenu={(e) => e.preventDefault()}
                     aria-label="P2 Kanan"
                   >
                     <ArrowRight className="w-6 h-6" />

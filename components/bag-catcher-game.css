@@ -1,9 +1,11 @@
 /* Bag Catcher Game - Permainan Tangkap Benda Tas Siaga Bencana */
 
 .viewport-fit:has(.game-deck),
-.viewport-fit:has(.is-bermain) {
-  background: linear-gradient(180deg, rgba(8, 28, 44, 0.74) 0%, rgba(8, 28, 44, 0.88) 100%),
-              url('/mitigasi-sebelum-3.jpg') center center / cover no-repeat fixed !important;
+.viewport-fit:has(.is-bermain),
+body:has(.is-bermain),
+body:has(.game-deck) {
+  background: linear-gradient(180deg, rgba(8, 28, 44, 0.35) 0%, rgba(8, 28, 44, 0.62) 100%),
+              url('/bg%20main.png') center center / cover no-repeat !important;
 }
 
 .learning-deck.game-deck {
@@ -16,9 +18,13 @@
   gap: 12px;
   box-sizing: border-box;
   overflow: hidden;
-  background: linear-gradient(180deg, rgba(8, 28, 44, 0.72) 0%, rgba(8, 28, 44, 0.86) 100%),
-              url('/mitigasi-sebelum-3.jpg') center center / cover no-repeat !important;
-  border-radius: 20px;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  touch-action: none !important;
+  user-select: none !important;
+  -webkit-user-select: none !important;
+  -webkit-touch-callout: none !important;
 }
 
 .learning-deck.game-deck > .slide-top {
@@ -320,26 +326,57 @@
   border-radius: 14px;
   margin-bottom: 12px;
   flex-shrink: 0;
+  position: relative;
+  min-height: 60px;
+  box-sizing: border-box;
+}
+
+.arena-hud-side {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  z-index: 2;
+}
+
+.arena-hud-side.left {
+  justify-content: flex-start;
+  min-width: 140px;
+}
+
+.arena-hud-side.right {
+  justify-content: flex-end;
+  min-width: 140px;
+}
+
+.arena-hud-center {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1;
 }
 
 .hud-pill {
   display: flex;
   align-items: center;
   gap: 8px;
+  white-space: nowrap;
 }
 
-.hud-pill-label {
-  font-size: 11px;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  color: #94a3b8;
-  font-weight: 700;
+.hud-pill-timer {
+  min-width: 110px;
 }
 
-.hud-pill-val {
-  font-size: 18px;
-  font-weight: 800;
-  color: #fff;
+.hud-pill-lives {
+  min-width: 220px;
+  justify-content: center;
+}
+
+.hud-pill-score {
+  min-width: 90px;
 }
 
 .hud-lives {
@@ -399,9 +436,9 @@
 
 /* Warning alert border when in danger / low lives */
 .game-playfield.is-danger-shake {
-  animation: shake 0.35s cubic-bezier(.36,.07,.19,.97) both;
   border-color: #ef4444 !important;
-  box-shadow: inset 0 0 40px rgba(239, 68, 68, 0.4), 0 0 20px rgba(239, 68, 68, 0.5);
+  box-shadow: inset 0 0 45px rgba(239, 68, 68, 0.5), 0 0 24px rgba(239, 68, 68, 0.6);
+  animation: danger-pulse 0.35s ease-out;
 }
 
 /* Falling Item Style */
@@ -579,8 +616,10 @@
   justify-content: center;
   gap: 10px;
   cursor: pointer;
-  user-select: none;
-  touch-action: manipulation;
+  user-select: none !important;
+  -webkit-user-select: none !important;
+  -webkit-touch-callout: none !important;
+  touch-action: none !important;
   transition: all 0.12s ease;
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.3);
 }
@@ -984,11 +1023,10 @@
   100% { transform: translateX(-50%) scale(1); }
 }
 
-@keyframes shake {
-  10%, 90% { transform: translate3d(-2px, 0, 0); }
-  20%, 80% { transform: translate3d(4px, 0, 0); }
-  30%, 50%, 70% { transform: translate3d(-6px, 0, 0); }
-  40%, 60% { transform: translate3d(6px, 0, 0); }
+@keyframes danger-pulse {
+  0% { filter: brightness(1.25); }
+  50% { filter: brightness(0.92); }
+  100% { filter: brightness(1); }
 }
 
 @keyframes pulse-danger {
@@ -1375,6 +1413,9 @@
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 14px;
+  touch-action: none !important;
+  user-select: none !important;
+  -webkit-user-select: none !important;
 }
 
 .pvp-split-pane {
@@ -1391,6 +1432,9 @@
   overflow: hidden;
   height: 100%;
   box-sizing: border-box;
+  touch-action: none !important;
+  user-select: none !important;
+  -webkit-user-select: none !important;
 }
 
 .pvp-split-pane.p1 {
@@ -1404,8 +1448,14 @@
 }
 
 .pvp-split-pane.is-danger-shake {
-  animation: shake 0.35s ease-in-out;
   border-color: #ef4444 !important;
+  box-shadow: 0 0 24px rgba(239, 68, 68, 0.5), inset 0 0 30px rgba(239, 68, 68, 0.2);
+}
+
+.pvp-split-pane.is-danger-shake .pvp-playfield {
+  border-color: #ef4444 !important;
+  box-shadow: inset 0 0 40px rgba(239, 68, 68, 0.45);
+  animation: danger-pulse 0.35s ease-out;
 }
 
 .pvp-split-hud {
@@ -1417,6 +1467,19 @@
   border-radius: 12px;
   padding: 6px 14px;
   flex-shrink: 0;
+  position: relative;
+  min-height: 46px;
+  box-sizing: border-box;
+}
+
+.pvp-split-hud .hud-lives {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  align-items: center;
+  gap: 4px;
 }
 
 .pvp-split-hud.p1 {
@@ -1475,6 +1538,10 @@
   align-items: center;
   gap: 10px;
   flex-shrink: 0;
+  touch-action: none !important;
+  user-select: none !important;
+  -webkit-user-select: none !important;
+  -webkit-touch-callout: none !important;
 }
 
 .pvp-split-controls .control-btn.pvp-btn {
