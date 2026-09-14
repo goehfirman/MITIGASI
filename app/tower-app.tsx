@@ -52,10 +52,10 @@ export default function TowerApp(){
           <p style={{ marginBottom: '12px' }}>
             Lab Maya ini dirancang menggunakan pendekatan <strong>STEM</strong> <em>(Science, Technology, Engineering, and Math)</em> untuk melatih Anda merancang struktur bangunan tahan gempa.
           </p>
-          <ul style={{ margin: 0, paddingLeft: '20px', display: 'flex', flexDirection: 'column', gap: '8px', color: '#cbd5e1' }}>
-            <li><strong>Sains:</strong> Memahami dampak gaya dan getaran gempa terhadap struktur.</li>
-            <li><strong>Teknologi:</strong> Menggunakan simulator virtual interaktif untuk pengujian.</li>
-            <li><strong>Engineering:</strong> Merangkai struktur bangunan yang kokoh menggunakan material simulasi (marshmallow & tusuk gigi).</li>
+          <ul style={{ margin: 0, paddingLeft: '24px', color: '#cbd5e1', listStyleType: 'disc' }}>
+            <li style={{ marginBottom: '8px' }}><strong>Sains:</strong> Memahami dampak gaya dan getaran gempa terhadap struktur.</li>
+            <li style={{ marginBottom: '8px' }}><strong>Teknologi:</strong> Menggunakan simulator virtual interaktif untuk pengujian.</li>
+            <li style={{ marginBottom: '8px' }}><strong>Engineering:</strong> Merangkai struktur bangunan yang kokoh menggunakan material simulasi (marshmallow & tusuk gigi).</li>
             <li><strong>Matematika:</strong> Memperhitungkan keseimbangan dan geometri (misal pola segitiga) untuk mencapai tinggi maksimum yang stabil.</li>
           </ul>
         </div>
