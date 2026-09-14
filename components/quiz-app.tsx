@@ -160,7 +160,7 @@ export default function QuizApp() {
       </div>
 
       {/* Row 2: Standard Page Title */}
-      <h1>Uji Pemahaman Nusantara</h1>
+      <h1>Uji Pemahaman</h1>
 
       {/* ============================================================ */}
       {/* 1. LAYAR START (INPUT NAMA MURID) */}
