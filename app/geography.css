@@ -1383,8 +1383,8 @@
 }
 
 .miti-typewriter-cursor {
-  display: inline-block;
-  margin-left: 3px;
+  position: absolute;
+  margin-left: 1px;
   font-weight: 800;
   color: #f59e0b;
   animation: mitiCursorBlink 0.75s infinite;

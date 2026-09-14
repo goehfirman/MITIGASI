@@ -25,18 +25,44 @@ function MitigationIntroModal({
   onClose: () => void;
   onProceed: () => void;
 }) {
+  const [index, setIndex] = useState(0);
+  const [isFinished, setIsFinished] = useState(false);
+
+  useEffect(() => {
+    if (!isOpen) {
+      setIndex(0);
+      setIsFinished(false);
+      return;
+    }
+
+    setIndex(0);
+    setIsFinished(false);
+    let i = 0;
+
+    const timer = setInterval(() => {
+      i++;
+      setIndex(i);
+      if (i >= MITIGATION_INTRO_TEXT.length) {
+        clearInterval(timer);
+        setIsFinished(true);
+      }
+    }, 25);
+
+    return () => clearInterval(timer);
+  }, [isOpen]);
+
   useEffect(() => {
     if (!isOpen) return;
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
         onClose();
-      } else if (e.key === 'Enter') {
+      } else if (e.key === 'Enter' && isFinished) {
         onProceed();
       }
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [isOpen, onClose, onProceed]);
+  }, [isOpen, isFinished, onClose, onProceed]);
 
   if (!isOpen) return null;
 
@@ -65,24 +91,38 @@ function MitigationIntroModal({
           <span className="miti-intro-badge">PERINGATAN DINI & MITIGASI BENCANA</span>
         </div>
 
-        <div className="miti-intro-content">
-          <p className="miti-intro-text">
-            {MITIGATION_INTRO_TEXT}
+        <div
+          className="miti-intro-content"
+          onClick={() => {
+            if (!isFinished) {
+              setIndex(MITIGATION_INTRO_TEXT.length);
+              setIsFinished(true);
+            }
+          }}
+          title={!isFinished ? "Klik untuk mempercepat teks" : undefined}
+          style={{ cursor: !isFinished ? 'pointer' : 'default' }}
+        >
+          <p className="miti-intro-text" style={{ position: 'relative' }}>
+            <span>{MITIGATION_INTRO_TEXT.substring(0, index)}</span>
+            {!isFinished && <span className="miti-typewriter-cursor">|</span>}
+            <span style={{ opacity: 0 }}>{MITIGATION_INTRO_TEXT.substring(index)}</span>
           </p>
         </div>
 
-        <div className="miti-intro-action-wrap">
-          <button
-            type="button"
-            className="miti-intro-action-btn"
-            onClick={onProceed}
-            autoFocus
-          >
-            <ShieldAlert className="miti-btn-shield" />
-            <span>Mitigasi Gempa</span>
-            <ArrowRight className="miti-btn-arrow" />
-          </button>
-        </div>
+        {isFinished && (
+          <div className="miti-intro-action-wrap">
+            <button
+              type="button"
+              className="miti-intro-action-btn"
+              onClick={onProceed}
+              autoFocus
+            >
+              <ShieldAlert className="miti-btn-shield" />
+              <span>Mitigasi Gempa</span>
+              <ArrowRight className="miti-btn-arrow" />
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );
