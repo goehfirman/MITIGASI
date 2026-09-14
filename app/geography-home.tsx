@@ -225,7 +225,7 @@ export default function GeographyHome({section='home'}:{section?:'home'|'belajar
         </div>
         <div style={{ fontSize: '14px', lineHeight: 1.6, display: 'flex', flexDirection: 'column', gap: '16px' }}>
           <div>
-            <h3 style={{ fontSize: '15px', color: '#ffd166', margin: '0 0 12px 0', borderBottom: '1px solid rgba(255,209,102,0.2)', paddingBottom: '8px' }}>Rincian Ringkasan TP (Per Indikator)</h3>
+            <h3 style={{ fontSize: '15px', color: '#ffd166', margin: '0 0 12px 0', borderBottom: '1px solid rgba(255,209,102,0.2)', paddingBottom: '8px' }}>Tujuan Pembelajaran</h3>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
               <div style={{ display: 'flex', gap: '12px', alignItems: 'flex-start' }}>
                 <div style={{ background: 'rgba(56, 189, 248, 0.15)', padding: '8px', borderRadius: '8px', color: '#38bdf8', marginTop: '2px' }}>
