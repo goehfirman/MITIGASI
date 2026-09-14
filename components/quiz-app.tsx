@@ -21,6 +21,7 @@ import {
   Shuffle,
   Sparkles
 } from 'lucide-react';
+import QuizMap from './quiz-map';
 
 interface QuizHistoryItem {
   id: string;
@@ -39,7 +40,7 @@ export default function QuizApp() {
   // Active quiz session state
   const [questions, setQuestions] = useState<QuizQuestion[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [answers, setAnswers] = useState<(number | null)[]>([]);
+  const [answers, setAnswers] = useState<(number | string | null)[]>([]);
   const [score, setScore] = useState(0);
   const [correctCount, setCorrectCount] = useState(0);
   const [history, setHistory] = useState<QuizHistoryItem[]>([]);
@@ -81,10 +82,10 @@ export default function QuizApp() {
     setStage('quiz');
   };
 
-  const handleSelectAnswer = (optionIdx: number) => {
-    const updated = [...answers];
-    updated[currentIndex] = optionIdx;
-    setAnswers(updated);
+  const handleSelectAnswer = (answer: number | string) => {
+    const newAnswers = [...answers];
+    newAnswers[currentIndex] = answer;
+    setAnswers(newAnswers);
   };
 
   const handleNext = () => {
@@ -301,7 +302,19 @@ export default function QuizApp() {
 
               {/* Kolom Kanan: Pilihan Jawaban */}
               <div className="quiz-q-right">
-                {currentQ.type === 'multiple-choice' ? (
+                {currentQ.type === 'map-click' ? (
+                  <div style={{ width: '100%', height: '100%', minHeight: '300px' }}>
+                    <QuizMap 
+                      type={currentQ.mapType || 'island'} 
+                      onLocationSelected={(name) => handleSelectAnswer(name)} 
+                    />
+                    {answers[currentIndex] && (
+                      <div style={{ marginTop: '12px', textAlign: 'center', color: '#34d399', fontWeight: 'bold' }}>
+                        Pilihan kamu: {answers[currentIndex]}
+                      </div>
+                    )}
+                  </div>
+                ) : currentQ.type === 'multiple-choice' ? (
                   <div className="quiz-options-grid">
                     {currentQ.options.map((option, idx) => {
                       const isSelected = answers[currentIndex] === idx;
@@ -533,7 +546,9 @@ export default function QuizApp() {
                       <div className="ans-row">
                         <span className="ans-label">Jawaban Kamu:</span>
                         <strong className={`ans-val ${isCorrect ? 'text-emerald-300' : 'text-rose-300'}`}>
-                          {studentAnswer !== null ? q.options[studentAnswer] : 'Tidak dijawab'}
+                          {studentAnswer !== null 
+                            ? (q.type === 'map-click' ? studentAnswer : q.options[studentAnswer as number]) 
+                            : 'Tidak dijawab'}
                         </strong>
                       </div>
 
@@ -541,7 +556,7 @@ export default function QuizApp() {
                         <div className="ans-row">
                           <span className="ans-label">Kunci Jawaban yang Benar:</span>
                           <strong className="ans-val text-amber-300">
-                            {q.options[q.correctAnswer]}
+                            {q.type === 'map-click' ? q.correctAnswer : q.options[q.correctAnswer as number]}
                           </strong>
                         </div>
                       )}

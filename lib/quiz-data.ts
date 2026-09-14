@@ -1,13 +1,14 @@
 export interface QuizQuestion {
   id: number;
-  type: 'multiple-choice' | 'true-false';
+  type: 'multiple-choice' | 'true-false' | 'map-click';
   category: 'khatulistiwa' | 'cincin-api' | 'kepulauan' | 'mitigasi';
   categoryLabel: string;
   question: string;
   image?: string;
   options: string[];
-  correctAnswer: number; // Index of correct option (0-3 for PG, 0-1 for True/False)
+  correctAnswer: number | string; // Index of correct option or the name of the target map location
   explanation: string;
+  mapType?: 'volcano' | 'island'; // Specifies what points to show on the map for map-click questions
 }
 
 export const QUIZ_BANK: QuizQuestion[] = [
@@ -687,7 +688,227 @@ export const QUIZ_BANK: QuizQuestion[] = [
     options: ['Benar', 'Salah'],
     correctAnswer: 0,
     explanation: 'Benar. Latihan simulasi rutin membentuk memori gerak refleks sehingga saat bencana sesungguhnya terjadi, murid dan guru siap bertindak cepat tanpa panik.'
-  }
+  },
+{
+  "id": 101,
+  "type": "map-click",
+  "category": "kepulauan",
+  "categoryLabel": "Peta Kepulauan",
+  "question": "Klik lokasi Pulau Sumatra pada peta!",
+  "options": [],
+  "correctAnswer": "SUMATRA",
+  "explanation": "Pulau Sumatra terletak di bagian barat Indonesia dan merupakan pulau terbesar keenam di dunia.",
+  "mapType": "island"
+},
+{
+  "id": 102,
+  "type": "map-click",
+  "category": "kepulauan",
+  "categoryLabel": "Peta Kepulauan",
+  "question": "Klik lokasi Pulau Jawa pada peta!",
+  "options": [],
+  "correctAnswer": "JAWA",
+  "explanation": "Pulau Jawa merupakan pusat pemerintahan dan pulau dengan penduduk terbanyak di Indonesia.",
+  "mapType": "island"
+},
+{
+  "id": 103,
+  "type": "map-click",
+  "category": "kepulauan",
+  "categoryLabel": "Peta Kepulauan",
+  "question": "Klik lokasi Pulau Kalimantan pada peta!",
+  "options": [],
+  "correctAnswer": "KALIMANTAN",
+  "explanation": "Pulau Kalimantan terkenal dengan hutan hujan tropisnya yang lebat dan dilewati garis khatulistiwa.",
+  "mapType": "island"
+},
+{
+  "id": 104,
+  "type": "map-click",
+  "category": "kepulauan",
+  "categoryLabel": "Peta Kepulauan",
+  "question": "Klik lokasi Pulau Sulawesi pada peta!",
+  "options": [],
+  "correctAnswer": "SULAWESI",
+  "explanation": "Pulau Sulawesi memiliki bentuk khas seperti huruf K dan terkenal dengan keragaman hayati endemiknya.",
+  "mapType": "island"
+},
+{
+  "id": 105,
+  "type": "map-click",
+  "category": "kepulauan",
+  "categoryLabel": "Peta Kepulauan",
+  "question": "Klik lokasi Pulau Papua pada peta!",
+  "options": [],
+  "correctAnswer": "PAPUA",
+  "explanation": "Pulau Papua berada di wilayah timur Indonesia dan merupakan pulau terbesar di Indonesia.",
+  "mapType": "island"
+},
+{
+  "id": 106,
+  "type": "map-click",
+  "category": "kepulauan",
+  "categoryLabel": "Peta Kepulauan",
+  "question": "Klik lokasi Kepulauan Maluku pada peta!",
+  "options": [],
+  "correctAnswer": "MALUKU",
+  "explanation": "Kepulauan Maluku terkenal di dunia sejak dulu sebagai surga rempah-rempah Nusantara.",
+  "mapType": "island"
+},
+{
+  "id": 107,
+  "type": "map-click",
+  "category": "kepulauan",
+  "categoryLabel": "Peta Kepulauan",
+  "question": "Klik lokasi Kepulauan Nusa Tenggara pada peta!",
+  "options": [],
+  "correctAnswer": "NUSA TENGGARA",
+  "explanation": "Nusa Tenggara terkenal dengan gugusan pulau-pulaunya yang indah seperti Bali, Lombok, Sumbawa, hingga Flores.",
+  "mapType": "island"
+},
+{
+  "id": 108,
+  "type": "map-click",
+  "category": "cincin-api",
+  "categoryLabel": "Jalur Cincin Api",
+  "question": "Temukan dan klik lokasi Gunung Sinabung pada peta!",
+  "options": [],
+  "correctAnswer": "Sinabung",
+  "explanation": "Gunung Sinabung adalah stratovolcano aktif yang terletak di Kabupaten Karo, Sumatera Utara.",
+  "mapType": "volcano"
+},
+{
+  "id": 109,
+  "type": "map-click",
+  "category": "cincin-api",
+  "categoryLabel": "Jalur Cincin Api",
+  "question": "Temukan dan klik lokasi Gunung Kerinci pada peta!",
+  "options": [],
+  "correctAnswer": "Kerinci",
+  "explanation": "Gunung Kerinci merupakan gunung berapi tertinggi di Indonesia, berlokasi di perbatasan Jambi dan Sumatera Barat.",
+  "mapType": "volcano"
+},
+{
+  "id": 110,
+  "type": "map-click",
+  "category": "cincin-api",
+  "categoryLabel": "Jalur Cincin Api",
+  "question": "Temukan dan klik lokasi Gunung Anak Krakatau pada peta!",
+  "options": [],
+  "correctAnswer": "Anak Krakatau",
+  "explanation": "Anak Krakatau terletak di Selat Sunda, terus tumbuh setelah letusan dahsyat Krakatau tahun 1883.",
+  "mapType": "volcano"
+},
+{
+  "id": 111,
+  "type": "map-click",
+  "category": "cincin-api",
+  "categoryLabel": "Jalur Cincin Api",
+  "question": "Temukan dan klik lokasi Gunung Tangkuban Parahu pada peta!",
+  "options": [],
+  "correctAnswer": "Tangkuban Parahu",
+  "explanation": "Gunung Tangkuban Parahu berada di Jawa Barat, terkenal dengan bentuknya yang menyerupai perahu terbalik.",
+  "mapType": "volcano"
+},
+{
+  "id": 112,
+  "type": "map-click",
+  "category": "cincin-api",
+  "categoryLabel": "Jalur Cincin Api",
+  "question": "Temukan dan klik lokasi Gunung Merapi pada peta!",
+  "options": [],
+  "correctAnswer": "Merapi",
+  "explanation": "Gunung Merapi terletak di Jawa Tengah dan DIY, dan merupakan salah satu gunung paling aktif di Indonesia.",
+  "mapType": "volcano"
+},
+{
+  "id": 113,
+  "type": "map-click",
+  "category": "cincin-api",
+  "categoryLabel": "Jalur Cincin Api",
+  "question": "Temukan dan klik lokasi Gunung Semeru pada peta!",
+  "options": [],
+  "correctAnswer": "Semeru",
+  "explanation": "Gunung Semeru di Jawa Timur adalah gunung tertinggi di Pulau Jawa dengan puncaknya yang disebut Mahameru.",
+  "mapType": "volcano"
+},
+{
+  "id": 114,
+  "type": "map-click",
+  "category": "cincin-api",
+  "categoryLabel": "Jalur Cincin Api",
+  "question": "Temukan dan klik lokasi Gunung Ijen pada peta!",
+  "options": [],
+  "correctAnswer": "Ijen",
+  "explanation": "Gunung Ijen di ujung timur Jawa terkenal dengan kawah asam berwarna biru dan fenomena blue fire.",
+  "mapType": "volcano"
+},
+{
+  "id": 115,
+  "type": "map-click",
+  "category": "cincin-api",
+  "categoryLabel": "Jalur Cincin Api",
+  "question": "Temukan dan klik lokasi Gunung Agung pada peta!",
+  "options": [],
+  "correctAnswer": "Agung",
+  "explanation": "Gunung Agung adalah gunung berapi tertinggi di Pulau Bali dan memiliki makna spiritual penting bagi masyarakat sekitar.",
+  "mapType": "volcano"
+},
+{
+  "id": 116,
+  "type": "map-click",
+  "category": "cincin-api",
+  "categoryLabel": "Jalur Cincin Api",
+  "question": "Temukan dan klik lokasi Gunung Rinjani pada peta!",
+  "options": [],
+  "correctAnswer": "Rinjani",
+  "explanation": "Gunung Rinjani di Pulau Lombok memiliki Danau Segara Anak yang sangat indah di dalam kalderanya.",
+  "mapType": "volcano"
+},
+{
+  "id": 117,
+  "type": "map-click",
+  "category": "cincin-api",
+  "categoryLabel": "Jalur Cincin Api",
+  "question": "Temukan dan klik lokasi Gunung Tambora pada peta!",
+  "options": [],
+  "correctAnswer": "Tambora",
+  "explanation": "Gunung Tambora di Pulau Sumbawa mencetak sejarah dunia lewat letusan maha dahsyatnya pada tahun 1815.",
+  "mapType": "volcano"
+},
+{
+  "id": 118,
+  "type": "map-click",
+  "category": "cincin-api",
+  "categoryLabel": "Jalur Cincin Api",
+  "question": "Temukan dan klik lokasi Gunung Kelimutu pada peta!",
+  "options": [],
+  "correctAnswer": "Kelimutu",
+  "explanation": "Gunung Kelimutu di Pulau Flores terkenal karena danau tiga warnanya yang sangat eksotis.",
+  "mapType": "volcano"
+},
+{
+  "id": 119,
+  "type": "map-click",
+  "category": "cincin-api",
+  "categoryLabel": "Jalur Cincin Api",
+  "question": "Temukan dan klik lokasi Gunung Lokon pada peta!",
+  "options": [],
+  "correctAnswer": "Lokon",
+  "explanation": "Gunung Lokon terletak di dekat Tomohon, Sulawesi Utara, dan cukup sering menunjukkan aktivitas vulkanik.",
+  "mapType": "volcano"
+},
+{
+  "id": 120,
+  "type": "map-click",
+  "category": "cincin-api",
+  "categoryLabel": "Jalur Cincin Api",
+  "question": "Temukan dan klik lokasi Gunung Gamalama pada peta!",
+  "options": [],
+  "correctAnswer": "Gamalama",
+  "explanation": "Gunung Gamalama membentuk sebagian besar daratan Pulau Ternate di Maluku Utara dan sering mengalami letusan.",
+  "mapType": "volcano"
+},
 ];
 
 /**
