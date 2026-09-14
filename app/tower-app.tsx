@@ -24,7 +24,7 @@ export default function TowerApp(){
  const [design,setDesign]=useState<Design>(()=>({nodes:[],beams:[]})),[past,setPast]=useState<Design[]>([]),[future,setFuture]=useState<Design[]>([]),[tool,setTool]=useState('add'),[selected,setSelected]=useState<number|null>(null),[selectedTarget,setSelectedTarget]=useState<Target|null>(null),[level,setLevel]=useState(0),[view,setView]=useState('3/4'),[zoom,setZoom]=useState(1),[low,setLow]=useState(false),[wire,setWire]=useState(false),[mode,setMode]=useState('Bebas'),[strength,setStrength]=useState('Ringan'),[direction,setDirection]=useState('X-Y'),[run,setRun]=useState(0),[time,setTime]=useState(0),[result,setResult]=useState<Result|null>(null),[history,setHistory]=useState<Result[]>([]),[panel,setPanel]=useState(''),[message,setMessage]=useState('Mulai dari idemu sendiri. Ketuk petak untuk menambahkan marshmallow, lalu sambungkan titik-titiknya.'),[name,setName]=useState('Kelompok 1'),[session,setSession]=useState<Session|null>(null),[busy,setBusy]=useState(false),[reflection,setReflection]=useState(''),[className,setClassName]=useState('Kelas 6 — Eksperimen Gempa'),[code,setCode]=useState(''),[students,setStudents]=useState<any[]>([]),[classResults,setClassResults]=useState<Result[]>([]),[saved,setSaved]=useState(false);
   const [showLabIntro, setShowLabIntro] = useState(false);
   useEffect(() => {
-    if (!sessionStorage.getItem('lab_intro_seen')) {
+    if (!sessionStorage.getItem('lab_intro_seen_v2')) {
       setShowLabIntro(true);
     }
   }, []);
@@ -41,9 +41,9 @@ export default function TowerApp(){
  function csv(rows:Result[]){const esc=(v:any)=>'"'+String(v??'').replace(/^[=+@-]/,"'").replaceAll('"','""')+'"';const text='\uFEFF'+[['Nama','Tanggal','Tinggi (cm)','Gempa','Arah','Bertahan (detik)','Skor','Hasil','Refleksi'],...rows.map(r=>[r.name,r.date,r.height,r.strength,r.direction,r.duration,r.score,r.standing?'Berdiri':'Roboh',r.reflection||''])].map(row=>row.map(esc).join(',')).join('\r\n');const u=URL.createObjectURL(new Blob([text],{type:'text/csv;charset=utf-8'}));const a=document.createElement('a');a.href=u;a.download='hasil-toothpick-tower.csv';a.click();URL.revokeObjectURL(u);}
   return <main className="lab">
   {showLabIntro && (
-    <div className="dev-modal-overlay" onClick={() => setShowLabIntro(false)} role="dialog" aria-modal="true" style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(0,0,0,0.7)', zIndex: 9999, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+    <div className="dev-modal-overlay" onClick={() => { setShowLabIntro(false); sessionStorage.setItem('lab_intro_seen_v2', 'true'); }} role="dialog" aria-modal="true" style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(0,0,0,0.7)', zIndex: 9999, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
       <div className="dev-modal-card" style={{ padding: '24px', maxWidth: '500px', width: '90vw', backgroundColor: '#0f172a', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.1)', color: '#e2f1f5', textAlign: 'left', position: 'relative' }} onClick={e=>e.stopPropagation()}>
-        <button onClick={() => { setShowLabIntro(false); sessionStorage.setItem('lab_intro_seen', 'true'); }} style={{ position: 'absolute', top: '16px', right: '16px', background: 'transparent', border: 'none', color: '#94a3b8', cursor: 'pointer', fontSize: '18px', display: 'flex', alignItems: 'center', justifyContent: 'center', width: '32px', height: '32px', borderRadius: '50%' }} aria-label="Tutup">✕</button>
+        <button onClick={() => { setShowLabIntro(false); sessionStorage.setItem('lab_intro_seen_v2', 'true'); }} style={{ position: 'absolute', top: '16px', right: '16px', background: 'transparent', border: 'none', color: '#94a3b8', cursor: 'pointer', fontSize: '18px', display: 'flex', alignItems: 'center', justifyContent: 'center', width: '32px', height: '32px', borderRadius: '50%' }} aria-label="Tutup">✕</button>
         <div style={{ display: 'flex', alignItems: 'center', marginBottom: '20px' }}>
           <img src="/stem-logo.png" alt="STEM" style={{ height: '32px', marginRight: '12px' }} />
           <h2 style={{ fontSize: '18px', fontWeight: 600, margin: 0 }}>Lab Maya Anti Gempa</h2>
@@ -72,7 +72,7 @@ export default function TowerApp(){
           </div>
         </div>
         <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-          <Button onClick={() => { setShowLabIntro(false); sessionStorage.setItem('lab_intro_seen', 'true'); }} style={{ background: '#38bdf8', color: '#0f172a', fontWeight: 'bold' }}>
+          <Button onClick={() => { setShowLabIntro(false); sessionStorage.setItem('lab_intro_seen_v2', 'true'); }} style={{ background: '#38bdf8', color: '#0f172a', fontWeight: 'bold' }}>
             Mulai Bereksperimen <ArrowRight className="ml-2 w-4 h-4" />
           </Button>
         </div>
