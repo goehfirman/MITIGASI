@@ -109,20 +109,17 @@ function MitigationIntroModal({
           </p>
         </div>
 
-        {isFinished && (
-          <div className="miti-intro-action-wrap">
-            <button
-              type="button"
-              className="miti-intro-action-btn"
-              onClick={onProceed}
-              autoFocus
-            >
-              <ShieldAlert className="miti-btn-shield" />
-              <span>Mitigasi Gempa</span>
-              <ArrowRight className="miti-btn-arrow" />
-            </button>
-          </div>
-        )}
+        <div className="miti-intro-action-wrap" style={{ opacity: isFinished ? 1 : 0, pointerEvents: isFinished ? 'auto' : 'none', transition: 'opacity 0.3s ease-in' }}>
+          <button
+            type="button"
+            className="miti-intro-action-btn"
+            onClick={onProceed}
+          >
+            <ShieldAlert className="miti-btn-shield" />
+            <span>Mitigasi Gempa</span>
+            <ArrowRight className="miti-btn-arrow" />
+          </button>
+        </div>
       </div>
     </div>
   );
