@@ -1473,11 +1473,17 @@
 /* ==========================================================================
    Tombol Tentang Pengembang (Pojok Kanan Bawah Halaman Depan) & Modal Popup
    ========================================================================== */
-.home-developer-btn {
+.home-bottom-actions {
   position: fixed;
   bottom: 24px;
   right: 28px;
   z-index: 60;
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.home-floating-btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -1498,7 +1504,7 @@
   overflow: hidden;
 }
 
-.home-developer-btn svg {
+.home-floating-btn svg {
   width: 18px;
   height: 18px;
   color: #ffd166;
@@ -1506,7 +1512,7 @@
   transition: transform 0.25s ease;
 }
 
-.home-developer-btn span {
+.home-floating-btn span {
   display: inline-block;
   max-width: 0;
   opacity: 0;
@@ -1517,8 +1523,8 @@
   transition: max-width 0.35s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.25s ease, margin-left 0.3s ease;
 }
 
-.home-developer-btn:hover,
-.home-developer-btn:focus-visible {
+.home-floating-btn:hover,
+.home-floating-btn:focus-visible {
   padding: 0 18px 0 15px;
   background: rgba(18, 54, 78, 0.95);
   border-color: #ffd166;
@@ -1527,34 +1533,34 @@
   box-shadow: 0 12px 28px rgba(0, 0, 0, 0.45), 0 0 18px rgba(255, 209, 102, 0.35);
 }
 
-.home-developer-btn:hover svg,
-.home-developer-btn:focus-visible svg {
+.home-floating-btn:hover svg,
+.home-floating-btn:focus-visible svg {
   transform: scale(1.1);
 }
 
-.home-developer-btn:hover span,
-.home-developer-btn:focus-visible span {
+.home-floating-btn:hover span,
+.home-floating-btn:focus-visible span {
   max-width: 180px;
   opacity: 1;
   margin-left: 8px;
 }
 
-.home-developer-btn:active {
+.home-floating-btn:active {
   transform: translateY(1px);
 }
 
 @media (max-width: 760px) {
-  .home-developer-btn {
+  .home-floating-btn {
     bottom: 16px;
     right: 16px;
     height: 38px;
     padding: 0 10px;
   }
-  .home-developer-btn:hover,
-  .home-developer-btn:focus-visible {
+  .home-floating-btn:hover,
+  .home-floating-btn:focus-visible {
     padding: 0 14px 0 10px;
   }
-  .home-developer-btn span {
+  .home-floating-btn span {
     font-size: 12px;
   }
 }

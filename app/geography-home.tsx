@@ -1,7 +1,7 @@
 "use client";
 import {useState,useMemo,useEffect,useRef,useLayoutEffect} from 'react';
 import {geoMercator,geoPath,geoGraticule} from 'd3-geo';
-import {Globe2,BookOpen,ShieldCheck,ArrowRight,Triangle,Pause,Play,Sun,Mountain,Leaf,Waves,House,Backpack,MoveRight,Expand,Maximize,ZoomIn,ZoomOut,CheckCircle2,AlertTriangle,ChevronRight,ChevronLeft,ShieldAlert,Users,Radio,Building,Activity,PhoneCall,AlertOctagon,User,HelpCircle} from 'lucide-react';
+import {Globe2,BookOpen,ShieldCheck,ArrowRight,Triangle,Pause,Play,Sun,Mountain,Leaf,Waves,House,Backpack,MoveRight,Expand,Maximize,ZoomIn,ZoomOut,CheckCircle2,AlertTriangle,ChevronRight,ChevronLeft,ShieldAlert,Users,Radio,Building,Activity,PhoneCall,AlertOctagon,User,HelpCircle,Info} from 'lucide-react';
 import {Button} from '@/components/ui/button';
 
 import region from '@/lib/indonesia-region.json';
@@ -95,6 +95,7 @@ export default function GeographyHome({section='home'}:{section?:'home'|'belajar
  const [showPrompt, setShowPrompt] = useState(false);
  const [showMitigationIntro, setShowMitigationIntro] = useState(false);
  const [showDeveloperModal, setShowDeveloperModal] = useState(false);
+ const [showInfoModal, setShowInfoModal] = useState(false);
 
  useEffect(()=>{
   const sync=()=>setFullscreen(!!document.fullscreenElement);sync();document.addEventListener('fullscreenchange',sync);
@@ -144,17 +145,61 @@ export default function GeographyHome({section='home'}:{section?:'home'|'belajar
    onClose={() => setShowMitigationIntro(false)}
    onProceed={handleProceedToMitigation}
  />
- {section === 'home' && (
-   <button
-     type="button"
-     className="home-developer-btn"
-     onClick={() => setShowDeveloperModal(true)}
-     aria-label="Tentang Pengembang"
-   >
-     <User className="w-4 h-4" />
-     <span>Tentang Pengembang</span>
-   </button>
- )}
+  {section === 'home' && (
+    <div className="home-bottom-actions">
+      <button
+        type="button"
+        className="home-floating-btn"
+        onClick={() => setShowInfoModal(true)}
+        aria-label="Info Pembelajaran"
+      >
+        <Info className="w-4 h-4" />
+        <span>Info Pembelajaran</span>
+      </button>
+      <button
+        type="button"
+        className="home-floating-btn"
+        onClick={() => setShowDeveloperModal(true)}
+        aria-label="Tentang Pengembang"
+      >
+        <User className="w-4 h-4" />
+        <span>Tentang Pengembang</span>
+      </button>
+    </div>
+  )}
+  {showInfoModal && (
+    <div
+      className="dev-modal-overlay"
+      onClick={() => setShowInfoModal(false)}
+      role="dialog"
+      aria-modal="true"
+      aria-label="Info Pembelajaran"
+    >
+      <div className="dev-modal-card" style={{ padding: '24px', maxWidth: '500px', backgroundColor: '#0f172a', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.1)', color: '#e2f1f5', textAlign: 'left', cursor: 'default' }} onClick={(e) => e.stopPropagation()}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
+          <h2 style={{ fontSize: '18px', fontWeight: 600, margin: 0, display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <Info className="w-5 h-5" style={{ color: '#ffd166' }} />
+            Info Pembelajaran
+          </h2>
+          <button onClick={() => setShowInfoModal(false)} style={{ background: 'transparent', border: 'none', color: '#94a3b8', cursor: 'pointer', fontSize: '18px' }}>✕</button>
+        </div>
+        <div style={{ fontSize: '14px', lineHeight: 1.6, display: 'flex', flexDirection: 'column', gap: '12px' }}>
+          <p style={{ margin: 0 }}>
+            <strong>Tujuan Pembelajaran:</strong><br />
+            Analisis Pengaruh Kondisi Geografis (Iklim dan Bentang Alam) terhadap Kehidupan.
+          </p>
+          <p style={{ margin: 0 }}>
+            <strong>Materi mencakup sub-bahasan:</strong>
+          </p>
+          <ol style={{ margin: 0, paddingLeft: '20px', display: 'flex', flexDirection: 'column', gap: '6px' }}>
+            <li>Dampak kondisi geografis Indonesia terhadap sektor ekonomi, sosial, dan budaya.</li>
+            <li>Pengaruh letak Indonesia di jalur <em>Ring of Fire</em> terhadap potensi dan mitigasi bencana gempa bumi.</li>
+            <li>Melalui pembelajaran STEM murid dapat merangkai struktur anti gempa.</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  )}
  {showDeveloperModal && (
    <div
      className="dev-modal-overlay"
