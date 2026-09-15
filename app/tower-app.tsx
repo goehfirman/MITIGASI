@@ -2,6 +2,7 @@
 import {useEffect,useState} from 'react';
 import Link from 'next/link';
 import Scene, { type Target } from './tower-scene';
+import './geography.css';
 import {Button} from '@/components/ui/button';
 import {Dialog,DialogContent,DialogTitle,DialogDescription} from '@/components/ui/dialog';
 import {Tabs,TabsList,TabsTrigger} from '@/components/ui/tabs';
@@ -58,40 +59,63 @@ export default function TowerApp(){
  }
   return <main className="lab">
   {showLabIntro && (
-    <div className="dev-modal-overlay" onClick={() => { setShowLabIntro(false); sessionStorage.setItem('lab_intro_seen_v2', 'true'); }} role="dialog" aria-modal="true" style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(0,0,0,0.7)', zIndex: 9999, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-      <div className="dev-modal-card" style={{ padding: '24px', maxWidth: '500px', width: '90vw', backgroundColor: '#0f172a', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.1)', color: '#e2f1f5', textAlign: 'left', position: 'relative' }} onClick={e=>e.stopPropagation()}>
-        <button onClick={() => { setShowLabIntro(false); sessionStorage.setItem('lab_intro_seen_v2', 'true'); }} style={{ position: 'absolute', top: '16px', right: '16px', background: 'transparent', border: 'none', color: '#94a3b8', cursor: 'pointer', fontSize: '18px', display: 'flex', alignItems: 'center', justifyContent: 'center', width: '32px', height: '32px', borderRadius: '50%' }} aria-label="Tutup">✕</button>
-        <div style={{ display: 'flex', alignItems: 'center', marginBottom: '20px' }}>
-          <img src="/stem-logo.png" alt="STEM" style={{ height: '32px', marginRight: '12px' }} />
-          <h2 style={{ fontSize: '18px', fontWeight: 600, margin: 0 }}>Lab Maya Anti Gempa</h2>
+    <div className="dev-modal-overlay" onClick={() => { setShowLabIntro(false); sessionStorage.setItem('lab_intro_seen_v2', 'true'); }} role="dialog" aria-modal="true" style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(4, 18, 28, 0.75)', backdropFilter: 'blur(8px)', zIndex: 9999, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+      <div className="dev-modal-card stem-pixar-dialog" onClick={e=>e.stopPropagation()}>
+        {/* 3D Decorative Corner Rivets */}
+        <span className="board-rivet rivet-tl" aria-hidden="true" />
+        <span className="board-rivet rivet-tr" aria-hidden="true" />
+        <span className="board-rivet rivet-bl" aria-hidden="true" />
+        <span className="board-rivet rivet-br" aria-hidden="true" />
+
+        {/* Decorative Sprouting Leaves on Bottom Corners */}
+        <div className="board-decor-leaf leaf-left" aria-hidden="true">
+          <svg viewBox="0 0 60 40" className="leaf-svg">
+            <path d="M 0 35 C 10 15 35 10 45 25 C 25 35 15 35 0 35 Z" fill="#4ade80" />
+            <path d="M 12 38 C 22 20 48 18 58 32 C 38 42 25 40 12 38 Z" fill="#22c55e" />
+            <path d="M 2 34 C 18 26 32 24 44 26" stroke="#15803d" strokeWidth="1.5" fill="none" />
+          </svg>
         </div>
-        <div style={{ fontSize: '14px', lineHeight: 1.6, marginBottom: '24px' }}>
-          <p style={{ marginBottom: '12px' }}>
-            Lab Maya ini dirancang menggunakan pendekatan <strong>STEM</strong> <em>(Science, Technology, Engineering, and Math)</em> untuk melatih Anda merancang struktur bangunan tahan gempa.
+        <div className="board-decor-leaf leaf-right" aria-hidden="true">
+          <svg viewBox="0 0 60 40" className="leaf-svg">
+            <path d="M 0 35 C 10 15 35 10 45 25 C 25 35 15 35 0 35 Z" fill="#4ade80" />
+            <path d="M 12 38 C 22 20 48 18 58 32 C 38 42 25 40 12 38 Z" fill="#22c55e" />
+            <path d="M 2 34 C 18 26 32 24 44 26" stroke="#15803d" strokeWidth="1.5" fill="none" />
+          </svg>
+        </div>
+
+        <div className="stem-pixar-header">
+          <div className="stem-pixar-logo-badge">
+            <img src="/stem-logo.png" alt="STEM" style={{ height: '28px', display: 'block' }} />
+          </div>
+          <h2 className="stem-pixar-title">Lab Maya Anti Gempa</h2>
+        </div>
+        <div>
+          <p className="stem-pixar-lead">
+            Lab Maya ini dirancang menggunakan pendekatan <strong style={{ color: '#38bdf8' }}>STEM</strong> <em>(Science, Technology, Engineering, and Math)</em> untuk melatih kamu merancang struktur bangunan tangguh anti gempa.
           </p>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', color: '#cbd5e1' }}>
-            <div style={{ display: 'flex', gap: '8px', alignItems: 'flex-start' }}>
-              <span style={{ color: '#38bdf8', fontSize: '18px', lineHeight: '20px' }}>•</span>
-              <div><strong>Sains:</strong> Memahami dampak gaya dan getaran gempa terhadap struktur.</div>
+          <div className="stem-pixar-pillars">
+            <div className="stem-pillar-card">
+              <span className="stem-pillar-badge stem-badge-science">Sains</span>
+              <div className="stem-pillar-text">Memahami dampak gaya dan getaran gempa terhadap struktur bangunan.</div>
             </div>
-            <div style={{ display: 'flex', gap: '8px', alignItems: 'flex-start' }}>
-              <span style={{ color: '#38bdf8', fontSize: '18px', lineHeight: '20px' }}>•</span>
-              <div><strong>Teknologi:</strong> Menggunakan simulator virtual interaktif untuk pengujian.</div>
+            <div className="stem-pillar-card">
+              <span className="stem-pillar-badge stem-badge-tech">Teknologi</span>
+              <div className="stem-pillar-text">Menggunakan simulator virtual interaktif untuk pengujian beban & gempa.</div>
             </div>
-            <div style={{ display: 'flex', gap: '8px', alignItems: 'flex-start' }}>
-              <span style={{ color: '#38bdf8', fontSize: '18px', lineHeight: '20px' }}>•</span>
-              <div><strong>Engineering:</strong> Merangkai struktur bangunan yang kokoh menggunakan material simulasi (marshmallow & tusuk gigi).</div>
+            <div className="stem-pillar-card">
+              <span className="stem-pillar-badge stem-badge-eng">Engineering</span>
+              <div className="stem-pillar-text">Merangkai struktur bangunan yang kokoh menggunakan material simulasi (marshmallow & tusuk gigi).</div>
             </div>
-            <div style={{ display: 'flex', gap: '8px', alignItems: 'flex-start' }}>
-              <span style={{ color: '#38bdf8', fontSize: '18px', lineHeight: '20px' }}>•</span>
-              <div><strong>Matematika:</strong> Memperhitungkan keseimbangan dan geometri (misal pola segitiga) untuk mencapai tinggi maksimum yang stabil.</div>
+            <div className="stem-pillar-card">
+              <span className="stem-pillar-badge stem-badge-math">Matematika</span>
+              <div className="stem-pillar-text">Memperhitungkan keseimbangan dan geometri (misal pola segitiga) untuk mencapai tinggi maksimum yang stabil.</div>
             </div>
           </div>
         </div>
         <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-          <Button onClick={() => { setShowLabIntro(false); sessionStorage.setItem('lab_intro_seen_v2', 'true'); }} style={{ background: '#38bdf8', color: '#0f172a', fontWeight: 'bold' }}>
-            Mulai Bereksperimen <ArrowRight className="ml-2 w-4 h-4" />
-          </Button>
+          <button onClick={() => { setShowLabIntro(false); sessionStorage.setItem('lab_intro_seen_v2', 'true'); }} className="stem-pixar-action-btn">
+            <span>Mulai Bereksperimen</span> <ArrowRight className="w-5 h-5" />
+          </button>
         </div>
       </div>
     </div>
@@ -106,6 +130,15 @@ export default function TowerApp(){
       <h2>Lab Maya Struktur Anti Gempa</h2>
     </div>
     <div className="lab-top-right">
+      <Button 
+        variant="ghost" 
+        className="lab-icon-btn" 
+        onClick={() => setShowLabIntro(true)} 
+        aria-label="Panduan STEM"
+        title="Panduan STEM Lab Maya"
+      >
+        <BookOpen size={20}/>
+      </Button>
       <Button 
         variant="ghost" 
         className="lab-icon-btn" 

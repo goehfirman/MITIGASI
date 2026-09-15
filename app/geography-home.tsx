@@ -75,15 +75,29 @@ function MitigationIntroModal({
       aria-modal="true"
       aria-label="Pengantar Mitigasi Gempa"
     >
-      <div className="miti-intro-dialog" onClick={(e) => e.stopPropagation()}>
-        <button
-          type="button"
-          className="miti-intro-close"
-          onClick={onClose}
-          aria-label="Tutup"
-        >
-          ✕
-        </button>
+      <div className="miti-intro-dialog miti-pixar-dialog" onClick={(e) => e.stopPropagation()}>
+        {/* 3D Decorative Corner Rivets */}
+        <span className="board-rivet rivet-tl" aria-hidden="true" />
+        <span className="board-rivet rivet-tr" aria-hidden="true" />
+        <span className="board-rivet rivet-bl" aria-hidden="true" />
+        <span className="board-rivet rivet-br" aria-hidden="true" />
+
+        {/* Decorative Sprouting Leaves on Bottom Corners */}
+        <div className="board-decor-leaf leaf-left" aria-hidden="true">
+          <svg viewBox="0 0 60 40" className="leaf-svg">
+            <path d="M 0 35 C 10 15 35 10 45 25 C 25 35 15 35 0 35 Z" fill="#4ade80" />
+            <path d="M 12 38 C 22 20 48 18 58 32 C 38 42 25 40 12 38 Z" fill="#22c55e" />
+            <path d="M 2 34 C 18 26 32 24 44 26" stroke="#15803d" strokeWidth="1.5" fill="none" />
+          </svg>
+        </div>
+        <div className="board-decor-leaf leaf-right" aria-hidden="true">
+          <svg viewBox="0 0 60 40" className="leaf-svg">
+            <path d="M 0 35 C 10 15 35 10 45 25 C 25 35 15 35 0 35 Z" fill="#4ade80" />
+            <path d="M 12 38 C 22 20 48 18 58 32 C 38 42 25 40 12 38 Z" fill="#22c55e" />
+            <path d="M 2 34 C 18 26 32 24 44 26" stroke="#15803d" strokeWidth="1.5" fill="none" />
+          </svg>
+        </div>
+
 
         <div className="miti-intro-icon-wrap">
           <div className="miti-intro-icon-ring">
@@ -152,13 +166,16 @@ export default function GeographyHome({section='home'}:{section?:'home'|'belajar
  }, [section]);
 
  useEffect(() => {
-  if (!showDeveloperModal) return;
+  if (!showDeveloperModal && !showInfoModal) return;
   const handleKey = (e: KeyboardEvent) => {
-   if (e.key === 'Escape') setShowDeveloperModal(false);
+   if (e.key === 'Escape') {
+     setShowDeveloperModal(false);
+     setShowInfoModal(false);
+   }
   };
   window.addEventListener('keydown', handleKey);
   return () => window.removeEventListener('keydown', handleKey);
- }, [showDeveloperModal]);
+ }, [showDeveloperModal, showInfoModal]);
 
  async function toggleFullscreen(){try{setFullscreenError('');if(document.fullscreenElement)await document.exitFullscreen();else await document.documentElement.requestFullscreen();}catch{setFullscreenError('Layar penuh belum tersedia. Gunakan tombol layar penuh pada browser papan.');}}
  
@@ -213,96 +230,147 @@ export default function GeographyHome({section='home'}:{section?:'home'|'belajar
       aria-modal="true"
       aria-label="Info Pembelajaran"
     >
-      <div className="dev-modal-card" style={{ position: 'relative', padding: '24px', maxWidth: '500px', width: '90vw', backgroundColor: '#0f172a', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.1)', color: '#e2f1f5', textAlign: 'left', cursor: 'default' }} onClick={(e) => e.stopPropagation()}>
-        <button onClick={() => setShowInfoModal(false)} className="miti-intro-close" aria-label="Tutup">✕</button>
-        <div style={{ display: 'flex', alignItems: 'center', marginBottom: '20px' }}>
-          <h2 style={{ fontSize: '18px', fontWeight: 600, margin: 0, display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <Info className="w-5 h-5" style={{ color: '#ffd166' }} />
-            Info Pembelajaran
-          </h2>
+      <div className="dev-modal-card info-pixar-dialog" onClick={(e) => e.stopPropagation()}>
+        {/* 3D Decorative Corner Rivets */}
+        <span className="board-rivet rivet-tl" aria-hidden="true" />
+        <span className="board-rivet rivet-tr" aria-hidden="true" />
+        <span className="board-rivet rivet-bl" aria-hidden="true" />
+        <span className="board-rivet rivet-br" aria-hidden="true" />
+
+        {/* Decorative Sprouting Leaves on Bottom Corners */}
+        <div className="board-decor-leaf leaf-left" aria-hidden="true">
+          <svg viewBox="0 0 60 40" className="leaf-svg">
+            <path d="M 0 35 C 10 15 35 10 45 25 C 25 35 15 35 0 35 Z" fill="#4ade80" />
+            <path d="M 12 38 C 22 20 48 18 58 32 C 38 42 25 40 12 38 Z" fill="#22c55e" />
+            <path d="M 2 34 C 18 26 32 24 44 26" stroke="#15803d" strokeWidth="1.5" fill="none" />
+          </svg>
         </div>
-        <div style={{ fontSize: '14px', lineHeight: 1.6, display: 'flex', flexDirection: 'column', gap: '16px' }}>
-          <div>
-            <h3 style={{ fontSize: '15px', color: '#ffd166', margin: '0 0 12px 0', borderBottom: '1px solid rgba(255,209,102,0.2)', paddingBottom: '8px' }}>Tujuan Pembelajaran</h3>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-              <div style={{ display: 'flex', gap: '12px', alignItems: 'flex-start' }}>
-                <div style={{ background: 'rgba(56, 189, 248, 0.15)', padding: '8px', borderRadius: '8px', color: '#38bdf8', marginTop: '2px' }}>
-                  <Globe2 className="w-5 h-5" />
-                </div>
-                <div>
-                  <strong style={{ display: 'block', color: '#e2f1f5', marginBottom: '4px', fontSize: '15px' }}>Analisis Geografis & Sosial-Budaya</strong>
-                  <span style={{ color: '#cbd5e1' }}>Murid mampu menganalisis pengaruh iklim dan bentang alam Indonesia terhadap mata pencaharian (ekonomi), interaksi sosial, dan tradisi budaya lokal.</span>
-                </div>
-              </div>
+        <div className="board-decor-leaf leaf-right" aria-hidden="true">
+          <svg viewBox="0 0 60 40" className="leaf-svg">
+            <path d="M 0 35 C 10 15 35 10 45 25 C 25 35 15 35 0 35 Z" fill="#4ade80" />
+            <path d="M 12 38 C 22 20 48 18 58 32 C 38 42 25 40 12 38 Z" fill="#22c55e" />
+            <path d="M 2 34 C 18 26 32 24 44 26" stroke="#15803d" strokeWidth="1.5" fill="none" />
+          </svg>
+        </div>
 
-              <div style={{ display: 'flex', gap: '12px', alignItems: 'flex-start' }}>
-                <div style={{ background: 'rgba(239, 68, 68, 0.15)', padding: '8px', borderRadius: '8px', color: '#ef4444', marginTop: '2px' }}>
-                  <ShieldAlert className="w-5 h-5" />
-                </div>
-                <div>
-                  <strong style={{ display: 'block', color: '#e2f1f5', marginBottom: '4px', fontSize: '15px' }}>Mitigasi Bencana & Ring of Fire</strong>
-                  <span style={{ color: '#cbd5e1' }}>Murid mampu menjelaskan konsekuensi letak Indonesia di jalur Ring of Fire dan merumuskan langkah mitigasi bencana gempa bumi secara mandiri.</span>
-                </div>
-              </div>
+        <div className="info-pixar-header">
+          <div className="info-pixar-badge">
+            <Info className="w-5 h-5" />
+          </div>
+          <h2 className="info-pixar-title">Info Pembelajaran</h2>
+        </div>
 
-              <div style={{ display: 'flex', gap: '12px', alignItems: 'flex-start' }}>
-                <div style={{ background: 'rgba(16, 185, 129, 0.15)', padding: '8px', borderRadius: '8px', color: '#10b981', marginTop: '2px' }}>
-                  <Building className="w-5 h-5" />
-                </div>
-                <div>
-                  <strong style={{ display: 'block', color: '#e2f1f5', marginBottom: '4px', fontSize: '15px' }}>Keterampilan STEM (Praktik/Projek)</strong>
-                  <span style={{ color: '#cbd5e1' }}>Murid mampu merancang dan merangkai prototipe struktur bangunan tahan gempa dengan menerapkan prinsip-prinsip STEM (Science, Technology, Engineering, & Math).</span>
-                </div>
-              </div>
+        <h3 className="info-pixar-section-title">🎯 Tujuan Pembelajaran</h3>
+        <div className="info-pixar-list">
+          <div className="info-pixar-card">
+            <span className="stem-pillar-badge info-badge-geo">
+              <Globe2 className="w-4 h-4 mr-1.5 inline" /> Geografi
+            </span>
+            <div className="info-pixar-card-body">
+              <div className="info-pixar-card-title">Analisis Geografis & Sosial-Budaya</div>
+              <div className="info-pixar-card-desc">Murid mampu menganalisis pengaruh iklim dan bentang alam Indonesia terhadap mata pencaharian (ekonomi), interaksi sosial, dan tradisi budaya lokal.</div>
             </div>
           </div>
+
+          <div className="info-pixar-card">
+            <span className="stem-pillar-badge info-badge-miti">
+              <ShieldAlert className="w-4 h-4 mr-1.5 inline" /> Mitigasi
+            </span>
+            <div className="info-pixar-card-body">
+              <div className="info-pixar-card-title">Mitigasi Bencana & Ring of Fire</div>
+              <div className="info-pixar-card-desc">Murid mampu menjelaskan konsekuensi letak Indonesia di jalur Ring of Fire dan merumuskan langkah mitigasi bencana gempa bumi secara mandiri.</div>
+            </div>
+          </div>
+
+          <div className="info-pixar-card">
+            <span className="stem-pillar-badge info-badge-stem">
+              <Building className="w-4 h-4 mr-1.5 inline" /> STEM
+            </span>
+            <div className="info-pixar-card-body">
+              <div className="info-pixar-card-title">Keterampilan STEM (Praktik/Projek)</div>
+              <div className="info-pixar-card-desc">Murid mampu merancang dan merangkai prototipe struktur bangunan tahan gempa dengan menerapkan prinsip-prinsip STEM (Science, Technology, Engineering, & Math).</div>
+            </div>
+          </div>
+        </div>
+
+        <div style={{ display: 'flex', justifyContent: 'flex-end', width: '100%', marginTop: '6px' }}>
+          <button type="button" className="stem-pixar-action-btn" onClick={() => setShowInfoModal(false)}>
+            <span>Mengerti & Siap Belajar! 🚀</span>
+          </button>
         </div>
       </div>
     </div>
   )}
- {showDeveloperModal && (
-   <div
-     className="dev-modal-overlay"
-     onClick={() => setShowDeveloperModal(false)}
-     role="dialog"
-     aria-modal="true"
-     aria-label="Tentang Pengembang"
-   >
-     <div className="dev-modal-card">
-       <img
-         src="/tentang-pengembang.png"
-         alt="Tentang Pengembang - Teguh Firmansyah Apriliana, M.Pd"
-         className="dev-modal-img"
-       />
-       <div className="dev-modal-hint">Klik di mana saja untuk keluar</div>
-     </div>
-   </div>
- )}
+  {showDeveloperModal && (
+    <div
+      className="dev-modal-overlay"
+      onClick={() => setShowDeveloperModal(false)}
+      role="dialog"
+      aria-modal="true"
+      aria-label="Tentang Pengembang"
+    >
+      <div className="dev-modal-card" onClick={(e) => e.stopPropagation()} style={{ position: 'relative' }}>
+        <button onClick={() => setShowDeveloperModal(false)} className="stem-pixar-close" aria-label="Tutup" style={{ top: '-14px', right: '-14px', zIndex: 30 }}>✕</button>
+        <img
+          src="/tentang-pengembang.png?v=20260915"
+          alt="Tentang Pengembang - Teguh Firmansyah Apriliana, M.Pd"
+          className="dev-modal-img"
+        />
+        <div className="dev-modal-hint">Klik di mana saja atau tombol ✕ untuk keluar</div>
+      </div>
+    </div>
+  )}
  {showPrompt && section === 'home' && (
    <div className="prompt-overlay">
-     <div className="prompt-dialog">
-       <p>Gunakan layar penuh untuk pengalaman terbaik?</p>
+     <div className="prompt-dialog prompt-pixar-dialog" role="dialog" aria-modal="true">
+       {/* 3D Decorative Corner Rivets */}
+       <span className="board-rivet rivet-tl" aria-hidden="true" />
+       <span className="board-rivet rivet-tr" aria-hidden="true" />
+       <span className="board-rivet rivet-bl" aria-hidden="true" />
+       <span className="board-rivet rivet-br" aria-hidden="true" />
+
+       {/* Decorative Sprouting Leaves on Bottom Corners */}
+       <div className="board-decor-leaf leaf-left" aria-hidden="true">
+         <svg viewBox="0 0 60 40" className="leaf-svg">
+           <path d="M 0 35 C 10 15 35 10 45 25 C 25 35 15 35 0 35 Z" fill="#4ade80" />
+           <path d="M 12 38 C 22 20 48 18 58 32 C 38 42 25 40 12 38 Z" fill="#22c55e" />
+           <path d="M 2 34 C 18 26 32 24 44 26" stroke="#15803d" strokeWidth="1.5" fill="none" />
+         </svg>
+       </div>
+       <div className="board-decor-leaf leaf-right" aria-hidden="true">
+         <svg viewBox="0 0 60 40" className="leaf-svg">
+           <path d="M 0 35 C 10 15 35 10 45 25 C 25 35 15 35 0 35 Z" fill="#4ade80" />
+           <path d="M 12 38 C 22 20 48 18 58 32 C 38 42 25 40 12 38 Z" fill="#22c55e" />
+           <path d="M 2 34 C 18 26 32 24 44 26" stroke="#15803d" strokeWidth="1.5" fill="none" />
+         </svg>
+       </div>
+
+       <div className="prompt-pixar-badge">
+         <Maximize className="prompt-badge-icon" />
+       </div>
+       <h3 className="prompt-pixar-title">Mode Layar Penuh</h3>
+       <p className="prompt-pixar-desc">Gunakan layar penuh untuk pengalaman petualangan terbaik?</p>
        <div className="prompt-actions">
-         <Button onClick={() => handlePrompt(true)}>Ya</Button>
-         <Button variant="outline" onClick={() => handlePrompt(false)}>Tidak</Button>
+         <Button className="pixar-prompt-btn-yes" onClick={() => handlePrompt(true)}>Ya</Button>
+         <Button className="pixar-prompt-btn-no" variant="outline" onClick={() => handlePrompt(false)}>Tidak</Button>
        </div>
      </div>
    </div>
  )}
  <div className="home-fullscreen"><Button variant="ghost" onClick={toggleFullscreen} aria-label={fullscreen?'Keluar layar penuh':'Layar penuh'} aria-pressed={fullscreen}>{fullscreen ? <Maximize aria-label="Keluar layar penuh"/> : <Maximize aria-label="Layar penuh"/>}</Button>{fullscreenError&&<p role="status">{fullscreenError}</p>}</div>
- {section!=='home'&&<header className="geo-nav"><Link className="geo-brand" href="/"><span><Globe2/></span><div>Nusantara<span>JELAJAH • PAHAMI • SIAGA</span></div></Link><nav aria-label="Menu utama"><Link href="/belajar" aria-current={section==='belajar'?'page':undefined}>Belajar</Link><Link href="/mitigasi" aria-current={section==='mitigasi'?'page':undefined} onClick={(e)=>{e.preventDefault();setShowMitigationIntro(true);}}>Mitigasi Gempa</Link><Link href="/bermain" aria-current={section==='bermain'?'page':undefined}>Bermain</Link><Link href="/uji-pemahaman" aria-current={section==='uji-pemahaman'?'page':undefined}>Uji Pemahaman</Link></nav><Button asChild variant="outline"><Link href="/lab"><Triangle/>Laboratorium <ArrowRight/></Link></Button></header>}
+ {section!=='home'&&<header className="geo-nav"><Link className="geo-brand" href="/"><span><Globe2/></span><div>Nusantara<span>JELAJAH • PAHAMI • SIAGA</span></div></Link><nav aria-label="Menu utama"><Link href="/belajar" aria-current={section==='belajar'?'page':undefined}>Belajar</Link><Link href="/mitigasi" aria-current={section==='mitigasi'?'page':undefined} onClick={(e)=>{e.preventDefault();setShowMitigationIntro(true);}}>Mitigasi Gempa</Link><Link href="/bermain" aria-current={section==='bermain'?'page':undefined}>Bermain</Link><Link href="/uji-pemahaman" aria-current={section==='uji-pemahaman'?'page':undefined}>Quiz</Link></nav><Button asChild variant="outline"><Link href="/lab"><Triangle/>Laboratorium <ArrowRight/></Link></Button></header>}
     <main key={section} className="section-fade-in" style={{ flex: 1, minHeight: 0, display: 'flex', flexDirection: 'column' }}>
       {section === 'home' ? (
         <section className="geo-intro">
           <div className="geo-kicker"><span/> IPAS · KELAS 6</div>
           <h1>Mengenal Kondisi Geografis Indonesia <span>(Manfaat dan Ancaman)</span></h1>
           <p>Kenali negeri kita. Temukan kekayaan alamnya, pahami risikonya,<br className="desktop-break"/> dan belajar menjadi generasi yang siap siaga.</p>
-          <nav className="hero-glass-menu" aria-label="Pilih kegiatan">
-            <Link href="/belajar"><BookOpen/>Belajar</Link>
-            <Link href="/mitigasi" onClick={(e)=>{e.preventDefault();setShowMitigationIntro(true);}}><ShieldCheck/>Mitigasi Gempa</Link>
+          <nav className="hero-glass-menu hero-pixar-menu" aria-label="Pilih kegiatan">
+            <Link href="/belajar" className="hero-btn-learn"><BookOpen/>Belajar</Link>
+            <Link href="/mitigasi" className="hero-btn-mitigasi" onClick={(e)=>{e.preventDefault();setShowMitigationIntro(true);}}><ShieldCheck/>Mitigasi Gempa</Link>
             <Link href="/bermain" className="hero-btn-game"><Gamepad2/>Bermain</Link>
             <Link href="/lab" className="hero-btn-lab"><Triangle/>Lab Maya<img src="/stem-logo.png" alt="STEM" className="stem-button-badge" /></Link>
-            <Link href="/uji-pemahaman" className="hero-btn-quiz"><HelpCircle/>Uji Pemahaman</Link>
+            <Link href="/uji-pemahaman" className="hero-btn-quiz"><HelpCircle/>Quiz</Link>
           </nav>
         </section>
       ) : section === 'belajar' ? (

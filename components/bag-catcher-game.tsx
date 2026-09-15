@@ -1593,11 +1593,11 @@ export default function BagCatcherGame() {
   const totalSiagaCaught2 = Object.values(collectedCounts2).reduce((a, b) => a + b, 0);
 
   return (
-    <section className="learning-deck game-deck" aria-label="Permainan Tangkap Benda Tas Siaga Bencana">
+    <section className={`learning-deck game-deck ${stage === 'start' ? 'is-start-screen' : stage === 'gameover' ? 'is-result-screen' : 'is-gameplay-screen'}`} aria-label="Permainan Tangkap Benda Tas Siaga Bencana">
       {/* 1. HEADER TOP BAR */}
       <div className="slide-top">
-        <Link href="/" aria-label="Kembali ke Beranda" title="Kembali ke Beranda">
-          <House />
+        <Link href="/" aria-label="Kembali ke Beranda" title="Kembali ke Beranda" className="pixar-home-btn">
+          <House className="w-5 h-5" />
         </Link>
       </div>
 
@@ -1605,9 +1605,54 @@ export default function BagCatcherGame() {
       {/* SCREEN 1: START / LOBBY                                      */}
       {/* ============================================================ */}
       {stage === 'start' && (
-        <div key="start" className="game-deck-body game-stage-centered section-fade-in">
-          <article className="game-glass-card game-start-card game-start-card-clean" aria-label="Mulai Permainan">
-            {/* Mode Switcher Tabs */}
+        <div key="start" className="game-deck-body game-stage-centered section-fade-in start-menu-stage">
+          {/* Main 3D Game Control Panel */}
+          <article className="game-start-card game-start-pixar-panel" aria-label="Mulai Permainan">
+            {/* 3D Decorative Corner Rivets */}
+            <span className="board-rivet rivet-tl" aria-hidden="true" />
+            <span className="board-rivet rivet-tr" aria-hidden="true" />
+            <span className="board-rivet rivet-bl" aria-hidden="true" />
+            <span className="board-rivet rivet-br" aria-hidden="true" />
+
+            {/* Decorative Compass on top right of wooden frame */}
+            <div className="board-decor-compass" aria-hidden="true" title="Kompas Petualang">
+              <svg viewBox="0 0 48 48" className="compass-svg">
+                <defs>
+                  <linearGradient id="brassGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stopColor="#ffe57f" />
+                    <stop offset="50%" stopColor="#d97706" />
+                    <stop offset="100%" stopColor="#78350f" />
+                  </linearGradient>
+                </defs>
+                <circle cx="24" cy="24" r="21" fill="url(#brassGrad)" stroke="#fef08a" strokeWidth="1.5" />
+                <circle cx="24" cy="24" r="16" fill="#082038" stroke="#92400e" strokeWidth="1.5" />
+                <line x1="24" y1="9" x2="24" y2="13" stroke="#fde047" strokeWidth="1.5" strokeLinecap="round" />
+                <line x1="24" y1="35" x2="24" y2="39" stroke="#fde047" strokeWidth="1.5" strokeLinecap="round" />
+                <line x1="9" y1="24" x2="13" y2="24" stroke="#fde047" strokeWidth="1.5" strokeLinecap="round" />
+                <line x1="35" y1="24" x2="39" y2="24" stroke="#fde047" strokeWidth="1.5" strokeLinecap="round" />
+                <polygon points="24,11 27,24 24,22 21,24" fill="#ef4444" />
+                <polygon points="24,37 27,24 24,26 21,24" fill="#60a5fa" />
+                <circle cx="24" cy="24" r="3" fill="#fbbf24" stroke="#78350f" strokeWidth="1" />
+              </svg>
+            </div>
+
+            {/* Decorative Leaves Sprouting at Bottom Corners */}
+            <div className="board-decor-leaf leaf-left" aria-hidden="true">
+              <svg viewBox="0 0 60 40" className="leaf-svg">
+                <path d="M 0 35 C 10 15 35 10 45 25 C 25 35 15 35 0 35 Z" fill="#4ade80" />
+                <path d="M 12 38 C 22 20 48 18 58 32 C 38 42 25 40 12 38 Z" fill="#22c55e" />
+                <path d="M 2 34 C 18 26 32 24 44 26" stroke="#15803d" strokeWidth="1.5" fill="none" />
+              </svg>
+            </div>
+            <div className="board-decor-leaf leaf-right" aria-hidden="true">
+              <svg viewBox="0 0 60 40" className="leaf-svg">
+                <path d="M 0 35 C 10 15 35 10 45 25 C 25 35 15 35 0 35 Z" fill="#4ade80" />
+                <path d="M 12 38 C 22 20 48 18 58 32 C 38 42 25 40 12 38 Z" fill="#22c55e" />
+                <path d="M 2 34 C 18 26 32 24 44 26" stroke="#15803d" strokeWidth="1.5" fill="none" />
+              </svg>
+            </div>
+
+            {/* Mode Switcher Tabs (3D Capsule Buttons) */}
             <div className="game-mode-tabs" role="tablist" aria-label="Pilih Mode Permainan">
               <button
                 type="button"
@@ -1619,7 +1664,7 @@ export default function BagCatcherGame() {
                   setNameError('');
                 }}
               >
-                <User className="w-5 h-5" />
+                <span className="tab-icon-wrap"><User className="w-5 h-5" /></span>
                 <span>1 Pemain (Solo)</span>
               </button>
               <button
@@ -1632,7 +1677,7 @@ export default function BagCatcherGame() {
                   setNameError('');
                 }}
               >
-                <Swords className="w-5 h-5" />
+                <span className="tab-icon-wrap"><Swords className="w-5 h-5" /></span>
                 <span>1 vs 1 (Duel)</span>
               </button>
             </div>
@@ -1641,9 +1686,22 @@ export default function BagCatcherGame() {
             <form onSubmit={handleStartGame} className="game-name-form">
               {gameMode === 'solo' ? (
                 <div className="pvp-input-col p1" style={{ width: '100%', maxWidth: '100%' }}>
+                  {/* Subtle Mountain Landscape in Background */}
+                  <div className="hud-landscape-bg" aria-hidden="true">
+                    <svg viewBox="0 0 600 120" preserveAspectRatio="none" className="hud-mountain-svg">
+                      <ellipse cx="490" cy="30" rx="35" ry="16" fill="#38bdf8" opacity="0.18" />
+                      <ellipse cx="520" cy="26" rx="25" ry="12" fill="#38bdf8" opacity="0.18" />
+                      <ellipse cx="465" cy="32" rx="20" ry="10" fill="#38bdf8" opacity="0.18" />
+                      <path d="M 425 120 L 485 36 L 545 120 Z" fill="#38bdf8" opacity="0.22" />
+                      <path d="M 470 120 L 515 56 L 560 120 Z" fill="#38bdf8" opacity="0.18" />
+                      <line x1="485" y1="36" x2="485" y2="20" stroke="#38bdf8" strokeWidth="2" opacity="0.4" />
+                      <polygon points="485,20 500,25 485,30" fill="#38bdf8" opacity="0.4" />
+                    </svg>
+                  </div>
+
                   <label htmlFor="player-name-input" className="game-name-label pvp-label-p1">
-                    <span className="pvp-badge-tag p1">P1</span>
-                    <span>Pemain Tunggal (Tas Biru)</span>
+                    <User className="w-5 h-5 text-sky-300" />
+                    <span>Ketik namamu</span>
                   </label>
                   <input
                     id="player-name-input"
@@ -1653,20 +1711,29 @@ export default function BagCatcherGame() {
                       setPlayerName(e.target.value);
                       if (nameError) setNameError('');
                     }}
-                    placeholder="Ketikkan Nama Pemain (Contoh: Siti Rahma)"
+                    placeholder="Ketik namamu di sini..."
                     maxLength={35}
                     className="game-name-input pvp-input"
                     autoFocus
                   />
-                  <span className="pvp-control-hint p1">Kendali: Tombol A & D / Tombol Panah / Sentuh & Geser Layar</span>
+                  <span className="pvp-control-hint p1">
+                    <span className="hint-icon" aria-hidden="true">🎮</span>
+                    <span>Kendali: Tombol A & D / Tombol Panah / Sentuh & Geser Layar</span>
+                  </span>
                 </div>
               ) : (
                 <div className="pvp-input-grid">
                   {/* Pemain 1 Input */}
                   <div className="pvp-input-col p1">
+                    <div className="hud-landscape-bg" aria-hidden="true">
+                      <svg viewBox="0 0 300 120" preserveAspectRatio="none" className="hud-mountain-svg">
+                        <ellipse cx="240" cy="28" rx="25" ry="12" fill="#38bdf8" opacity="0.18" />
+                        <path d="M 190 120 L 235 42 L 280 120 Z" fill="#38bdf8" opacity="0.2" />
+                      </svg>
+                    </div>
                     <label htmlFor="pvp-p1-input" className="game-name-label pvp-label-p1">
                       <span className="pvp-badge-tag p1">P1</span>
-                      <span>Pemain 1 (Tas Biru)</span>
+                      <span>Pemain 1</span>
                     </label>
                     <input
                       id="pvp-p1-input"
@@ -1681,14 +1748,23 @@ export default function BagCatcherGame() {
                       className="game-name-input pvp-input"
                       autoFocus
                     />
-                    <span className="pvp-control-hint p1">Kendali: Tombol A & D / Layar Kiri</span>
+                    <span className="pvp-control-hint p1">
+                      <span className="hint-icon" aria-hidden="true">⌨️</span>
+                      <span>Kendali: Tombol A & D / Layar Kiri</span>
+                    </span>
                   </div>
 
                   {/* Pemain 2 Input */}
                   <div className="pvp-input-col p2">
+                    <div className="hud-landscape-bg" aria-hidden="true">
+                      <svg viewBox="0 0 300 120" preserveAspectRatio="none" className="hud-mountain-svg">
+                        <ellipse cx="240" cy="28" rx="25" ry="12" fill="#fbbf24" opacity="0.18" />
+                        <path d="M 190 120 L 235 42 L 280 120 Z" fill="#fbbf24" opacity="0.2" />
+                      </svg>
+                    </div>
                     <label htmlFor="pvp-p2-input" className="game-name-label pvp-label-p2">
                       <span className="pvp-badge-tag p2">P2</span>
-                      <span>Pemain 2 (Tas Kuning)</span>
+                      <span>Pemain 2</span>
                     </label>
                     <input
                       id="pvp-p2-input"
@@ -1702,14 +1778,20 @@ export default function BagCatcherGame() {
                       maxLength={25}
                       className="game-name-input pvp-input"
                     />
-                    <span className="pvp-control-hint p2">Kendali: Tombol Panah ← & → / Layar Kanan</span>
+                    <span className="pvp-control-hint p2">
+                      <span className="hint-icon" aria-hidden="true">⌨️</span>
+                      <span>Kendali: Tombol Panah ← & → / Layar Kanan</span>
+                    </span>
                   </div>
                 </div>
               )}
 
-              <button type="submit" className="game-start-btn pvp-start-btn">
-                <Play className="w-6 h-6" />
-                <span>Mulai Bermain!</span>
+              {/* 3D Big Juicy Orange-Yellow PLAY Button */}
+              <button type="submit" className="game-start-btn pvp-start-btn pixar-play-btn" aria-label="Mulai Bermain!">
+                <div className="btn-play-icon-glow" aria-hidden="true">
+                  <Play className="w-8 h-8 fill-white text-white drop-shadow" />
+                </div>
+                <span className="btn-play-text">Mulai Bermain!</span>
               </button>
 
               {nameError && (
@@ -1738,7 +1820,7 @@ export default function BagCatcherGame() {
 
               <div className="pvp-header-center">
                 <div className="hud-pill hud-pill-timer">
-                  <span className="hud-pill-val" style={{ color: timeLeft <= 10 ? '#f87171' : '#38bdf8' }}>
+                  <span className="hud-pill-val" style={{ color: timeLeft <= 10 ? '#ef4444' : '#ffd166' }}>
                     ⏱️ {timeLeft}s
                   </span>
                 </div>
@@ -1746,11 +1828,11 @@ export default function BagCatcherGame() {
                   type="button"
                   onClick={() => setIsPaused(!isPaused)}
                   className="game-top-btn"
-                  style={{ width: '36px', height: '36px', minHeight: '36px', borderRadius: '10px' }}
+                  style={{ width: '38px', height: '38px', minHeight: '38px' }}
                   title={isPaused ? "Lanjutkan" : "Jeda"}
                   aria-label={isPaused ? "Lanjutkan" : "Jeda"}
                 >
-                  {isPaused ? <Play className="w-4 h-4 text-emerald-400" /> : <Pause className="w-4 h-4 text-amber-400" />}
+                  {isPaused ? <Play className="w-4 h-4 text-white drop-shadow" /> : <Pause className="w-4 h-4 text-white drop-shadow" />}
                 </button>
               </div>
 
@@ -1930,7 +2012,7 @@ export default function BagCatcherGame() {
 
               <div className="pvp-header-center">
                 <div className="hud-pill hud-pill-timer">
-                  <span className="hud-pill-val" style={{ color: timeLeft <= 10 ? '#f87171' : '#38bdf8' }}>
+                  <span className="hud-pill-val" style={{ color: timeLeft <= 10 ? '#ef4444' : '#ffd166' }}>
                     ⏱️ {timeLeft}s
                   </span>
                 </div>
@@ -1938,11 +2020,11 @@ export default function BagCatcherGame() {
                   type="button"
                   onClick={() => setIsPaused(!isPaused)}
                   className="game-top-btn"
-                  style={{ width: '36px', height: '36px', minHeight: '36px', borderRadius: '10px' }}
+                  style={{ width: '38px', height: '38px', minHeight: '38px' }}
                   title={isPaused ? "Lanjutkan" : "Jeda"}
                   aria-label={isPaused ? "Lanjutkan" : "Jeda"}
                 >
-                  {isPaused ? <Play className="w-4 h-4 text-emerald-400" /> : <Pause className="w-4 h-4 text-amber-400" />}
+                  {isPaused ? <Play className="w-4 h-4 text-white drop-shadow" /> : <Pause className="w-4 h-4 text-white drop-shadow" />}
                 </button>
               </div>
 
@@ -2245,8 +2327,45 @@ export default function BagCatcherGame() {
       {/* SCREEN 3: GAMEOVER & EVALUATION RESULT                       */}
       {/* ============================================================ */}
       {stage === 'gameover' && (
-        <div key="gameover" className="game-deck-body game-stage-centered section-fade-in">
-          <article className="game-glass-card game-result-card" aria-label="Hasil Permainan">
+        <div key="gameover" className="game-deck-body game-stage-centered section-fade-in result-menu-stage">
+          <article className="game-result-card game-result-pixar-panel" aria-label="Hasil Permainan">
+            {/* 3D Decorative Corner Rivets */}
+            <span className="board-rivet rivet-tl" aria-hidden="true" />
+            <span className="board-rivet rivet-tr" aria-hidden="true" />
+            <span className="board-rivet rivet-bl" aria-hidden="true" />
+            <span className="board-rivet rivet-br" aria-hidden="true" />
+
+            {/* Decorative Compass on top right of wooden frame */}
+            <div className="board-decor-compass" aria-hidden="true" title="Kompas Petualang">
+              <svg viewBox="0 0 48 48" className="compass-svg">
+                <circle cx="24" cy="24" r="21" fill="url(#brassGrad)" stroke="#fef08a" strokeWidth="1.5" />
+                <circle cx="24" cy="24" r="16" fill="#082038" stroke="#92400e" strokeWidth="1.5" />
+                <line x1="24" y1="9" x2="24" y2="13" stroke="#fde047" strokeWidth="1.5" strokeLinecap="round" />
+                <line x1="24" y1="35" x2="24" y2="39" stroke="#fde047" strokeWidth="1.5" strokeLinecap="round" />
+                <line x1="9" y1="24" x2="13" y2="24" stroke="#fde047" strokeWidth="1.5" strokeLinecap="round" />
+                <line x1="35" y1="24" x2="39" y2="24" stroke="#fde047" strokeWidth="1.5" strokeLinecap="round" />
+                <polygon points="24,11 27,24 24,22 21,24" fill="#ef4444" />
+                <polygon points="24,37 27,24 24,26 21,24" fill="#60a5fa" />
+                <circle cx="24" cy="24" r="3" fill="#fbbf24" stroke="#78350f" strokeWidth="1" />
+              </svg>
+            </div>
+
+            {/* Decorative Leaves Sprouting at Bottom Corners */}
+            <div className="board-decor-leaf leaf-left" aria-hidden="true">
+              <svg viewBox="0 0 60 40" className="leaf-svg">
+                <path d="M 0 35 C 10 15 35 10 45 25 C 25 35 15 35 0 35 Z" fill="#4ade80" />
+                <path d="M 12 38 C 22 20 48 18 58 32 C 38 42 25 40 12 38 Z" fill="#22c55e" />
+                <path d="M 2 34 C 18 26 32 24 44 26" stroke="#15803d" strokeWidth="1.5" fill="none" />
+              </svg>
+            </div>
+            <div className="board-decor-leaf leaf-right" aria-hidden="true">
+              <svg viewBox="0 0 60 40" className="leaf-svg">
+                <path d="M 0 35 C 10 15 35 10 45 25 C 25 35 15 35 0 35 Z" fill="#4ade80" />
+                <path d="M 12 38 C 22 20 48 18 58 32 C 38 42 25 40 12 38 Z" fill="#22c55e" />
+                <path d="M 2 34 C 18 26 32 24 44 26" stroke="#15803d" strokeWidth="1.5" fill="none" />
+              </svg>
+            </div>
+
             {gameMode === 'solo' ? (
               // SOLO RESULT
               <>
@@ -2276,8 +2395,8 @@ export default function BagCatcherGame() {
                 <div className="solo-result-card-container">
                   <div className="pvp-player-card p1 is-winner">
                     <div className="pvp-card-header">
-                      <span className="pvp-badge-tag p1">P1</span>
-                      <strong>{playerName || 'Pemain Tunggal'}</strong>
+                      <span className="pvp-badge-tag p1">SOLO</span>
+                      <strong>{playerName || 'Pemain'}</strong>
                       <span className="pvp-win-tag">{lives > 0 ? 'BERHASIL' : 'SELESAI'}</span>
                     </div>
                     <div className="pvp-card-score">{score} Poin</div>
@@ -2391,7 +2510,9 @@ export default function BagCatcherGame() {
             {/* Educational Recap Section */}
             <div className="result-edu-section">
               <h3>
-                <BookOpen className="w-5 h-5 text-emerald-400" />
+                <span className="edu-title-badge">
+                  <BookOpen className="w-5 h-5" />
+                </span>
                 <span>Pentingnya Isi Tas Siaga Bencana</span>
               </h3>
               <div className="edu-items-list">
@@ -2404,7 +2525,7 @@ export default function BagCatcherGame() {
                         item.emoji
                       )}
                     </span>
-                    <div>
+                    <div className="edu-item-text">
                       <strong>{item.name}</strong>
                       <p>{item.reason}</p>
                     </div>
@@ -2418,7 +2539,7 @@ export default function BagCatcherGame() {
               <button
                 type="button"
                 onClick={handleStartGame}
-                className="btn-result-action primary"
+                className="btn-result-action primary pixar-btn-replay"
               >
                 <RotateCcw className="w-5 h-5" />
                 <span>{gameMode === 'pvp' ? 'Tanding Ulang (Duel)' : 'Main Lagi'}</span>
@@ -2427,13 +2548,13 @@ export default function BagCatcherGame() {
               <button
                 type="button"
                 onClick={() => setStage('start')}
-                className="btn-result-action mode-switch-btn"
+                className="btn-result-action mode-switch-btn pixar-btn-mode"
               >
                 <Users className="w-5 h-5" />
                 <span>Ganti Mode</span>
               </button>
 
-              <Link href="/" className="btn-result-action secondary">
+              <Link href="/" className="btn-result-action secondary pixar-btn-home">
                 <House className="w-5 h-5" />
                 <span>Kembali ke Beranda</span>
               </Link>

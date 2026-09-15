@@ -161,7 +161,7 @@ export default function QuizApp() {
       </div>
 
       {/* Row 2: Standard Page Title */}
-      <h1>Uji Pemahaman</h1>
+      <h1>Quiz</h1>
 
       {/* ============================================================ */}
       {/* 1. LAYAR START (INPUT NAMA MURID) */}
@@ -169,6 +169,28 @@ export default function QuizApp() {
       {stage === 'start' && (
         <div key="start" className="quiz-deck-body quiz-stage-centered section-fade-in">
           <article className="slide-glass quiz-glass-card quiz-start-card" aria-label="Mulai Uji Pemahaman">
+            {/* 3D Decorative Corner Rivets */}
+            <span className="board-rivet rivet-tl" aria-hidden="true" />
+            <span className="board-rivet rivet-tr" aria-hidden="true" />
+            <span className="board-rivet rivet-bl" aria-hidden="true" />
+            <span className="board-rivet rivet-br" aria-hidden="true" />
+
+            {/* Decorative Sprouting Leaves on Bottom Corners */}
+            <div className="board-decor-leaf leaf-left" aria-hidden="true">
+              <svg viewBox="0 0 60 40" className="leaf-svg">
+                <path d="M 0 35 C 10 15 35 10 45 25 C 25 35 15 35 0 35 Z" fill="#4ade80" />
+                <path d="M 12 38 C 22 20 48 18 58 32 C 38 42 25 40 12 38 Z" fill="#22c55e" />
+                <path d="M 2 34 C 18 26 32 24 44 26" stroke="#15803d" strokeWidth="1.5" fill="none" />
+              </svg>
+            </div>
+            <div className="board-decor-leaf leaf-right" aria-hidden="true">
+              <svg viewBox="0 0 60 40" className="leaf-svg">
+                <path d="M 0 35 C 10 15 35 10 45 25 C 25 35 15 35 0 35 Z" fill="#4ade80" />
+                <path d="M 12 38 C 22 20 48 18 58 32 C 38 42 25 40 12 38 Z" fill="#22c55e" />
+                <path d="M 2 34 C 18 26 32 24 44 26" stroke="#15803d" strokeWidth="1.5" fill="none" />
+              </svg>
+            </div>
+
             <div className="quiz-card-head">
               <div className="geo-kicker">
                 <span /> SIMULASI UJI KEMAMPUAN
@@ -229,7 +251,7 @@ export default function QuizApp() {
                   autoFocus
                 />
                 <button type="submit" className="quiz-start-btn">
-                  <span>Mulai Uji Pemahaman</span>
+                  <span>Mulai Quiz</span>
                   <ArrowRight className="w-5 h-5" />
                 </button>
               </div>
@@ -268,6 +290,28 @@ export default function QuizApp() {
       {stage === 'quiz' && currentQ && (
         <div key={`quiz-${currentIndex}`} className="quiz-deck-body quiz-stage-active section-fade-in">
           <article className="slide-glass quiz-glass-card quiz-active-card" aria-label={`Soal nomor ${currentIndex + 1}`}>
+            {/* 3D Decorative Corner Rivets */}
+            <span className="board-rivet rivet-tl" aria-hidden="true" />
+            <span className="board-rivet rivet-tr" aria-hidden="true" />
+            <span className="board-rivet rivet-bl" aria-hidden="true" />
+            <span className="board-rivet rivet-br" aria-hidden="true" />
+
+            {/* Decorative Sprouting Leaves on Bottom Corners */}
+            <div className="board-decor-leaf leaf-left" aria-hidden="true">
+              <svg viewBox="0 0 60 40" className="leaf-svg">
+                <path d="M 0 35 C 10 15 35 10 45 25 C 25 35 15 35 0 35 Z" fill="#4ade80" />
+                <path d="M 12 38 C 22 20 48 18 58 32 C 38 42 25 40 12 38 Z" fill="#22c55e" />
+                <path d="M 2 34 C 18 26 32 24 44 26" stroke="#15803d" strokeWidth="1.5" fill="none" />
+              </svg>
+            </div>
+            <div className="board-decor-leaf leaf-right" aria-hidden="true">
+              <svg viewBox="0 0 60 40" className="leaf-svg">
+                <path d="M 0 35 C 10 15 35 10 45 25 C 25 35 15 35 0 35 Z" fill="#4ade80" />
+                <path d="M 12 38 C 22 20 48 18 58 32 C 38 42 25 40 12 38 Z" fill="#22c55e" />
+                <path d="M 2 34 C 18 26 32 24 44 26" stroke="#15803d" strokeWidth="1.5" fill="none" />
+              </svg>
+            </div>
+
             {currentQ.type === 'map-click' ? (
               <div className="quiz-active-grid-map">
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', flexShrink: 0 }}>
@@ -435,12 +479,34 @@ export default function QuizApp() {
       {stage === 'result' && (
         <div key="result" className="quiz-deck-body quiz-stage-centered section-fade-in">
           <article className="slide-glass quiz-glass-card quiz-result-card" aria-label="Hasil Uji Pemahaman">
+            {/* 3D Decorative Corner Rivets */}
+            <span className="board-rivet rivet-tl" aria-hidden="true" />
+            <span className="board-rivet rivet-tr" aria-hidden="true" />
+            <span className="board-rivet rivet-bl" aria-hidden="true" />
+            <span className="board-rivet rivet-br" aria-hidden="true" />
+
+            {/* Decorative Sprouting Leaves on Bottom Corners */}
+            <div className="board-decor-leaf leaf-left" aria-hidden="true">
+              <svg viewBox="0 0 60 40" className="leaf-svg">
+                <path d="M 0 35 C 10 15 35 10 45 25 C 25 35 15 35 0 35 Z" fill="#4ade80" />
+                <path d="M 12 38 C 22 20 48 18 58 32 C 38 42 25 40 12 38 Z" fill="#22c55e" />
+                <path d="M 2 34 C 18 26 32 24 44 26" stroke="#15803d" strokeWidth="1.5" fill="none" />
+              </svg>
+            </div>
+            <div className="board-decor-leaf leaf-right" aria-hidden="true">
+              <svg viewBox="0 0 60 40" className="leaf-svg">
+                <path d="M 0 35 C 10 15 35 10 45 25 C 25 35 15 35 0 35 Z" fill="#4ade80" />
+                <path d="M 12 38 C 22 20 48 18 58 32 C 38 42 25 40 12 38 Z" fill="#22c55e" />
+                <path d="M 2 34 C 18 26 32 24 44 26" stroke="#15803d" strokeWidth="1.5" fill="none" />
+              </svg>
+            </div>
+
             <div className="result-header">
               <div className="result-trophy-ring">
                 <Trophy className="w-10 h-10 text-amber-300" />
               </div>
               <div className="geo-kicker">
-                <span /> HASIL UJI PEMAHAMAN
+                <span /> HASIL QUIZ
               </div>
               <h2>Selamat, {studentName}!</h2>
               <p className="result-subtitle">Kamu telah menyelesaikan 10 butir soal evaluasi kurikulum IPAS Geografi & Mitigasi Gempa.</p>
@@ -504,7 +570,7 @@ export default function QuizApp() {
                 onClick={() => handleStartQuiz()}
               >
                 <RotateCcw className="w-5 h-5 mr-1.5" />
-                <span>Ulangi Kuis (10 Soal Acak Baru)</span>
+                <span>Ulangi Quiz (10 Soal Acak Baru)</span>
               </button>
 
               <Link href="/" className="result-btn-home">
@@ -522,9 +588,31 @@ export default function QuizApp() {
       {stage === 'review' && (
         <div key="review" className="quiz-deck-body quiz-stage-review section-fade-in">
           <article className="slide-glass quiz-glass-card quiz-review-card" aria-label="Tinjauan Pembahasan Soal">
+            {/* 3D Decorative Corner Rivets */}
+            <span className="board-rivet rivet-tl" aria-hidden="true" />
+            <span className="board-rivet rivet-tr" aria-hidden="true" />
+            <span className="board-rivet rivet-bl" aria-hidden="true" />
+            <span className="board-rivet rivet-br" aria-hidden="true" />
+
+            {/* Decorative Sprouting Leaves on Bottom Corners */}
+            <div className="board-decor-leaf leaf-left" aria-hidden="true">
+              <svg viewBox="0 0 60 40" className="leaf-svg">
+                <path d="M 0 35 C 10 15 35 10 45 25 C 25 35 15 35 0 35 Z" fill="#4ade80" />
+                <path d="M 12 38 C 22 20 48 18 58 32 C 38 42 25 40 12 38 Z" fill="#22c55e" />
+                <path d="M 2 34 C 18 26 32 24 44 26" stroke="#15803d" strokeWidth="1.5" fill="none" />
+              </svg>
+            </div>
+            <div className="board-decor-leaf leaf-right" aria-hidden="true">
+              <svg viewBox="0 0 60 40" className="leaf-svg">
+                <path d="M 0 35 C 10 15 35 10 45 25 C 25 35 15 35 0 35 Z" fill="#4ade80" />
+                <path d="M 12 38 C 22 20 48 18 58 32 C 38 42 25 40 12 38 Z" fill="#22c55e" />
+                <path d="M 2 34 C 18 26 32 24 44 26" stroke="#15803d" strokeWidth="1.5" fill="none" />
+              </svg>
+            </div>
+
             <div className="review-top-bar">
               <div>
-                <h2>Pembahasan Soal Uji Pemahaman</h2>
+                <h2>Pembahasan Soal Quiz</h2>
                 <p>Murid: <strong>{studentName}</strong> • Nilai: <strong>{score}</strong> ({correctCount} dari {questions.length} benar)</p>
               </div>
               <button
