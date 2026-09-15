@@ -291,11 +291,30 @@ export default function GeographyHome({section='home'}:{section?:'home'|'belajar
  )}
  <div className="home-fullscreen"><Button variant="ghost" onClick={toggleFullscreen} aria-label={fullscreen?'Keluar layar penuh':'Layar penuh'} aria-pressed={fullscreen}>{fullscreen ? <Maximize aria-label="Keluar layar penuh"/> : <Maximize aria-label="Layar penuh"/>}</Button>{fullscreenError&&<p role="status">{fullscreenError}</p>}</div>
  {section!=='home'&&<header className="geo-nav"><Link className="geo-brand" href="/"><span><Globe2/></span><div>Nusantara<span>JELAJAH • PAHAMI • SIAGA</span></div></Link><nav aria-label="Menu utama"><Link href="/belajar" aria-current={section==='belajar'?'page':undefined}>Belajar</Link><Link href="/mitigasi" aria-current={section==='mitigasi'?'page':undefined} onClick={(e)=>{e.preventDefault();setShowMitigationIntro(true);}}>Mitigasi Gempa</Link><Link href="/bermain" aria-current={section==='bermain'?'page':undefined}>Bermain</Link><Link href="/uji-pemahaman" aria-current={section==='uji-pemahaman'?'page':undefined}>Uji Pemahaman</Link></nav><Button asChild variant="outline"><Link href="/lab"><Triangle/>Laboratorium <ArrowRight/></Link></Button></header>}
-   {section==='home'?<>
-   <section className="geo-intro"><div className="geo-kicker"><span/> IPAS · KELAS 6</div><h1>Mengenal Kondisi Geografis Indonesia <span>(Manfaat dan Ancaman)</span></h1><p>Kenali negeri kita. Temukan kekayaan alamnya, pahami risikonya,<br className="desktop-break"/> dan belajar menjadi generasi yang siap siaga.</p><nav className="hero-glass-menu" aria-label="Pilih kegiatan"><Link href="/belajar"><BookOpen/>Belajar</Link><Link href="/mitigasi" onClick={(e)=>{e.preventDefault();setShowMitigationIntro(true);}}><ShieldCheck/>Mitigasi Gempa</Link><Link href="/bermain" className="hero-btn-game"><Gamepad2/>Bermain</Link><Link href="/lab" className="hero-btn-lab"><Triangle/>Lab Maya<img src="/stem-logo.png" alt="STEM" className="stem-button-badge" /></Link><Link href="/uji-pemahaman" className="hero-btn-quiz"><HelpCircle/>Uji Pemahaman</Link></nav></section>
-
-
-  </>:section==='belajar'?<Learning/>:section==='mitigasi'?<Mitigation/>:section==='bermain'?<BagCatcherGame/>:<QuizApp/>}
+    <main key={section} className="section-fade-in" style={{ flex: 1, minHeight: 0, display: 'flex', flexDirection: 'column' }}>
+      {section === 'home' ? (
+        <section className="geo-intro">
+          <div className="geo-kicker"><span/> IPAS · KELAS 6</div>
+          <h1>Mengenal Kondisi Geografis Indonesia <span>(Manfaat dan Ancaman)</span></h1>
+          <p>Kenali negeri kita. Temukan kekayaan alamnya, pahami risikonya,<br className="desktop-break"/> dan belajar menjadi generasi yang siap siaga.</p>
+          <nav className="hero-glass-menu" aria-label="Pilih kegiatan">
+            <Link href="/belajar"><BookOpen/>Belajar</Link>
+            <Link href="/mitigasi" onClick={(e)=>{e.preventDefault();setShowMitigationIntro(true);}}><ShieldCheck/>Mitigasi Gempa</Link>
+            <Link href="/bermain" className="hero-btn-game"><Gamepad2/>Bermain</Link>
+            <Link href="/lab" className="hero-btn-lab"><Triangle/>Lab Maya<img src="/stem-logo.png" alt="STEM" className="stem-button-badge" /></Link>
+            <Link href="/uji-pemahaman" className="hero-btn-quiz"><HelpCircle/>Uji Pemahaman</Link>
+          </nav>
+        </section>
+      ) : section === 'belajar' ? (
+        <Learning/>
+      ) : section === 'mitigasi' ? (
+        <Mitigation/>
+      ) : section === 'bermain' ? (
+        <BagCatcherGame/>
+      ) : (
+        <QuizApp/>
+      )}
+    </main>
  <footer className="geo-footer"><span>Belajar mengenal alam. Berlatih menghadapi tantangan.</span><div><a href="https://www.naturalearthdata.com/" target="_blank" rel="noreferrer">Peta: Natural Earth</a><a href="https://volcano.si.edu/" target="_blank" rel="noreferrer">Gunung api: Smithsonian GVP</a><a href="https://pubs.usgs.gov/gip/dynamic/fire.html" target="_blank" rel="noreferrer">Cincin Api: USGS</a></div></footer>
  </div>;
 }
@@ -535,7 +554,7 @@ function Learning(){
  return <section className={'learning-deck slide-theme-'+slide} aria-label="Slide Kondisi Geografis Indonesia" onKeyDown={e=>{if(e.key==='ArrowRight'){e.preventDefault();setSlide(s=>Math.min(2,s+1));}if(e.key==='ArrowLeft'){e.preventDefault();setSlide(s=>Math.max(0,s-1));}}}>
  <div className="slide-top"><Link href="/" aria-label="Kembali ke Beranda"><House /></Link></div>
  <h1>Kondisi Geografis Indonesia</h1>
- <div className="slide-body has-map">
+ <div key={slide} className="slide-body has-map section-fade-in">
  {slide===0&&<article className="slide-glass"><img className="slide-illustration" src="/slide-khatulistiwa.gif" alt="Animasi Dilintasi Khatulistiwa"/><Sun/><h2>Dilintasi Khatulistiwa</h2><p>Garis khayal lintang 0° yang membagi Bumi menjadi belahan utara dan selatan.</p><h3>Pengaruh & Manfaat</h3><ul className="slide-aspects"><li><strong>Ekonomi:</strong> Sinar matahari dan iklim tropis sepanjang tahun menyuburkan sektor pertanian, perkebunan, serta pariwisata bahari.</li><li><strong>Sosial:</strong> Pola aktivitas masyarakat berjalan relatif stabil tanpa hambatan perubahan musim yang ekstrem.</li><li><strong>Budaya:</strong> Melahirkan ragam tradisi bercocok tanam, arsitektur rumah panggung bersirkulasi luas, dan pakaian adat berbahan ringan.</li></ul></article>}
  {slide===1&&<article className="slide-glass"><img className="slide-illustration" src="/slide-cincin-api.gif" alt="Animasi Jalur Cincin Api"/><Mountain/><h2>Jalur Cincin Api</h2><p>Kawasan pertemuan lempeng aktif dengan banyak gunung api dan potensi gempa di sekitar Samudra Pasifik.</p><h3>Pengaruh & Manfaat</h3><ul className="slide-aspects"><li><strong>Ekonomi:</strong> Abu vulkanik menyuburkan tanah pertanian serta menyimpan potensi energi panas bumi (geotermal) dan tambang mineral tinggi.</li><li><strong>Sosial:</strong> Menuntut ketangguhan (<em>resilience</em>) dan kesiapsiagaan masyarakat terhadap ancaman gempa, erupsi, dan tsunami.</li><li><strong>Budaya:</strong> Mendorong lahirnya kearifan lokal mitigasi bencana (arsitektur tradisional tahan gempa) serta tradisi penghormatan alam.</li></ul></article>}
  {slide===2&&<article className="slide-glass"><img className="slide-illustration" src="/slide-kepulauan.gif" alt="Animasi Negeri Kepulauan"/><Waves/><h2>Negeri Kepulauan</h2><p>Negara maritim yang menghubungkan ribuan pulau dengan bentang alam dan potensi perairan yang luas.</p><h3>Pengaruh & Manfaat</h3><ul className="slide-aspects"><li><strong>Ekonomi:</strong> Potensi perikanan dan sumber daya laut melimpah, meski membutuhkan biaya logistik dan transportasi antarpulau.</li><li><strong>Sosial:</strong> Pemukiman terkonsentrasi di wilayah pesisir serta mobilitas penduduk bertumpu pada konektivitas laut.</li><li><strong>Budaya:</strong> Isolasi geografis antarpulau melahirkan keberagaman suku, bahasa daerah, adat istiadat, serta tradisi kebaharian yang kaya.</li></ul></article>}
@@ -1178,7 +1197,7 @@ function MitigationVisualizer({
     </div>
    )}
 
-   <section className="geo-map-section miti-visual-section" aria-label="Visualisasi Langkah Mitigasi">
+   <section className="geo-map-section miti-visual-section section-fade-in" aria-label="Visualisasi Langkah Mitigasi">
     <div className="geo-map-head miti-visual-head">
      <div>
       <span className="geo-kicker">VISUALISASI MITIGASI · LANGKAH {pointIndex + 1} DARI {totalPoints}</span>
@@ -1317,7 +1336,7 @@ function Mitigation() {
    </div>
    <h1>Mitigasi Gempa Bumi</h1>
 
-   <div className="slide-body has-map miti-body">
+   <div key={slide} className="slide-body has-map miti-body section-fade-in">
     <article className="slide-glass miti-glass">
      <div className="miti-phase-header">
       <div className="miti-phase-badge">{currentPhase.subtitle}</div>

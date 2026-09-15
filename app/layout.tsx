@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import ViewportFit from './viewport-fit';
 import AudioPlayer from '@/components/audio-player';
+import PageTransition from '@/components/page-transition';
 
 export const metadata: Metadata = {
   title: "Sigap Gempa",
@@ -23,10 +24,11 @@ export default function RootLayout({
   return (
     <html lang="id">
       <body className="antialiased">
-        <ViewportFit>{children}</ViewportFit>
+        <ViewportFit>
+          <PageTransition>{children}</PageTransition>
+        </ViewportFit>
         <AudioPlayer />
       </body>
     </html>
   );
 }
-

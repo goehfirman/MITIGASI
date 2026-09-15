@@ -640,6 +640,15 @@ export default function BagCatcherGame() {
   const p2LeftPointerIdRef = useRef<number | null>(null);
   const p2RightPointerIdRef = useRef<number | null>(null);
 
+  const trackRef = useRef<HTMLDivElement>(null);
+  const pvpTrack1Ref = useRef<HTMLDivElement>(null);
+  const pvpTrack2Ref = useRef<HTMLDivElement>(null);
+  const isDraggingTrackRef = useRef<boolean>(false);
+  const isDraggingPvpTrack1Ref = useRef<boolean>(false);
+  const isDraggingPvpTrack2Ref = useRef<boolean>(false);
+  const p1TrackPointerIdRef = useRef<number | null>(null);
+  const p2TrackPointerIdRef = useRef<number | null>(null);
+
   // State mirror refs for requestAnimationFrame
   const gameModeRef = useRef<'solo' | 'pvp'>('solo');
   const playerNameRef = useRef('');
@@ -708,27 +717,45 @@ export default function BagCatcherGame() {
       if (e.key === 'a' || e.key === 'A') {
         keysRef.current.p1Left = true;
         setIsP1LeftActive(true);
+        const nextX = Math.max(9, bagXRef.current - 7.5);
+        bagXRef.current = nextX;
+        setBagX(nextX);
       } else if (e.key === 'd' || e.key === 'D') {
         keysRef.current.p1Right = true;
         setIsP1RightActive(true);
+        const nextX = Math.min(91, bagXRef.current + 7.5);
+        bagXRef.current = nextX;
+        setBagX(nextX);
       }
 
       if (mode === 'solo') {
         if (e.key === 'ArrowLeft') {
           keysRef.current.p1Left = true;
           setIsP1LeftActive(true);
+          const nextX = Math.max(9, bagXRef.current - 7.5);
+          bagXRef.current = nextX;
+          setBagX(nextX);
         } else if (e.key === 'ArrowRight') {
           keysRef.current.p1Right = true;
           setIsP1RightActive(true);
+          const nextX = Math.min(91, bagXRef.current + 7.5);
+          bagXRef.current = nextX;
+          setBagX(nextX);
         }
       } else {
         // PvP Mode: P2 Keyboard Controls (ArrowLeft & ArrowRight)
         if (e.key === 'ArrowLeft') {
           keysRef.current.p2Left = true;
           setIsP2LeftActive(true);
+          const nextX = Math.max(9, bagX2Ref.current - 7.5);
+          bagX2Ref.current = nextX;
+          setBagX2(nextX);
         } else if (e.key === 'ArrowRight') {
           keysRef.current.p2Right = true;
           setIsP2RightActive(true);
+          const nextX = Math.min(91, bagX2Ref.current + 7.5);
+          bagX2Ref.current = nextX;
+          setBagX2(nextX);
         }
       }
 
@@ -806,12 +833,17 @@ export default function BagCatcherGame() {
     setIsP2RightActive(false);
     isDraggingRef.current = false;
     isDraggingRef2.current = false;
+    isDraggingTrackRef.current = false;
+    isDraggingPvpTrack1Ref.current = false;
+    isDraggingPvpTrack2Ref.current = false;
     p1LeftPointerIdRef.current = null;
     p1RightPointerIdRef.current = null;
     p2LeftPointerIdRef.current = null;
     p2RightPointerIdRef.current = null;
     p1PlayfieldPointerIdRef.current = null;
     p2PlayfieldPointerIdRef.current = null;
+    p1TrackPointerIdRef.current = null;
+    p2TrackPointerIdRef.current = null;
 
     if (gameModeRef.current === 'solo') {
       if (reason === 'time') {
@@ -1012,31 +1044,41 @@ export default function BagCatcherGame() {
       lastTimeRef.current = now;
 
       if (!isPausedRef.current && stageRef.current === 'playing') {
-        const moveSpeed = 70; // percent per second
+        const moveSpeed = 120; // percent per second (responsif dan lincah untuk layar sentuh)
         const isPvP = gameModeRef.current === 'pvp';
 
         // 1. Move Player 1 Bag
         let currentX1 = bagXRef.current;
+        let movedP1 = false;
         if (keysRef.current.p1Left) {
           currentX1 = Math.max(9, currentX1 - moveSpeed * dt);
+          movedP1 = true;
         }
         if (keysRef.current.p1Right) {
           currentX1 = Math.min(91, currentX1 + moveSpeed * dt);
+          movedP1 = true;
         }
-        bagXRef.current = currentX1;
-        setBagX(currentX1);
+        if (movedP1) {
+          bagXRef.current = currentX1;
+          setBagX(currentX1);
+        }
 
         // 2. Move Player 2 Bag (if PvP)
         let currentX2 = bagX2Ref.current;
+        let movedP2 = false;
         if (isPvP) {
           if (keysRef.current.p2Left) {
             currentX2 = Math.max(9, currentX2 - moveSpeed * dt);
+            movedP2 = true;
           }
           if (keysRef.current.p2Right) {
             currentX2 = Math.min(91, currentX2 + moveSpeed * dt);
+            movedP2 = true;
           }
-          bagX2Ref.current = currentX2;
-          setBagX2(currentX2);
+          if (movedP2) {
+            bagX2Ref.current = currentX2;
+            setBagX2(currentX2);
+          }
         }
 
         // 3. Spawn Items
@@ -1224,7 +1266,135 @@ export default function BagCatcherGame() {
     return () => cancelAnimationFrame(frame);
   }, [stage, timeLeft, triggerGameOver]);
 
-  // Touch / Pointer dragging on playfield (Player 1 / Solo)
+  // 1. Position calculation helpers
+  const updateP1BagPositionFromPointer = useCallback((clientX: number) => {
+    if (!playfieldRef.current) return;
+    const rect = playfieldRef.current.getBoundingClientRect();
+    const relativeX = clientX - rect.left;
+    const percentX = (relativeX / rect.width) * 100;
+    const clamped = Math.max(9, Math.min(91, percentX));
+    bagXRef.current = clamped;
+    setBagX(clamped);
+  }, []);
+
+  const updateP2BagPositionFromPointer = useCallback((clientX: number) => {
+    if (!playfieldRef2.current) return;
+    const rect = playfieldRef2.current.getBoundingClientRect();
+    const relativeX = clientX - rect.left;
+    const percentX = (relativeX / rect.width) * 100;
+    const clamped = Math.max(9, Math.min(91, percentX));
+    bagX2Ref.current = clamped;
+    setBagX2(clamped);
+  }, []);
+
+  const updateP1BagPositionFromTrack = useCallback((clientX: number) => {
+    if (!trackRef.current) return;
+    const rect = trackRef.current.getBoundingClientRect();
+    const relativeX = clientX - rect.left;
+    const percentX = (relativeX / rect.width) * 100;
+    const clamped = Math.max(9, Math.min(91, percentX));
+    bagXRef.current = clamped;
+    setBagX(clamped);
+  }, []);
+
+  const updateP1BagPositionFromPvpTrack = useCallback((clientX: number) => {
+    if (!pvpTrack1Ref.current) return;
+    const rect = pvpTrack1Ref.current.getBoundingClientRect();
+    const relativeX = clientX - rect.left;
+    const percentX = (relativeX / rect.width) * 100;
+    const clamped = Math.max(9, Math.min(91, percentX));
+    bagXRef.current = clamped;
+    setBagX(clamped);
+  }, []);
+
+  const updateP2BagPositionFromPvpTrack = useCallback((clientX: number) => {
+    if (!pvpTrack2Ref.current) return;
+    const rect = pvpTrack2Ref.current.getBoundingClientRect();
+    const relativeX = clientX - rect.left;
+    const percentX = (relativeX / rect.width) * 100;
+    const clamped = Math.max(9, Math.min(91, percentX));
+    bagX2Ref.current = clamped;
+    setBagX2(clamped);
+  }, []);
+
+  // 2. Window-level pointer tracking (rock-solid for touch / interactive screens)
+  useEffect(() => {
+    const handleWindowPointerMove = (e: PointerEvent) => {
+      if (isDraggingRef.current && p1PlayfieldPointerIdRef.current === e.pointerId) {
+        updateP1BagPositionFromPointer(e.clientX);
+      }
+      if (isDraggingRef2.current && p2PlayfieldPointerIdRef.current === e.pointerId) {
+        updateP2BagPositionFromPointer(e.clientX);
+      }
+      if (isDraggingTrackRef.current && p1TrackPointerIdRef.current === e.pointerId) {
+        updateP1BagPositionFromTrack(e.clientX);
+      }
+      if (isDraggingPvpTrack1Ref.current && p1TrackPointerIdRef.current === e.pointerId) {
+        updateP1BagPositionFromPvpTrack(e.clientX);
+      }
+      if (isDraggingPvpTrack2Ref.current && p2TrackPointerIdRef.current === e.pointerId) {
+        updateP2BagPositionFromPvpTrack(e.clientX);
+      }
+    };
+
+    const handleWindowPointerUp = (e: PointerEvent) => {
+      if (p1PlayfieldPointerIdRef.current === e.pointerId) {
+        isDraggingRef.current = false;
+        p1PlayfieldPointerIdRef.current = null;
+      }
+      if (p2PlayfieldPointerIdRef.current === e.pointerId) {
+        isDraggingRef2.current = false;
+        p2PlayfieldPointerIdRef.current = null;
+      }
+      if (p1TrackPointerIdRef.current === e.pointerId) {
+        isDraggingTrackRef.current = false;
+        isDraggingPvpTrack1Ref.current = false;
+        p1TrackPointerIdRef.current = null;
+      }
+      if (p2TrackPointerIdRef.current === e.pointerId) {
+        isDraggingPvpTrack2Ref.current = false;
+        p2TrackPointerIdRef.current = null;
+      }
+      if (p1LeftPointerIdRef.current === e.pointerId) {
+        keysRef.current.p1Left = false;
+        setIsP1LeftActive(false);
+        p1LeftPointerIdRef.current = null;
+      }
+      if (p1RightPointerIdRef.current === e.pointerId) {
+        keysRef.current.p1Right = false;
+        setIsP1RightActive(false);
+        p1RightPointerIdRef.current = null;
+      }
+      if (p2LeftPointerIdRef.current === e.pointerId) {
+        keysRef.current.p2Left = false;
+        setIsP2LeftActive(false);
+        p2LeftPointerIdRef.current = null;
+      }
+      if (p2RightPointerIdRef.current === e.pointerId) {
+        keysRef.current.p2Right = false;
+        setIsP2RightActive(false);
+        p2RightPointerIdRef.current = null;
+      }
+    };
+
+    window.addEventListener('pointermove', handleWindowPointerMove, { passive: false });
+    window.addEventListener('pointerup', handleWindowPointerUp);
+    window.addEventListener('pointercancel', handleWindowPointerUp);
+
+    return () => {
+      window.removeEventListener('pointermove', handleWindowPointerMove);
+      window.removeEventListener('pointerup', handleWindowPointerUp);
+      window.removeEventListener('pointercancel', handleWindowPointerUp);
+    };
+  }, [
+    updateP1BagPositionFromPointer,
+    updateP2BagPositionFromPointer,
+    updateP1BagPositionFromTrack,
+    updateP1BagPositionFromPvpTrack,
+    updateP2BagPositionFromPvpTrack
+  ]);
+
+  // 3. Pointer drag handlers on Playfield
   const handlePointerDownPlayfield = (e: React.PointerEvent<HTMLDivElement>) => {
     e.preventDefault();
     p1PlayfieldPointerIdRef.current = e.pointerId;
@@ -1251,17 +1421,6 @@ export default function BagCatcherGame() {
     }
   };
 
-  const updateP1BagPositionFromPointer = (clientX: number) => {
-    if (!playfieldRef.current) return;
-    const rect = playfieldRef.current.getBoundingClientRect();
-    const relativeX = clientX - rect.left;
-    const percentX = (relativeX / rect.width) * 100;
-    const clamped = Math.max(9, Math.min(91, percentX));
-    bagXRef.current = clamped;
-    setBagX(clamped);
-  };
-
-  // Touch / Pointer dragging on playfield (Player 2 - PvP)
   const handlePointerDownPlayfield2 = (e: React.PointerEvent<HTMLDivElement>) => {
     e.preventDefault();
     p2PlayfieldPointerIdRef.current = e.pointerId;
@@ -1288,22 +1447,50 @@ export default function BagCatcherGame() {
     }
   };
 
-  const updateP2BagPositionFromPointer = (clientX: number) => {
-    if (!playfieldRef2.current) return;
-    const rect = playfieldRef2.current.getBoundingClientRect();
-    const relativeX = clientX - rect.left;
-    const percentX = (relativeX / rect.width) * 100;
-    const clamped = Math.max(9, Math.min(91, percentX));
-    bagX2Ref.current = clamped;
-    setBagX2(clamped);
+  // 4. Pointer drag start handlers on Slider Tracks
+  const handleTrackPointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    p1TrackPointerIdRef.current = e.pointerId;
+    isDraggingTrackRef.current = true;
+    updateP1BagPositionFromTrack(e.clientX);
+    try {
+      e.currentTarget.setPointerCapture?.(e.pointerId);
+    } catch {}
+    if (typeof navigator !== 'undefined' && navigator.vibrate) navigator.vibrate(15);
   };
 
-  // On-screen Button handlers for Player 1
+  const handleP1TrackDown = (e: React.PointerEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    p1TrackPointerIdRef.current = e.pointerId;
+    isDraggingPvpTrack1Ref.current = true;
+    updateP1BagPositionFromPvpTrack(e.clientX);
+    try {
+      e.currentTarget.setPointerCapture?.(e.pointerId);
+    } catch {}
+    if (typeof navigator !== 'undefined' && navigator.vibrate) navigator.vibrate(15);
+  };
+
+  const handleP2TrackDown = (e: React.PointerEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    p2TrackPointerIdRef.current = e.pointerId;
+    isDraggingPvpTrack2Ref.current = true;
+    updateP2BagPositionFromPvpTrack(e.clientX);
+    try {
+      e.currentTarget.setPointerCapture?.(e.pointerId);
+    } catch {}
+    if (typeof navigator !== 'undefined' && navigator.vibrate) navigator.vibrate(15);
+  };
+
+  // 5. On-screen Button handlers with Instant Tap Hop
   const handleP1LeftDown = (e: React.PointerEvent<HTMLButtonElement>) => {
     e.preventDefault();
     p1LeftPointerIdRef.current = e.pointerId;
     keysRef.current.p1Left = true;
     setIsP1LeftActive(true);
+    // Instant tap-step for ultra-responsive feel
+    const nextX = Math.max(9, bagXRef.current - 7.5);
+    bagXRef.current = nextX;
+    setBagX(nextX);
     try {
       e.currentTarget.setPointerCapture?.(e.pointerId);
     } catch {}
@@ -1319,11 +1506,16 @@ export default function BagCatcherGame() {
       } catch {}
     }
   };
+
   const handleP1RightDown = (e: React.PointerEvent<HTMLButtonElement>) => {
     e.preventDefault();
     p1RightPointerIdRef.current = e.pointerId;
     keysRef.current.p1Right = true;
     setIsP1RightActive(true);
+    // Instant tap-step for ultra-responsive feel
+    const nextX = Math.min(91, bagXRef.current + 7.5);
+    bagXRef.current = nextX;
+    setBagX(nextX);
     try {
       e.currentTarget.setPointerCapture?.(e.pointerId);
     } catch {}
@@ -1340,12 +1532,15 @@ export default function BagCatcherGame() {
     }
   };
 
-  // On-screen Button handlers for Player 2 (PvP)
   const handleP2LeftDown = (e: React.PointerEvent<HTMLButtonElement>) => {
     e.preventDefault();
     p2LeftPointerIdRef.current = e.pointerId;
     keysRef.current.p2Left = true;
     setIsP2LeftActive(true);
+    // Instant tap-step for PvP P2
+    const nextX = Math.max(9, bagX2Ref.current - 7.5);
+    bagX2Ref.current = nextX;
+    setBagX2(nextX);
     try {
       e.currentTarget.setPointerCapture?.(e.pointerId);
     } catch {}
@@ -1361,11 +1556,16 @@ export default function BagCatcherGame() {
       } catch {}
     }
   };
+
   const handleP2RightDown = (e: React.PointerEvent<HTMLButtonElement>) => {
     e.preventDefault();
     p2RightPointerIdRef.current = e.pointerId;
     keysRef.current.p2Right = true;
     setIsP2RightActive(true);
+    // Instant tap-step for PvP P2
+    const nextX = Math.min(91, bagX2Ref.current + 7.5);
+    bagX2Ref.current = nextX;
+    setBagX2(nextX);
     try {
       e.currentTarget.setPointerCapture?.(e.pointerId);
     } catch {}
@@ -1405,7 +1605,7 @@ export default function BagCatcherGame() {
       {/* SCREEN 1: START / LOBBY                                      */}
       {/* ============================================================ */}
       {stage === 'start' && (
-        <div className="game-deck-body game-stage-centered">
+        <div key="start" className="game-deck-body game-stage-centered section-fade-in">
           <article className="game-glass-card game-start-card game-start-card-clean" aria-label="Mulai Permainan">
             {/* Mode Switcher Tabs */}
             <div className="game-mode-tabs" role="tablist" aria-label="Pilih Mode Permainan">
@@ -1440,84 +1640,77 @@ export default function BagCatcherGame() {
             {/* Name Form */}
             <form onSubmit={handleStartGame} className="game-name-form">
               {gameMode === 'solo' ? (
-                <>
-                  <label htmlFor="player-name-input" className="game-name-label">
-                    <Sparkles className="w-5 h-5 text-emerald-400" />
-                    <span>Ketikkan Nama Pemain:</span>
+                <div className="pvp-input-col p1" style={{ width: '100%', maxWidth: '100%' }}>
+                  <label htmlFor="player-name-input" className="game-name-label pvp-label-p1">
+                    <span className="pvp-badge-tag p1">P1</span>
+                    <span>Pemain Tunggal (Tas Biru)</span>
                   </label>
-                  <div className="game-input-row">
+                  <input
+                    id="player-name-input"
+                    type="text"
+                    value={playerName}
+                    onChange={(e) => {
+                      setPlayerName(e.target.value);
+                      if (nameError) setNameError('');
+                    }}
+                    placeholder="Ketikkan Nama Pemain (Contoh: Siti Rahma)"
+                    maxLength={35}
+                    className="game-name-input pvp-input"
+                    autoFocus
+                  />
+                  <span className="pvp-control-hint p1">Kendali: Tombol A & D / Tombol Panah / Sentuh & Geser Layar</span>
+                </div>
+              ) : (
+                <div className="pvp-input-grid">
+                  {/* Pemain 1 Input */}
+                  <div className="pvp-input-col p1">
+                    <label htmlFor="pvp-p1-input" className="game-name-label pvp-label-p1">
+                      <span className="pvp-badge-tag p1">P1</span>
+                      <span>Pemain 1 (Tas Biru)</span>
+                    </label>
                     <input
-                      id="player-name-input"
+                      id="pvp-p1-input"
                       type="text"
                       value={playerName}
                       onChange={(e) => {
                         setPlayerName(e.target.value);
                         if (nameError) setNameError('');
                       }}
-                      placeholder="Contoh: Siti Rahma"
-                      maxLength={35}
-                      className="game-name-input"
+                      placeholder="Nama P1 (Contoh: Budi)"
+                      maxLength={25}
+                      className="game-name-input pvp-input"
                       autoFocus
                     />
-                    <button type="submit" className="game-start-btn">
-                      <span>Mulai Bermain!</span>
-                      <ArrowRight className="w-6 h-6" />
-                    </button>
-                  </div>
-                </>
-              ) : (
-                <>
-                  <div className="pvp-input-grid">
-                    {/* Pemain 1 Input */}
-                    <div className="pvp-input-col p1">
-                      <label htmlFor="pvp-p1-input" className="game-name-label pvp-label-p1">
-                        <span className="pvp-badge-tag p1">P1</span>
-                        <span>Pemain 1 (Tas Biru)</span>
-                      </label>
-                      <input
-                        id="pvp-p1-input"
-                        type="text"
-                        value={playerName}
-                        onChange={(e) => {
-                          setPlayerName(e.target.value);
-                          if (nameError) setNameError('');
-                        }}
-                        placeholder="Nama P1 (Contoh: Budi)"
-                        maxLength={25}
-                        className="game-name-input pvp-input"
-                        autoFocus
-                      />
-                      <span className="pvp-control-hint p1">Kendali: Tombol A & D / Layar Kiri</span>
-                    </div>
-
-                    {/* Pemain 2 Input */}
-                    <div className="pvp-input-col p2">
-                      <label htmlFor="pvp-p2-input" className="game-name-label pvp-label-p2">
-                        <span className="pvp-badge-tag p2">P2</span>
-                        <span>Pemain 2 (Tas Kuning)</span>
-                      </label>
-                      <input
-                        id="pvp-p2-input"
-                        type="text"
-                        value={player2Name}
-                        onChange={(e) => {
-                          setPlayer2Name(e.target.value);
-                          if (nameError) setNameError('');
-                        }}
-                        placeholder="Nama P2 (Contoh: Siti)"
-                        maxLength={25}
-                        className="game-name-input pvp-input"
-                      />
-                      <span className="pvp-control-hint p2">Kendali: Tombol Panah ← & → / Layar Kanan</span>
-                    </div>
+                    <span className="pvp-control-hint p1">Kendali: Tombol A & D / Layar Kiri</span>
                   </div>
 
-                  <button type="submit" className="game-start-btn pvp-start-btn">
-                    <Swords className="w-6 h-6" />
-                    <span>Mulai Duel!</span>
-                  </button>
-                </>
+                  {/* Pemain 2 Input */}
+                  <div className="pvp-input-col p2">
+                    <label htmlFor="pvp-p2-input" className="game-name-label pvp-label-p2">
+                      <span className="pvp-badge-tag p2">P2</span>
+                      <span>Pemain 2 (Tas Kuning)</span>
+                    </label>
+                    <input
+                      id="pvp-p2-input"
+                      type="text"
+                      value={player2Name}
+                      onChange={(e) => {
+                        setPlayer2Name(e.target.value);
+                        if (nameError) setNameError('');
+                      }}
+                      placeholder="Nama P2 (Contoh: Siti)"
+                      maxLength={25}
+                      className="game-name-input pvp-input"
+                    />
+                    <span className="pvp-control-hint p2">Kendali: Tombol Panah ← & → / Layar Kanan</span>
+                  </div>
+                </div>
               )}
+
+              <button type="submit" className="game-start-btn pvp-start-btn">
+                <Play className="w-6 h-6" />
+                <span>Mulai Bermain!</span>
+              </button>
 
               {nameError && (
                 <p className="quiz-error-msg" role="alert">
@@ -1535,204 +1728,199 @@ export default function BagCatcherGame() {
       {/* ============================================================ */}
       {stage === 'playing' && (
         gameMode === 'solo' ? (
-          <div className="game-deck-body game-stage-active">
-            {/* Main Game Arena */}
-            <article className="game-glass-card game-arena-card" aria-label="Arena Tangkap Benda">
-              {/* TOP HUD */}
-              <div className="arena-hud">
-                {/* Sisi Kiri: Timer */}
-                <div className="arena-hud-side left">
-                  <div className="hud-pill hud-pill-timer">
-                    <span className="hud-pill-label">Waktu:</span>
-                    <span className="hud-pill-val" style={{ color: timeLeft <= 10 ? '#f87171' : '#38bdf8' }}>
-                      ⏱️ {timeLeft}s
-                    </span>
+          <div key="playing-solo" className="game-deck-body solo-arena-layout section-fade-in">
+            {/* Top Shared Match Bar */}
+            <div className="pvp-top-header">
+              <div className="pvp-header-side p1">
+                <span className="pvp-badge-tag p1">P1</span>
+                <strong className="pvp-header-player-name">{playerName || 'Pemain Tunggal'}</strong>
+              </div>
+
+              <div className="pvp-header-center">
+                <div className="hud-pill hud-pill-timer">
+                  <span className="hud-pill-val" style={{ color: timeLeft <= 10 ? '#f87171' : '#38bdf8' }}>
+                    ⏱️ {timeLeft}s
+                  </span>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setIsPaused(!isPaused)}
+                  className="game-top-btn"
+                  style={{ width: '36px', height: '36px', minHeight: '36px', borderRadius: '10px' }}
+                  title={isPaused ? "Lanjutkan" : "Jeda"}
+                  aria-label={isPaused ? "Lanjutkan" : "Jeda"}
+                >
+                  {isPaused ? <Play className="w-4 h-4 text-emerald-400" /> : <Pause className="w-4 h-4 text-amber-400" />}
+                </button>
+              </div>
+
+              <div className="solo-side-record">
+                <div className="solo-record-pill" title="Rekor Tertinggi">
+                  <Trophy className="w-4 h-4 text-amber-400" />
+                  <span>Rekor: {Math.max(highScore, score)}</span>
+                </div>
+                <span className="pvp-badge-tag solo-badge">SOLO</span>
+              </div>
+            </div>
+
+            {/* Solo Arena Grid */}
+            <div className="solo-arena-grid">
+              <article className={`pvp-split-pane p1 solo-pane ${isDangerShake ? 'is-danger-shake' : ''}`} aria-label="Arena Pemain Tunggal">
+                {/* HUD P1 */}
+                <div className="pvp-split-hud p1">
+                  <div className="pvp-hud-name-group">
+                    <span className="pvp-badge-tag p1">P1</span>
+                    <span className="pvp-hud-player-title">{playerName || 'Pemain Tunggal'}</span>
+                  </div>
+                  <div className="hud-lives" aria-label={`Ketahanan Tas: ${lives}`}>
+                    {[1, 2, 3].map((heartIndex) => (
+                      <Heart
+                        key={heartIndex}
+                        className={`w-5 h-5 hud-heart ${heartIndex <= lives ? 'fill-rose-500' : 'empty'}`}
+                      />
+                    ))}
+                  </div>
+                  <div className="pvp-hud-score-group">
+                    <span className="pvp-score-num p1">{score}</span>
+                    {combo > 1 && <span className="hud-combo-badge p1">x{combo}</span>}
                   </div>
                 </div>
 
-                {/* Tengah: Ketahanan Tas (Terkunci di Posisi Tengah / Locked Center) */}
-                <div className="arena-hud-center">
-                  <div className="hud-pill hud-pill-lives">
-                    <span className="hud-pill-label">Ketahanan Tas:</span>
-                    <div className="hud-lives" aria-label={`Sisa Nyawa: ${lives}`}>
-                      {[1, 2, 3].map((heartIndex) => (
-                        <Heart
-                          key={heartIndex}
-                          className={`w-6 h-6 hud-heart ${heartIndex <= lives ? 'fill-rose-500' : 'empty'}`}
-                        />
-                      ))}
+                {/* Playfield */}
+                <div
+                  ref={playfieldRef}
+                  className="game-playfield pvp-playfield"
+                  onPointerDown={handlePointerDownPlayfield}
+                  onPointerMove={handlePointerMovePlayfield}
+                  onPointerUp={handlePointerUpPlayfield}
+                  onPointerCancel={handlePointerUpPlayfield}
+                  onContextMenu={(e) => e.preventDefault()}
+                >
+                  <div className="playfield-grid-bg" />
+                  <div className="catch-zone-line" />
+
+                  {/* Falling Items */}
+                  {fallingItems.map((item) => (
+                    <div
+                      key={item.uid}
+                      className={`falling-item cat-${item.item.category}`}
+                      style={{
+                        left: `${item.x}%`,
+                        top: `${item.y}%`
+                      }}
+                    >
+                      <div className="item-avatar">
+                        {item.item.image ? (
+                          <img
+                            src={item.item.image}
+                            alt={item.item.name}
+                            className="item-avatar-img"
+                            draggable={false}
+                          />
+                        ) : (
+                          <span>{item.item.emoji}</span>
+                        )}
+                      </div>
+                      <span className="item-name-tag">{item.item.name}</span>
                     </div>
+                  ))}
+
+                  {/* Feedbacks */}
+                  {feedbacks.map((fb) => (
+                    <div
+                      key={fb.uid}
+                      className={`floating-feedback ${fb.type} player-p1`}
+                      style={{
+                        left: `${fb.x}%`,
+                        top: `${fb.y}%`
+                      }}
+                    >
+                      {fb.text}
+                    </div>
+                  ))}
+
+                  {/* Emergency Bag */}
+                  <div
+                    className={`player-bag bag-p1 ${bagSquish ? 'is-catching' : ''} ${isBagOpen ? 'is-open' : 'is-closed'}`}
+                    style={{
+                      left: `${bagX}%`
+                    }}
+                  >
+                    <div className="bag-basket-aura aura-p1" />
+                    <img
+                      src={isBagOpen ? "/tas buka.png" : "/tas tutup.png"}
+                      alt={isBagOpen ? "Tas Siaga Terbuka" : "Tas Siaga Tertutup"}
+                      className="bag-sprite-img"
+                      draggable={false}
+                    />
                   </div>
                 </div>
 
-                {/* Sisi Kanan: Skor & Pause Button */}
-                <div className="arena-hud-side right">
-                  <div className="hud-pill hud-pill-score">
-                    <span className="hud-pill-label">Skor:</span>
-                    <span className="hud-pill-val hud-score-val">{score}</span>
-                    {combo > 1 && (
-                      <span className="hud-combo-badge">
-                        <Flame className="w-3.5 h-3.5 inline mr-0.5" />
-                        x{combo} Combo!
-                      </span>
-                    )}
+                {/* ON-SCREEN CONTROLS (SOLO) */}
+                <div className="pvp-split-controls p1 solo-controls">
+                  <button
+                    type="button"
+                    className={`control-btn pvp-btn p1 ${isP1LeftActive ? 'is-active' : ''}`}
+                    onPointerDown={handleP1LeftDown}
+                    onPointerUp={handleP1LeftUp}
+                    onPointerCancel={handleP1LeftUp}
+                    onContextMenu={(e) => e.preventDefault()}
+                    aria-label="Gerakkan Tas ke Kiri"
+                  >
+                    <ArrowLeft className="w-6 h-6" />
+                  </button>
+
+                  <div
+                    ref={trackRef}
+                    className={`pvp-track-container p1 solo-track ${isDraggingTrackRef.current ? 'is-dragging' : ''}`}
+                    onPointerDown={handleTrackPointerDown}
+                    onContextMenu={(e) => e.preventDefault()}
+                    title="Geser atau sentuh track untuk kontrol instan"
+                  >
+                    <div className="pvp-track-bar">
+                      <div
+                        className="pvp-track-thumb p1"
+                        style={{ left: `${bagX}%` }}
+                      />
+                    </div>
+                    <span className="pvp-track-label">Geser atau sentuh track untuk kontrol instan</span>
                   </div>
 
                   <button
                     type="button"
-                    onClick={() => setIsPaused(!isPaused)}
-                    className="game-top-btn"
-                    style={{ width: '36px', height: '36px', minHeight: '36px', borderRadius: '10px' }}
-                    title={isPaused ? "Lanjutkan" : "Jeda"}
-                    aria-label={isPaused ? "Lanjutkan" : "Jeda"}
+                    className={`control-btn pvp-btn p1 ${isP1RightActive ? 'is-active' : ''}`}
+                    onPointerDown={handleP1RightDown}
+                    onPointerUp={handleP1RightUp}
+                    onPointerCancel={handleP1RightUp}
+                    onContextMenu={(e) => e.preventDefault()}
+                    aria-label="Gerakkan Tas ke Kanan"
                   >
-                    {isPaused ? <Play className="w-4 h-4 text-emerald-400" /> : <Pause className="w-4 h-4 text-amber-400" />}
+                    <ArrowRight className="w-6 h-6" />
                   </button>
                 </div>
-              </div>
+              </article>
+            </div>
 
-              {/* The Falling Arena (Sky Chute) */}
-              <div
-                ref={playfieldRef}
-                className={`game-playfield ${isDangerShake ? 'is-danger-shake' : ''}`}
-                onPointerDown={handlePointerDownPlayfield}
-                onPointerMove={handlePointerMovePlayfield}
-                onPointerUp={handlePointerUpPlayfield}
-                onPointerCancel={handlePointerUpPlayfield}
-                onContextMenu={(e) => e.preventDefault()}
-              >
-                <div className="playfield-grid-bg" />
-                <div className="catch-zone-line" />
-
-                {/* Falling Items */}
-                {fallingItems.map((item) => (
-                  <div
-                    key={item.uid}
-                    className={`falling-item cat-${item.item.category}`}
-                    style={{
-                      left: `${item.x}%`,
-                      top: `${item.y}%`
-                    }}
-                  >
-                    <div className="item-avatar">
-                      {item.item.image ? (
-                        <img
-                          src={item.item.image}
-                          alt={item.item.name}
-                          className="item-avatar-img"
-                          draggable={false}
-                        />
-                      ) : (
-                        <span>{item.item.emoji}</span>
-                      )}
-                    </div>
-                    <span className="item-name-tag">{item.item.name}</span>
-                  </div>
-                ))}
-
-                {/* Floating Feedback Badges */}
-                {feedbacks.map((fb) => (
-                  <div
-                    key={fb.uid}
-                    className={`floating-feedback ${fb.type}`}
-                    style={{
-                      left: `${fb.x}%`,
-                      top: `${fb.y}%`
-                    }}
-                  >
-                    {fb.text}
-                  </div>
-                ))}
-
-                {/* Emergency Bag */}
-                <div
-                  className={`player-bag bag-p1 ${bagSquish ? 'is-catching' : ''} ${isBagOpen ? 'is-open' : 'is-closed'}`}
-                  style={{
-                    left: `${bagX}%`
-                  }}
-                >
-                  <div className="bag-basket-aura aura-p1" />
-                  <img
-                    src={isBagOpen ? "/tas buka.png" : "/tas tutup.png"}
-                    alt={isBagOpen ? "Tas Siaga Terbuka" : "Tas Siaga Tertutup"}
-                    className="bag-sprite-img"
-                    draggable={false}
-                  />
-                </div>
-
-                {/* Pause Overlay */}
-                {isPaused && (
-                  <div
-                    style={{
-                      position: 'absolute',
-                      inset: 0,
-                      backgroundColor: 'rgba(10, 25, 41, 0.85)',
-                      backdropFilter: 'blur(4px)',
-                      display: 'flex',
-                      flexDirection: 'column',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      zIndex: 30
-                    }}
-                  >
-                    <h3 style={{ fontSize: '24px', fontWeight: 800, color: '#ffd166', marginBottom: '10px' }}>
-                      Permainan Dijeda (PAUSE)
-                    </h3>
-                    <button
-                      type="button"
-                      onClick={() => setIsPaused(false)}
-                      className="game-start-btn"
-                    >
-                      <Play className="w-5 h-5" />
-                      <span>Lanjutkan Permainan</span>
-                    </button>
-                  </div>
-                )}
-              </div>
-
-              {/* ON-SCREEN CONTROLS (SOLO) */}
-              <div className="on-screen-controls" aria-label="Kontrol Layar Tas Siaga">
+            {/* Pause Overlay */}
+            {isPaused && (
+              <div className="pvp-pause-overlay">
+                <h3 style={{ fontSize: '24px', fontWeight: 800, color: '#ffd166', marginBottom: '10px' }}>
+                  Permainan Dijeda (PAUSE)
+                </h3>
                 <button
                   type="button"
-                  className={`control-btn ${isP1LeftActive ? 'is-active' : ''}`}
-                  onPointerDown={handleP1LeftDown}
-                  onPointerUp={handleP1LeftUp}
-                  onPointerLeave={handleP1LeftUp}
-                  onPointerCancel={handleP1LeftUp}
-                  onContextMenu={(e) => e.preventDefault()}
-                  aria-label="Gerakkan Tas ke Kiri"
+                  onClick={() => setIsPaused(false)}
+                  className="game-start-btn"
                 >
-                  <ArrowLeft className="w-6 h-6" />
-                </button>
-
-                <div className="control-center-track">
-                  <div className="track-slider-box" title="Posisi Tas Siaga">
-                    <div
-                      className="track-slider-thumb"
-                      style={{ left: `${bagX}%` }}
-                    />
-                  </div>
-                  <span className="track-hint-text">Sentuh & Tahan Tombol atau Geser</span>
-                </div>
-
-                <button
-                  type="button"
-                  className={`control-btn ${isP1RightActive ? 'is-active' : ''}`}
-                  onPointerDown={handleP1RightDown}
-                  onPointerUp={handleP1RightUp}
-                  onPointerLeave={handleP1RightUp}
-                  onPointerCancel={handleP1RightUp}
-                  onContextMenu={(e) => e.preventDefault()}
-                  aria-label="Gerakkan Tas ke Kanan"
-                >
-                  <ArrowRight className="w-6 h-6" />
+                  <Play className="w-5 h-5" />
+                  <span>Lanjutkan Permainan</span>
                 </button>
               </div>
-            </article>
+            )}
           </div>
         ) : (
           /* PVP SPLITSCREEN LAYOUT (DUEL BERDAMPINGAN KIRI-KANAN) */
-          <div className="game-deck-body pvp-splitscreen-layout">
+          <div key="playing-pvp" className="game-deck-body pvp-splitscreen-layout section-fade-in">
             {/* Top Shared Match Bar */}
             <div className="pvp-top-header">
               <div className="pvp-header-side p1">
@@ -1865,22 +2053,31 @@ export default function BagCatcherGame() {
                     className={`control-btn pvp-btn p1 ${isP1LeftActive ? 'is-active' : ''}`}
                     onPointerDown={handleP1LeftDown}
                     onPointerUp={handleP1LeftUp}
-                    onPointerLeave={handleP1LeftUp}
                     onPointerCancel={handleP1LeftUp}
                     onContextMenu={(e) => e.preventDefault()}
                     aria-label="P1 Kiri (A)"
                   >
                     <ArrowLeft className="w-6 h-6" />
                   </button>
-                  <div className="pvp-track-hint">
-                    <span>A / D / Sentuh</span>
+
+                  <div
+                    ref={pvpTrack1Ref}
+                    className={`pvp-track-container p1 ${isDraggingPvpTrack1Ref.current ? 'is-dragging' : ''}`}
+                    onPointerDown={handleP1TrackDown}
+                    onContextMenu={(e) => e.preventDefault()}
+                    title="Geser tas P1"
+                  >
+                    <div className="pvp-track-bar">
+                      <div className="pvp-track-thumb p1" style={{ left: `${bagX}%` }} />
+                    </div>
+                    <span className="pvp-track-label">Geser Tas P1</span>
                   </div>
+
                   <button
                     type="button"
                     className={`control-btn pvp-btn p1 ${isP1RightActive ? 'is-active' : ''}`}
                     onPointerDown={handleP1RightDown}
                     onPointerUp={handleP1RightUp}
-                    onPointerLeave={handleP1RightUp}
                     onPointerCancel={handleP1RightUp}
                     onContextMenu={(e) => e.preventDefault()}
                     aria-label="P1 Kanan (D)"
@@ -1989,22 +2186,31 @@ export default function BagCatcherGame() {
                     className={`control-btn pvp-btn p2 ${isP2LeftActive ? 'is-active' : ''}`}
                     onPointerDown={handleP2LeftDown}
                     onPointerUp={handleP2LeftUp}
-                    onPointerLeave={handleP2LeftUp}
                     onPointerCancel={handleP2LeftUp}
                     onContextMenu={(e) => e.preventDefault()}
                     aria-label="P2 Kiri"
                   >
                     <ArrowLeft className="w-6 h-6" />
                   </button>
-                  <div className="pvp-track-hint">
-                    <span>← / → / Sentuh</span>
+
+                  <div
+                    ref={pvpTrack2Ref}
+                    className={`pvp-track-container p2 ${isDraggingPvpTrack2Ref.current ? 'is-dragging' : ''}`}
+                    onPointerDown={handleP2TrackDown}
+                    onContextMenu={(e) => e.preventDefault()}
+                    title="Geser tas P2"
+                  >
+                    <div className="pvp-track-bar">
+                      <div className="pvp-track-thumb p2" style={{ left: `${bagX2}%` }} />
+                    </div>
+                    <span className="pvp-track-label">Geser Tas P2</span>
                   </div>
+
                   <button
                     type="button"
                     className={`control-btn pvp-btn p2 ${isP2RightActive ? 'is-active' : ''}`}
                     onPointerDown={handleP2RightDown}
                     onPointerUp={handleP2RightUp}
-                    onPointerLeave={handleP2RightUp}
                     onPointerCancel={handleP2RightUp}
                     onContextMenu={(e) => e.preventDefault()}
                     aria-label="P2 Kanan"
@@ -2039,7 +2245,7 @@ export default function BagCatcherGame() {
       {/* SCREEN 3: GAMEOVER & EVALUATION RESULT                       */}
       {/* ============================================================ */}
       {stage === 'gameover' && (
-        <div className="game-deck-body game-stage-centered">
+        <div key="gameover" className="game-deck-body game-stage-centered section-fade-in">
           <article className="game-glass-card game-result-card" aria-label="Hasil Permainan">
             {gameMode === 'solo' ? (
               // SOLO RESULT
@@ -2064,6 +2270,25 @@ export default function BagCatcherGame() {
                       ? `Luar biasa, ${playerName || 'Pejuang Siaga'}! Kamu berhasil mengumpulkan logistik penting sebelum waktu habis.`
                       : `Tetap semangat, ${playerName || 'Pejuang Siaga'}! Selalu waspadai benda berbahaya dan barang pengecoh saat mengemas tas siaga.`}
                   </p>
+                </div>
+
+                {/* Unified Player Card for Solo */}
+                <div className="solo-result-card-container">
+                  <div className="pvp-player-card p1 is-winner">
+                    <div className="pvp-card-header">
+                      <span className="pvp-badge-tag p1">P1</span>
+                      <strong>{playerName || 'Pemain Tunggal'}</strong>
+                      <span className="pvp-win-tag">{lives > 0 ? 'BERHASIL' : 'SELESAI'}</span>
+                    </div>
+                    <div className="pvp-card-score">{score} Poin</div>
+                    <div className="pvp-card-detail">
+                      <span>Benda Siaga: <strong>{totalSiagaCaught}</strong></span>
+                      <span className="pvp-detail-dot">•</span>
+                      <span>Sisa Ketahanan: <strong style={{ color: lives > 0 ? '#34d399' : '#f87171' }}>{lives} / 3 ❤️</strong></span>
+                      <span className="pvp-detail-dot">•</span>
+                      <span>Rekor: <strong style={{ color: '#ffd166' }}>{Math.max(highScore, score)}</strong></span>
+                    </div>
+                  </div>
                 </div>
 
                 {/* Stats Row */}

@@ -167,7 +167,7 @@ export default function QuizApp() {
       {/* 1. LAYAR START (INPUT NAMA MURID) */}
       {/* ============================================================ */}
       {stage === 'start' && (
-        <div className="quiz-deck-body quiz-stage-centered">
+        <div key="start" className="quiz-deck-body quiz-stage-centered section-fade-in">
           <article className="slide-glass quiz-glass-card quiz-start-card" aria-label="Mulai Uji Pemahaman">
             <div className="quiz-card-head">
               <div className="geo-kicker">
@@ -266,7 +266,7 @@ export default function QuizApp() {
       {/* 2. LAYAR KUIS INTERAKTIF */}
       {/* ============================================================ */}
       {stage === 'quiz' && currentQ && (
-        <div className="quiz-deck-body quiz-stage-active">
+        <div key={`quiz-${currentIndex}`} className="quiz-deck-body quiz-stage-active section-fade-in">
           <article className="slide-glass quiz-glass-card quiz-active-card" aria-label={`Soal nomor ${currentIndex + 1}`}>
             {currentQ.type === 'map-click' ? (
               <div className="quiz-active-grid-map">
@@ -433,7 +433,7 @@ export default function QuizApp() {
       {/* 3. LAYAR HASIL & SKOR AKHIR */}
       {/* ============================================================ */}
       {stage === 'result' && (
-        <div className="quiz-deck-body quiz-stage-centered">
+        <div key="result" className="quiz-deck-body quiz-stage-centered section-fade-in">
           <article className="slide-glass quiz-glass-card quiz-result-card" aria-label="Hasil Uji Pemahaman">
             <div className="result-header">
               <div className="result-trophy-ring">
@@ -520,7 +520,7 @@ export default function QuizApp() {
       {/* 4. LAYAR PEMBAHASAN SOAL LENGKAP */}
       {/* ============================================================ */}
       {stage === 'review' && (
-        <div className="quiz-deck-body quiz-stage-review">
+        <div key="review" className="quiz-deck-body quiz-stage-review section-fade-in">
           <article className="slide-glass quiz-glass-card quiz-review-card" aria-label="Tinjauan Pembahasan Soal">
             <div className="review-top-bar">
               <div>

@@ -97,3 +97,55 @@ html,body{height:100%;overflow:hidden}.viewport-fit{position:fixed;inset:0;overf
 .popup-action-btn.delete:hover{background:#dc2626;border-color:#f87171;color:#fff}
 .popup-close-btn{background:transparent;border:0;color:#94a3b8;cursor:pointer;padding:4px;border-radius:6px;display:flex;align-items:center;justify-content:center;transition:all .15s ease}
 .popup-close-btn:hover{background:rgba(255,255,255,.15);color:#fff}
+
+/* ======================================================== */
+/* PAGE & SECTION TRANSITION ANIMATIONS                     */
+/* ======================================================== */
+
+/* Route-level transition (between pages) */
+.page-fade-in {
+  animation: pageFadeSlideIn 0.45s cubic-bezier(0.16, 1, 0.3, 1) both;
+  will-change: opacity, transform, filter;
+  backface-visibility: hidden;
+}
+
+/* Section-level transition (within a page, e.g. menu sections, game stages) */
+.section-fade-in {
+  animation: sectionFadeIn 0.38s cubic-bezier(0.16, 1, 0.3, 1) both;
+  will-change: opacity, transform, filter;
+  backface-visibility: hidden;
+}
+
+@keyframes pageFadeSlideIn {
+  0% {
+    opacity: 0;
+    transform: translateY(20px) scale(0.985);
+    filter: blur(4px);
+  }
+  60% {
+    opacity: 0.9;
+    filter: blur(1px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0px);
+  }
+}
+
+@keyframes sectionFadeIn {
+  0% {
+    opacity: 0;
+    transform: translateY(14px) scale(0.992);
+    filter: blur(3px);
+  }
+  60% {
+    opacity: 0.92;
+    filter: blur(0.5px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0px);
+  }
+}

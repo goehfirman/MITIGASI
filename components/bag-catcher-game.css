@@ -532,7 +532,7 @@ body:has(.game-deck) {
 .player-bag {
   position: absolute;
   bottom: 14px;
-  transform: translateX(-50%);
+  transform: translateX(-50%) translateZ(0);
   width: 120px;
   height: 120px;
   z-index: 10;
@@ -542,6 +542,7 @@ body:has(.game-deck) {
   display: flex;
   align-items: center;
   justify-content: center;
+  will-change: left, transform;
 }
 
 .bag-sprite-img {
@@ -649,36 +650,59 @@ body:has(.game-deck) {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  min-width: 130px;
-  gap: 4px;
+  min-width: 160px;
+  flex: 1;
+  gap: 5px;
+  cursor: pointer;
+  touch-action: none !important;
+  user-select: none !important;
+  -webkit-user-select: none !important;
+  -webkit-touch-callout: none !important;
+  padding: 4px 10px;
+  border-radius: 14px;
+  background: rgba(15, 23, 42, 0.45);
+  border: 1px solid rgba(52, 211, 153, 0.2);
+  transition: background 0.2s, border-color 0.2s;
+}
+
+.control-center-track:hover,
+.control-center-track.is-dragging {
+  background: rgba(15, 23, 42, 0.7);
+  border-color: rgba(52, 211, 153, 0.5);
 }
 
 .track-slider-box {
   width: 100%;
-  height: 8px;
-  background: rgba(15, 23, 42, 0.8);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  height: 16px;
+  background: rgba(10, 18, 30, 0.9);
+  border: 1.5px solid rgba(52, 211, 153, 0.4);
   border-radius: 999px;
   position: relative;
-  overflow: hidden;
+  overflow: visible;
+  box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.7), 0 0 10px rgba(52, 211, 153, 0.15);
+  touch-action: none !important;
 }
 
 .track-slider-thumb {
   position: absolute;
-  top: 0;
-  bottom: 0;
-  width: 20%;
+  top: -4px;
+  width: 26px;
+  height: 24px;
   border-radius: 999px;
-  background: #34d399;
-  box-shadow: 0 0 8px #34d399;
+  background: linear-gradient(180deg, #34d399 0%, #059669 100%);
+  border: 2px solid #ffffff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5), 0 0 12px rgba(52, 211, 153, 0.8);
   transform: translateX(-50%);
-  transition: left 0.05s linear;
+  transition: none !important;
+  will-change: left;
+  pointer-events: none;
 }
 
 .track-hint-text {
-  font-size: 11px;
-  color: #94a3b8;
-  font-weight: 600;
+  font-size: 11.5px;
+  color: #a7f3d0;
+  font-weight: 700;
+  letter-spacing: 0.2px;
 }
 
 /* ======================================================== */
@@ -1194,6 +1218,7 @@ body:has(.game-deck) {
 .pvp-control-hint.p2 { color: #fde68a; }
 
 .pvp-start-btn {
+  width: 100% !important;
   height: 56px !important;
   font-size: 17.5px !important;
   font-weight: 800 !important;
@@ -1575,14 +1600,81 @@ body:has(.game-deck) {
   box-shadow: 0 0 16px rgba(245, 158, 11, 0.6);
 }
 
-.pvp-track-hint {
-  font-size: 11px;
-  font-weight: 600;
-  color: #94a3b8;
-  white-space: nowrap;
-  text-align: center;
-  padding: 0 6px;
+.pvp-track-container {
+  flex: 1.3;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  cursor: pointer;
+  touch-action: none !important;
+  user-select: none !important;
+  -webkit-user-select: none !important;
+  -webkit-touch-callout: none !important;
+  padding: 4px 8px;
+  border-radius: 12px;
+  background: rgba(15, 23, 42, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  min-height: 48px;
+  transition: all 0.2s ease;
 }
+
+.pvp-track-container.p1:hover,
+.pvp-track-container.p1.is-dragging {
+  border-color: rgba(56, 189, 248, 0.5);
+  background: rgba(15, 23, 42, 0.75);
+}
+
+.pvp-track-container.p2:hover,
+.pvp-track-container.p2.is-dragging {
+  border-color: rgba(245, 158, 11, 0.5);
+  background: rgba(15, 23, 42, 0.75);
+}
+
+.pvp-track-bar {
+  width: 100%;
+  height: 12px;
+  background: rgba(10, 18, 30, 0.9);
+  border-radius: 999px;
+  position: relative;
+  overflow: visible;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  touch-action: none !important;
+}
+
+.pvp-track-thumb {
+  position: absolute;
+  top: -4px;
+  width: 22px;
+  height: 20px;
+  border-radius: 999px;
+  border: 2px solid #ffffff;
+  transform: translateX(-50%);
+  transition: none !important;
+  will-change: left;
+  pointer-events: none;
+}
+
+.pvp-track-thumb.p1 {
+  background: linear-gradient(180deg, #38bdf8 0%, #0284c7 100%);
+  box-shadow: 0 0 10px rgba(56, 189, 248, 0.9);
+}
+
+.pvp-track-thumb.p2 {
+  background: linear-gradient(180deg, #fbbf24 0%, #d97706 100%);
+  box-shadow: 0 0 10px rgba(245, 158, 11, 0.9);
+}
+
+.pvp-track-label {
+  font-size: 10.5px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.pvp-track-container.p1 .pvp-track-label { color: #7dd3fc; }
+.pvp-track-container.p2 .pvp-track-label { color: #fde68a; }
 
 .pvp-pause-overlay {
   position: absolute;
@@ -1738,4 +1830,98 @@ body:has(.game-deck) {
   background: rgba(255, 255, 255, 0.2);
   border-color: #38bdf8;
   color: #38bdf8;
+}
+
+/* ======================================================== */
+/* SOLO ARENA & RESULT (UNIFIED WITH PVP STYLING)           */
+/* ======================================================== */
+.solo-arena-layout {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  height: 100%;
+  min-height: 0;
+  position: relative;
+  overflow: hidden;
+  max-width: 960px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.solo-arena-grid {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  width: 100%;
+  touch-action: none !important;
+  user-select: none !important;
+  -webkit-user-select: none !important;
+}
+
+.pvp-split-pane.solo-pane {
+  flex: 1;
+  width: 100%;
+}
+
+.solo-side-record {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  justify-content: flex-end;
+}
+
+.solo-record-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 700;
+  color: #ffd166;
+  background: rgba(245, 158, 11, 0.15);
+  border: 1px solid rgba(245, 158, 11, 0.35);
+  padding: 4px 10px;
+  border-radius: 8px;
+}
+
+.pvp-badge-tag.solo-badge {
+  background: rgba(56, 189, 248, 0.25);
+  color: #38bdf8;
+  border: 1px solid rgba(56, 189, 248, 0.5);
+}
+
+.pvp-split-controls.solo-controls {
+  gap: 12px;
+}
+
+.pvp-split-controls.solo-controls .control-btn.pvp-btn {
+  flex: 0 0 110px;
+  height: 52px;
+  font-size: 16px;
+}
+
+.pvp-track-container.solo-track {
+  min-height: 52px;
+}
+
+.pvp-track-container.solo-track .pvp-track-bar {
+  height: 14px;
+}
+
+.pvp-track-container.solo-track .pvp-track-thumb {
+  width: 26px;
+  height: 24px;
+  top: -5px;
+}
+
+.solo-result-card-container {
+  display: flex;
+  justify-content: center;
+  margin: 4px 0 8px;
+  width: 100%;
+}
+
+.solo-result-card-container .pvp-player-card {
+  width: 100%;
+  max-width: 580px;
+  text-align: center;
 }
