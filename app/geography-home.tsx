@@ -1,7 +1,7 @@
 "use client";
 import {useState,useMemo,useEffect,useRef,useLayoutEffect} from 'react';
 import {geoMercator,geoPath,geoGraticule} from 'd3-geo';
-import {Globe2,BookOpen,ShieldCheck,ArrowRight,Triangle,Pause,Play,Sun,Mountain,Leaf,Waves,House,Backpack,MoveRight,Expand,Maximize,ZoomIn,ZoomOut,CheckCircle2,AlertTriangle,ChevronRight,ChevronLeft,ShieldAlert,Users,Radio,Building,Activity,PhoneCall,AlertOctagon,User,HelpCircle,Info,Gamepad2} from 'lucide-react';
+import {Globe2,BookOpen,ShieldCheck,ArrowRight,Triangle,Pause,Play,Sun,Mountain,Leaf,Waves,House,Backpack,MoveRight,Expand,Maximize,Minimize,ZoomIn,ZoomOut,CheckCircle2,AlertTriangle,ChevronRight,ChevronLeft,ShieldAlert,Users,Radio,Building,Activity,PhoneCall,AlertOctagon,User,HelpCircle,Info,Gamepad2} from 'lucide-react';
 import {Button} from '@/components/ui/button';
 
 import region from '@/lib/indonesia-region.json';
@@ -151,7 +151,7 @@ export default function GeographyHome({section='home'}:{section?:'home'|'belajar
 
  useEffect(()=>{
   const sync=()=>setFullscreen(!!document.fullscreenElement);sync();document.addEventListener('fullscreenchange',sync);
-  if (!sessionStorage.getItem('geo_prompted')) {
+  if (!sessionStorage.getItem('geo_prompted') && !window.location.search.includes('noprompt')) {
     setShowPrompt(true);
   } else {
     window.dispatchEvent(new CustomEvent('request-play-music'));
@@ -194,7 +194,7 @@ export default function GeographyHome({section='home'}:{section?:'home'|'belajar
   }
  }
 
- return <div className={'geo-home '+(section==='home'?'is-home':(section==='belajar'||section==='mitigasi'||section==='uji-pemahaman'||section==='bermain')?'is-learning':'') + (section==='bermain' ? ' is-bermain' : '')}>
+ return <div className={'geo-home '+(section==='home'?'is-home':(section==='belajar'||section==='mitigasi'||section==='uji-pemahaman'||section==='bermain')?'is-learning':'') + (section==='bermain' ? ' is-bermain' : '') + (section==='belajar' ? ' is-belajar' : '')}>
  <MitigationIntroModal
    isOpen={showMitigationIntro}
    onClose={() => setShowMitigationIntro(false)}
@@ -309,14 +309,13 @@ export default function GeographyHome({section='home'}:{section?:'home'|'belajar
       aria-modal="true"
       aria-label="Tentang Pengembang"
     >
-      <div className="dev-modal-card" onClick={(e) => e.stopPropagation()} style={{ position: 'relative' }}>
-        <button onClick={() => setShowDeveloperModal(false)} className="stem-pixar-close" aria-label="Tutup" style={{ top: '-14px', right: '-14px', zIndex: 30 }}>✕</button>
+      <div className="dev-modal-card" style={{ position: 'relative' }}>
         <img
           src="/tentang-pengembang.png?v=20260915"
           alt="Tentang Pengembang - Teguh Firmansyah Apriliana, M.Pd"
           className="dev-modal-img"
         />
-        <div className="dev-modal-hint">Klik di mana saja atau tombol ✕ untuk keluar</div>
+        <div className="dev-modal-hint">Klik di mana saja untuk keluar</div>
       </div>
     </div>
   )}
@@ -357,7 +356,7 @@ export default function GeographyHome({section='home'}:{section?:'home'|'belajar
      </div>
    </div>
  )}
- <div className="home-fullscreen"><Button variant="ghost" onClick={toggleFullscreen} aria-label={fullscreen?'Keluar layar penuh':'Layar penuh'} aria-pressed={fullscreen}>{fullscreen ? <Maximize aria-label="Keluar layar penuh"/> : <Maximize aria-label="Layar penuh"/>}</Button>{fullscreenError&&<p role="status">{fullscreenError}</p>}</div>
+ <div className="home-fullscreen"><Button variant="ghost" onClick={toggleFullscreen} aria-label={fullscreen?'Keluar layar penuh':'Layar penuh'} aria-pressed={fullscreen}>{fullscreen ? <Minimize aria-label="Keluar layar penuh"/> : <Maximize aria-label="Layar penuh"/>}</Button>{fullscreenError&&<p role="status">{fullscreenError}</p>}</div>
  {section!=='home'&&<header className="geo-nav"><Link className="geo-brand" href="/"><span><Globe2/></span><div>Nusantara<span>JELAJAH • PAHAMI • SIAGA</span></div></Link><nav aria-label="Menu utama"><Link href="/belajar" aria-current={section==='belajar'?'page':undefined}>Belajar</Link><Link href="/mitigasi" aria-current={section==='mitigasi'?'page':undefined} onClick={(e)=>{e.preventDefault();setShowMitigationIntro(true);}}>Mitigasi Gempa</Link><Link href="/bermain" aria-current={section==='bermain'?'page':undefined}>Bermain</Link><Link href="/uji-pemahaman" aria-current={section==='uji-pemahaman'?'page':undefined}>Quiz</Link></nav><Button asChild variant="outline"><Link href="/lab"><Triangle/>Laboratorium <ArrowRight/></Link></Button></header>}
     <main key={section} className="section-fade-in" style={{ flex: 1, minHeight: 0, display: 'flex', flexDirection: 'column' }}>
       {section === 'home' ? (

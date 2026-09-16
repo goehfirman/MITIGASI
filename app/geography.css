@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@500;600;700;800;900&family=Fredoka:wght@600;700;800&display=swap');
+
 .prompt-overlay {
   position: fixed;
   inset: 0;
@@ -401,8 +403,8 @@
 .is-home .geo-footer{order:4;width:calc(100% - 64px);align-self:center;margin:0 auto}
 @media(max-width:760px){.is-home .geo-menu,.is-home .geo-map-section,.is-home .geo-footer{width:calc(100% - 32px)}}
 .is-home .geo-intro{position:relative;margin-bottom:28px}
-.hero-glass-menu{position:absolute;bottom:4%;left:50%;transform:translateX(-50%);display:flex;justify-content:center;align-items:center;gap:14px;width:max-content;max-width:96%;z-index:15}
-.hero-glass-menu a{display:inline-flex;align-items:center;justify-content:center;gap:12px;min-height:60px;padding:12px 24px;border-radius:20px;background:linear-gradient(180deg,#7c3e16 0%,#55260c 55%,#3b1704 100%);border:2.5px solid #d99147;color:#fff2d9;font-size:18px;font-weight:800;letter-spacing:0.4px;text-shadow:0 1px 3px rgba(0,0,0,0.85);box-shadow:inset 0 1.5px 0 rgba(255,255,255,0.4),inset 0 -3px 0 rgba(0,0,0,0.45),0 5px 0 #1e0b02,0 10px 22px rgba(0,0,0,0.55);cursor:pointer;transition:all 0.16s cubic-bezier(0.16,1,0.3,1);text-decoration:none;user-select:none}
+.hero-glass-menu{position:absolute;bottom:4%;left:50%;transform:translateX(-50%);display:flex;justify-content:center;align-items:center;gap:14px;width:max-content;max-width:96%;z-index:15;font-family:'Nunito','Fredoka',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif}
+.hero-glass-menu a{display:inline-flex;align-items:center;justify-content:center;gap:12px;min-height:60px;padding:12px 24px;border-radius:20px;background:linear-gradient(180deg,#7c3e16 0%,#55260c 55%,#3b1704 100%);border:2.5px solid #d99147;color:#fff2d9;font-family:'Nunito','Fredoka',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif !important;font-size:18px;font-weight:800;letter-spacing:0.4px;text-shadow:0 1px 3px rgba(0,0,0,0.85);box-shadow:inset 0 1.5px 0 rgba(255,255,255,0.4),inset 0 -3px 0 rgba(0,0,0,0.45),0 5px 0 #1e0b02,0 10px 22px rgba(0,0,0,0.55);cursor:pointer;transition:all 0.16s cubic-bezier(0.16,1,0.3,1);text-decoration:none;user-select:none}
 .hero-glass-menu a:hover{background:linear-gradient(180deg,#8e491c 0%,#632d0f 55%,#451c06 100%);border-color:#f6b168;color:#ffffff;transform:translateY(-3px) scale(1.02);box-shadow:inset 0 2px 0 rgba(255,255,255,0.55),inset 0 -3px 0 rgba(0,0,0,0.45),0 8px 0 #1e0b02,0 16px 30px rgba(0,0,0,0.6)}
 .hero-glass-menu a:active{transform:translateY(3px) scale(0.98);box-shadow:inset 0 1px 0 rgba(255,255,255,0.25),0 2px 0 #1e0b02,0 4px 10px rgba(0,0,0,0.4)}
 .hero-glass-menu a:focus-visible{outline:3px solid #fde047;outline-offset:4px}
@@ -432,6 +434,105 @@
 .home-fullscreen p{position:absolute;right:0;top:58px;width:280px;padding:14px;background:#3b1704;color:#fef08a;border:2px solid #c98845;border-radius:14px;font-size:13.5px;font-weight:600;box-shadow:0 10px 25px rgba(0,0,0,0.6)}
 .is-home{position:relative}
 @media(max-width:760px){.home-fullscreen{top:10px;right:10px}.home-fullscreen button{padding:10px 12px;min-height:44px;border-radius:14px}.home-fullscreen button span{display:none}}
+
+/* Minimalist Fullscreen and Home Button in Menu Belajar */
+.is-belajar {
+  position: relative;
+}
+.is-belajar .slide-top a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  min-height: 44px;
+  padding: 0;
+  border-radius: 10px;
+  color: #e0efef;
+  background: transparent;
+  transition: all 0.2s ease;
+}
+.is-belajar .slide-top a svg {
+  width: 24px;
+  height: 24px;
+  stroke-width: 2px;
+  transition: transform 0.2s ease, color 0.2s ease;
+}
+.is-belajar .slide-top a:hover {
+  background: rgba(255, 255, 255, 0.12);
+  color: #ffffff;
+  transform: scale(1.08);
+}
+.is-belajar .slide-top a:active {
+  transform: scale(0.95);
+}
+
+.is-belajar .home-fullscreen {
+  position: absolute;
+  top: 20px;
+  right: 32px;
+  z-index: 25;
+}
+.is-belajar .home-fullscreen button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  min-height: 44px;
+  padding: 0;
+  border-radius: 10px;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  color: #e0efef !important;
+  text-shadow: none !important;
+  cursor: pointer;
+  transition: all 0.2s ease !important;
+}
+.is-belajar .home-fullscreen button svg {
+  width: 24px;
+  height: 24px;
+  color: #e0efef !important;
+  filter: none !important;
+  stroke-width: 2px;
+  transition: transform 0.2s ease, color 0.2s ease;
+}
+.is-belajar .home-fullscreen button:hover {
+  background: rgba(255, 255, 255, 0.12) !important;
+  border-color: transparent !important;
+  color: #ffffff !important;
+  transform: scale(1.08) !important;
+  box-shadow: none !important;
+}
+.is-belajar .home-fullscreen button:hover svg {
+  color: #ffffff !important;
+}
+.is-belajar .home-fullscreen button:active {
+  transform: scale(0.95) !important;
+  box-shadow: none !important;
+}
+.is-belajar .home-fullscreen p {
+  top: 50px;
+  right: 0;
+  background: rgba(10, 49, 62, 0.95);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  color: #e0efef;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+}
+
+@media(max-width:760px){
+  .is-belajar .slide-top a,
+  .is-belajar .home-fullscreen button {
+    width: 40px;
+    height: 40px;
+    min-height: 40px;
+  }
+  .is-belajar .home-fullscreen {
+    top: 16px;
+    right: 20px;
+  }
+}
 /* Keep navigation inside the visible screen even when the cover is taller. */
 :fullscreen .hero-glass-menu{bottom:auto;top:calc(min(60.347vw, 100dvh) - 120px)}
 @media(max-width:760px){:fullscreen .hero-glass-menu{bottom:auto;top:calc(min(60.347vw, 100dvh) - 76px)}}
@@ -1607,6 +1708,7 @@ body:has(.game-deck){background:linear-gradient(180deg, rgba(8, 28, 44, 0.35) 0%
   border: 2px solid #d99147;
   border-radius: 999px;
   color: #fff2d9;
+  font-family: 'Nunito', 'Fredoka', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
   font-size: 13.5px;
   font-weight: 800;
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.35), 0 4px 0 #1e0b02, 0 8px 18px rgba(0, 0, 0, 0.45);
